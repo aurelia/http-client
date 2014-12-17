@@ -1,6 +1,6 @@
 {
   "name": "aurelia-http-client",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A simple, restful, message-based wrapper around XMLHttpRequest.",
   "keywords": [
     "aurelia",
@@ -9,7 +9,9 @@
   ],
   "homepage": "http://aurelia.io",
   "license": "MIT",
-  "authors": ["Rob Eisenberg <rob@bluespire.com> (http://robeisenberg.com/)"],
+  "authors": [
+    "Rob Eisenberg <rob@bluespire.com> (http://robeisenberg.com/)"
+  ],
   "repository": {
     "type": "git",
     "url": "http://github.com/aurelia/http-client"
