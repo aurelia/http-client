@@ -3,7 +3,7 @@
 
 #### Bug Fixes
 
-* ***:** switch http client to use path.join ([6954c4fe](http://github.com/aurelia/http-client/commit/6954c4fe74de49739cdab92e3753f418136d3b7f))
+* **http-client:** switch http client to use path.join ([6954c4fe](http://github.com/aurelia/http-client/commit/6954c4fe74de49739cdab92e3753f418136d3b7f))
 * **package:** update dependencies to latest ([562b00ba](http://github.com/aurelia/http-client/commit/562b00bac62bb46e94d7db9df196d04350ee0f42))
 
 
