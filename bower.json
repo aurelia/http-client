@@ -15,7 +15,7 @@
     "url": "http://github.com/aurelia/http-client"
   },
   "dependencies": {
-    "aurelia-path": "0.1.0",
+    "aurelia-path": "0.2.2",
     "es6-shim": "0.21.1"
   }
 }
