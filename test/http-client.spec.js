@@ -1,4 +1,4 @@
-import {HttpClient} from '../lib/index';
+import {HttpClient} from '../src/index';
 
 describe('http client', () => {
   it('should have some tests', () => {

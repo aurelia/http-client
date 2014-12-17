@@ -12,6 +12,10 @@ This library is part of the [Aurelia](http://www.aurelia.io/) platform and conta
 
 * [aurelia-path](https://github.com/aurelia/path)
 
+## Used By
+
+This library is used directly by applications only.
+
 ## Platform Support
 
 This library can be used in the **browser** only.
