@@ -6,7 +6,7 @@ import {Headers} from './headers';
 
 export class HttpClient {
   constructor(){
-    this.baseAddress = '';
+    this.baseUrl = null;
     this.defaultRequestHeaders = new Headers();
   }
 
@@ -15,36 +15,27 @@ export class HttpClient {
   }
 
   get(uri){
-    return this.send(
-      new HttpRequestMessage('GET', join(this.baseAddress, uri))
-        .withHeaders(this.defaultRequestHeaders)
-      );
+    uri = this.baseUrl ? join(this.baseUrl, uri) : uri;
+    return this.send(new HttpRequestMessage('GET', uri).withHeaders(this.defaultRequestHeaders));
   }
 
   put(uri, content, replacer){
-    return this.send(
-      new HttpRequestMessage('PUT', join(this.baseAddress, uri), content, replacer || this.replacer)
-        .withHeaders(this.defaultRequestHeaders)
-      );
+    uri = this.baseUrl ? join(this.baseUrl, uri) : uri;
+    return this.send(new HttpRequestMessage('PUT', uri, content, replacer || this.replacer).withHeaders(this.defaultRequestHeaders));
   }
 
   post(uri, content, replacer){
-    return this.send(
-      new HttpRequestMessage('POST', join(this.baseAddress, uri), content, replacer || this.replacer)
-        .withHeaders(this.defaultRequestHeaders)
-      );
+    uri = this.baseUrl ? join(this.baseUrl, uri) : uri;
+    return this.send(new HttpRequestMessage('POST', uri, content, replacer || this.replacer).withHeaders(this.defaultRequestHeaders));
   }
 
   delete(uri){
-    return this.send(
-      new HttpRequestMessage('DELETE', join(this.baseAddress, uri))
-        .withHeaders(this.defaultRequestHeaders)
-      );
+    uri = this.baseUrl ? join(this.baseUrl, uri) : uri;
+    return this.send(new HttpRequestMessage('DELETE', uri).withHeaders(this.defaultRequestHeaders));
   }
 
   jsonp(uri, callbackParameterName='jsoncallback'){
-    return this.send(
-      new JSONPRequestMessage(join(this.baseAddress, uri), callbackParameterName)
-      );
+    uri = this.baseUrl ? join(this.baseUrl, uri) : uri;
+    return this.send(new JSONPRequestMessage(uri, callbackParameterName));
   }
 }
