@@ -17,29 +17,24 @@ define(["exports", "aurelia-path", "./http-request-message", "./http-response-me
     };
 
     HttpClient.prototype.get = function (uri) {
-      uri = this.baseUrl ? join(this.baseUrl, uri) : uri;
-      return this.send(new HttpRequestMessage("GET", uri).withHeaders(this.defaultRequestHeaders));
+      return this.send(new HttpRequestMessage("GET", join(this.baseUrl, uri)).withHeaders(this.defaultRequestHeaders));
     };
 
     HttpClient.prototype.put = function (uri, content, replacer) {
-      uri = this.baseUrl ? join(this.baseUrl, uri) : uri;
-      return this.send(new HttpRequestMessage("PUT", uri, content, replacer || this.replacer).withHeaders(this.defaultRequestHeaders));
+      return this.send(new HttpRequestMessage("PUT", join(this.baseUrl, uri), content, replacer || this.replacer).withHeaders(this.defaultRequestHeaders));
     };
 
     HttpClient.prototype.post = function (uri, content, replacer) {
-      uri = this.baseUrl ? join(this.baseUrl, uri) : uri;
-      return this.send(new HttpRequestMessage("POST", uri, content, replacer || this.replacer).withHeaders(this.defaultRequestHeaders));
+      return this.send(new HttpRequestMessage("POST", join(this.baseUrl, uri), content, replacer || this.replacer).withHeaders(this.defaultRequestHeaders));
     };
 
     HttpClient.prototype["delete"] = function (uri) {
-      uri = this.baseUrl ? join(this.baseUrl, uri) : uri;
-      return this.send(new HttpRequestMessage("DELETE", uri).withHeaders(this.defaultRequestHeaders));
+      return this.send(new HttpRequestMessage("DELETE", join(this.baseUrl, uri)).withHeaders(this.defaultRequestHeaders));
     };
 
     HttpClient.prototype.jsonp = function (uri, callbackParameterName) {
       if (callbackParameterName === undefined) callbackParameterName = "jsoncallback";
-      uri = this.baseUrl ? join(this.baseUrl, uri) : uri;
-      return this.send(new JSONPRequestMessage(uri, callbackParameterName));
+      return this.send(new JSONPRequestMessage(join(this.baseUrl, uri), callbackParameterName));
     };
 
     return HttpClient;

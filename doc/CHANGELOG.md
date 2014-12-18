@@ -1,3 +1,12 @@
+### 0.3.1 (2014-12-18)
+
+
+#### Bug Fixes
+
+* **http-client:** take advantage of fixed path.join behavior ([29ed73a1](http://github.com/aurelia/http-client/commit/29ed73a1f7cc118bc1f9740486081cad270b37c5))
+* **package:** update path to the latest version ([0e3eb0a7](http://github.com/aurelia/http-client/commit/0e3eb0a79a63fef5fdafa1d7bb820b25b636eaa9))
+
+
 ## 0.3.0 (2014-12-17)
 
 
