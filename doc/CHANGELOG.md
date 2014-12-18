@@ -1,3 +1,11 @@
+## 0.3.0 (2014-12-17)
+
+
+#### Bug Fixes
+
+* **http-client:** handle empty base url with join ([d1968323](http://github.com/aurelia/http-client/commit/d1968323c557e59bdad46e1a7d43e14941a46089))
+
+
 ## 0.2.0 (2014-12-17)
 
 

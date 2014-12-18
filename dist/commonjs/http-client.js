@@ -7,7 +7,7 @@ var JSONPRequestMessage = require('./json-request-message').JSONPRequestMessage;
 var Headers = require('./headers').Headers;
 var HttpClient = (function () {
   var HttpClient = function HttpClient() {
-    this.baseAddress = "";
+    this.baseUrl = null;
     this.defaultRequestHeaders = new Headers();
   };
 
@@ -16,24 +16,29 @@ var HttpClient = (function () {
   };
 
   HttpClient.prototype.get = function (uri) {
-    return this.send(new HttpRequestMessage("GET", join(this.baseAddress, uri)).withHeaders(this.defaultRequestHeaders));
+    uri = this.baseUrl ? join(this.baseUrl, uri) : uri;
+    return this.send(new HttpRequestMessage("GET", uri).withHeaders(this.defaultRequestHeaders));
   };
 
   HttpClient.prototype.put = function (uri, content, replacer) {
-    return this.send(new HttpRequestMessage("PUT", join(this.baseAddress, uri), content, replacer || this.replacer).withHeaders(this.defaultRequestHeaders));
+    uri = this.baseUrl ? join(this.baseUrl, uri) : uri;
+    return this.send(new HttpRequestMessage("PUT", uri, content, replacer || this.replacer).withHeaders(this.defaultRequestHeaders));
   };
 
   HttpClient.prototype.post = function (uri, content, replacer) {
-    return this.send(new HttpRequestMessage("POST", join(this.baseAddress, uri), content, replacer || this.replacer).withHeaders(this.defaultRequestHeaders));
+    uri = this.baseUrl ? join(this.baseUrl, uri) : uri;
+    return this.send(new HttpRequestMessage("POST", uri, content, replacer || this.replacer).withHeaders(this.defaultRequestHeaders));
   };
 
   HttpClient.prototype["delete"] = function (uri) {
-    return this.send(new HttpRequestMessage("DELETE", join(this.baseAddress, uri)).withHeaders(this.defaultRequestHeaders));
+    uri = this.baseUrl ? join(this.baseUrl, uri) : uri;
+    return this.send(new HttpRequestMessage("DELETE", uri).withHeaders(this.defaultRequestHeaders));
   };
 
   HttpClient.prototype.jsonp = function (uri, callbackParameterName) {
     if (callbackParameterName === undefined) callbackParameterName = "jsoncallback";
-    return this.send(new JSONPRequestMessage(join(this.baseAddress, uri), callbackParameterName));
+    uri = this.baseUrl ? join(this.baseUrl, uri) : uri;
+    return this.send(new JSONPRequestMessage(uri, callbackParameterName));
   };
 
   return HttpClient;
