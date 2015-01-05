@@ -64,21 +64,15 @@ export class HttpRequestMessage {
       this.configureXHR(xhr);
 
       xhr.onload = (e) => {
-        var responseMessage = new HttpResponseMessage(this, xhr, responseType, client.reviver);
-
-        if (responseMessage.isSuccess) {
-          resolve(responseMessage);
-        } else{
-          reject(responseMessage);
-        }
+        resolve(new HttpResponseMessage(this, xhr, responseType, client.reviver));
       };
 
       xhr.ontimeout = function(e){
-        reject(new HttpResponseMessage(this, xhr, responseType));
+        resolve(new HttpResponseMessage(this, xhr, responseType));
       };
 
       xhr.onerror = function(e){
-        reject(new HttpResponseMessage(this, xhr, responseType));
+        resolve(new HttpResponseMessage(this, xhr, responseType));
       };
 
       if(progressCallback){

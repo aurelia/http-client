@@ -1,7 +1,7 @@
 import {join} from 'aurelia-path';
 import {HttpRequestMessage} from './http-request-message';
 import {HttpResponseMessage} from './http-response-message';
-import {JSONPRequestMessage} from './json-request-message';
+import {JSONPRequestMessage} from './jsonp-request-message';
 import {Headers} from './headers';
 
 export class HttpClient {
