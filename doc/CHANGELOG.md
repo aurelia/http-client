@@ -1,3 +1,29 @@
+## 0.4.0 (2015-01-06)
+
+
+#### Bug Fixes
+
+* **http-request-message:** do not reject promise; instead return response with isSuccess as false ([561ca9cb](http://github.com/aurelia/http-client/commit/561ca9cbc7f8a445d76c18b26707442e4a4cdf78))
+
+
+#### Features
+
+* **build:** update compile, switch to register modules, switch to core-js ([68f4665e](http://github.com/aurelia/http-client/commit/68f4665ed69c35a9ecb94b4a661fa753eb30f79b))
+
+
+### 0.3.2 (2015-01-06)
+
+
+#### Bug Fixes
+
+* **http-request-message:** do not reject promise; instead return response with isSuccess as false ([561ca9cb](http://github.com/aurelia/http-client/commit/561ca9cbc7f8a445d76c18b26707442e4a4cdf78))
+
+
+#### Features
+
+* **build:** update compile, switch to register modules, switch to core-js ([68f4665e](http://github.com/aurelia/http-client/commit/68f4665ed69c35a9ecb94b4a661fa753eb30f79b))
+
+
 ### 0.3.1 (2014-12-18)
 
 

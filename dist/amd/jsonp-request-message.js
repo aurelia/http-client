@@ -1,7 +1,7 @@
-"use strict";
+define(["exports", "./http-response-message"], function (exports, _httpResponseMessage) {
+  "use strict";
 
-var HttpResponseMessage = require('./http-response-message').HttpResponseMessage;
-var JSONPRequestMessage = (function () {
+  var HttpResponseMessage = _httpResponseMessage.HttpResponseMessage;
   var JSONPRequestMessage = function JSONPRequestMessage(uri, callbackParameterName) {
     this.uri = uri;
     this.callbackParameterName = callbackParameterName;
@@ -29,7 +29,5 @@ var JSONPRequestMessage = (function () {
     });
   };
 
-  return JSONPRequestMessage;
-})();
-
-exports.JSONPRequestMessage = JSONPRequestMessage;
+  exports.JSONPRequestMessage = JSONPRequestMessage;
+});

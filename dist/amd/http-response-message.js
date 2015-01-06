@@ -1,7 +1,7 @@
 define(["exports", "./headers"], function (exports, _headers) {
   "use strict";
 
-  var _classProps = function (child, staticProps, instanceProps) {
+  var _prototypeProperties = function (child, staticProps, instanceProps) {
     if (staticProps) Object.defineProperties(child, staticProps);
     if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
   };
@@ -27,45 +27,42 @@ define(["exports", "./headers"], function (exports, _headers) {
     return headers;
   }
 
-  var HttpResponseMessage = (function () {
-    var HttpResponseMessage = function HttpResponseMessage(requestMessage, xhr, responseType, reviver) {
-      this.requestMessage = requestMessage;
-      this.statusCode = xhr.status;
-      this.response = xhr.response;
-      this.isSuccess = xhr.status === 200;
-      this.statusText = xhr.statusText;
-      this.responseType = responseType;
-      this.reviver = reviver;
+  var HttpResponseMessage = function HttpResponseMessage(requestMessage, xhr, responseType, reviver) {
+    this.requestMessage = requestMessage;
+    this.statusCode = xhr.status;
+    this.response = xhr.response;
+    this.isSuccess = xhr.status === 200;
+    this.statusText = xhr.statusText;
+    this.responseType = responseType;
+    this.reviver = reviver;
 
-      if (xhr.getAllResponseHeaders) {
-        this.headers = new Headers(parseResponseHeaders(xhr.getAllResponseHeaders()));
-      } else {
-        this.headers = new Headers();
-      }
-    };
+    if (xhr.getAllResponseHeaders) {
+      this.headers = new Headers(parseResponseHeaders(xhr.getAllResponseHeaders()));
+    } else {
+      this.headers = new Headers();
+    }
+  };
 
-    _classProps(HttpResponseMessage, null, {
-      content: {
-        get: function () {
-          if (this._content !== undefined) {
-            return this._content;
-          }
-
-          if (this.responseType === "json") {
-            return this._content = JSON.parse(this.response, this.reviver);
-          }
-
-          if (this.reviver) {
-            return this._content = this.reviver(this.response);
-          }
-
-          return this._content = this.response;
+  _prototypeProperties(HttpResponseMessage, null, {
+    content: {
+      get: function () {
+        if (this._content !== undefined) {
+          return this._content;
         }
-      }
-    });
 
-    return HttpResponseMessage;
-  })();
+        if (this.responseType === "json") {
+          return this._content = JSON.parse(this.response, this.reviver);
+        }
+
+        if (this.reviver) {
+          return this._content = this.reviver(this.response);
+        }
+
+        return this._content = this.response;
+      },
+      enumerable: true
+    }
+  });
 
   exports.HttpResponseMessage = HttpResponseMessage;
 });
