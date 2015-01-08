@@ -22,6 +22,10 @@ export class HttpClient {
     return this.send(new HttpRequestMessage('PUT', join(this.baseUrl, uri), content, replacer || this.replacer).withHeaders(this.defaultRequestHeaders));
   }
 
+  patch(uri, content, replacer){
+    return this.send(new HttpRequestMessage('PATCH', join(this.baseUrl, uri), content, replacer || this.replacer).withHeaders(this.defaultRequestHeaders));
+  }
+
   post(uri, content, replacer){
     return this.send(new HttpRequestMessage('POST', join(this.baseUrl, uri), content, replacer || this.replacer).withHeaders(this.defaultRequestHeaders));
   }
