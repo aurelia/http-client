@@ -1,33 +1,49 @@
 define(["exports", "./http-response-message"], function (exports, _httpResponseMessage) {
   "use strict";
 
+  var _prototypeProperties = function (child, staticProps, instanceProps) {
+    if (staticProps) Object.defineProperties(child, staticProps);
+    if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
+  };
+
   var HttpResponseMessage = _httpResponseMessage.HttpResponseMessage;
-  var JSONPRequestMessage = function JSONPRequestMessage(uri, callbackParameterName) {
-    this.uri = uri;
-    this.callbackParameterName = callbackParameterName;
-  };
+  var JSONPRequestMessage = (function () {
+    var JSONPRequestMessage = function JSONPRequestMessage(uri, callbackParameterName) {
+      this.uri = uri;
+      this.callbackParameterName = callbackParameterName;
+    };
 
-  JSONPRequestMessage.prototype.send = function (client) {
-    var _this = this;
-    return new Promise(function (resolve, reject) {
-      var callbackName = "jsonp_callback_" + Math.round(100000 * Math.random());
-      var uri = _this.uri + (_this.uri.indexOf("?") >= 0 ? "&" : "?") + _this.callbackParameterName + "=" + callbackName;
+    _prototypeProperties(JSONPRequestMessage, null, {
+      send: {
+        value: function (client) {
+          var _this = this;
+          return new Promise(function (resolve, reject) {
+            var callbackName = "jsonp_callback_" + Math.round(100000 * Math.random());
+            var uri = _this.uri + (_this.uri.indexOf("?") >= 0 ? "&" : "?") + _this.callbackParameterName + "=" + callbackName;
 
-      window[callbackName] = function (data) {
-        delete window[callbackName];
-        document.body.removeChild(script);
-        resolve(new HttpResponseMessage(_this, {
-          response: data,
-          status: 200,
-          statusText: "OK"
-        }, "jsonp"));
-      };
+            window[callbackName] = function (data) {
+              delete window[callbackName];
+              document.body.removeChild(script);
+              resolve(new HttpResponseMessage(_this, {
+                response: data,
+                status: 200,
+                statusText: "OK"
+              }, "jsonp"));
+            };
 
-      var script = document.createElement("script");
-      script.src = uri;
-      document.body.appendChild(script);
+            var script = document.createElement("script");
+            script.src = uri;
+            document.body.appendChild(script);
+          });
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      }
     });
-  };
+
+    return JSONPRequestMessage;
+  })();
 
   exports.JSONPRequestMessage = JSONPRequestMessage;
 });

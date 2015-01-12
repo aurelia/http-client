@@ -1,88 +1,117 @@
 define(["exports", "./headers", "./http-response-message"], function (exports, _headers, _httpResponseMessage) {
   "use strict";
 
+  var _prototypeProperties = function (child, staticProps, instanceProps) {
+    if (staticProps) Object.defineProperties(child, staticProps);
+    if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
+  };
+
   var Headers = _headers.Headers;
   var HttpResponseMessage = _httpResponseMessage.HttpResponseMessage;
-  var HttpRequestMessage = function HttpRequestMessage(method, uri, content, replacer) {
-    this.method = method;
-    this.uri = uri;
-    this.content = content;
-    this.headers = new Headers();
-    this.responseType = "json";
-    this.replacer = replacer;
-  };
+  var HttpRequestMessage = (function () {
+    var HttpRequestMessage = function HttpRequestMessage(method, uri, content, replacer) {
+      this.method = method;
+      this.uri = uri;
+      this.content = content;
+      this.headers = new Headers();
+      this.responseType = "json";
+      this.replacer = replacer;
+    };
 
-  HttpRequestMessage.prototype.withHeaders = function (headers) {
-    this.headers = headers;
-    return this;
-  };
+    _prototypeProperties(HttpRequestMessage, null, {
+      withHeaders: {
+        value: function (headers) {
+          this.headers = headers;
+          return this;
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      },
+      configureXHR: {
+        value: function (xhr) {
+          xhr.open(this.method, this.uri, true);
+          xhr.responseType = this.responseType;
+          this.headers.configureXHR(xhr);
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      },
+      formatContent: {
+        value: function () {
+          var content = this.content;
 
-  HttpRequestMessage.prototype.configureXHR = function (xhr) {
-    xhr.open(this.method, this.uri, true);
-    xhr.responseType = this.responseType;
-    this.headers.configureXHR(xhr);
-  };
+          if (window.FormData && content instanceof FormData) {
+            return content;
+          }
 
-  HttpRequestMessage.prototype.formatContent = function () {
-    var content = this.content;
+          if (window.Blob && content instanceof Blob) {
+            return content;
+          }
 
-    if (window.FormData && content instanceof FormData) {
-      return content;
-    }
+          if (window.ArrayBufferView && content instanceof ArrayBufferView) {
+            return content;
+          }
 
-    if (window.Blob && content instanceof Blob) {
-      return content;
-    }
+          if (content instanceof Document) {
+            return content;
+          }
 
-    if (window.ArrayBufferView && content instanceof ArrayBufferView) {
-      return content;
-    }
+          if (typeof content === "string") {
+            return content;
+          }
 
-    if (content instanceof Document) {
-      return content;
-    }
+          return JSON.stringify(content, this.replacer);
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      },
+      send: {
+        value: function (client, progressCallback) {
+          var _this = this;
+          return new Promise(function (resolve, reject) {
+            var xhr = new XMLHttpRequest(),
+                responseType = _this.responseType;
 
-    if (typeof content === "string") {
-      return content;
-    }
+            if (responseType === "json") {
+              _this.responseType = "text";
+            }
 
-    return JSON.stringify(content, this.replacer);
-  };
+            if (client.timeout !== undefined) {
+              xhr.timeout = client.timeout;
+            }
 
-  HttpRequestMessage.prototype.send = function (client, progressCallback) {
-    var _this = this;
-    return new Promise(function (resolve, reject) {
-      var xhr = new XMLHttpRequest(), responseType = _this.responseType;
+            _this.configureXHR(xhr);
 
-      if (responseType === "json") {
-        _this.responseType = "text";
+            xhr.onload = function (e) {
+              resolve(new HttpResponseMessage(_this, xhr, responseType, client.reviver));
+            };
+
+            xhr.ontimeout = function (e) {
+              resolve(new HttpResponseMessage(this, xhr, responseType));
+            };
+
+            xhr.onerror = function (e) {
+              resolve(new HttpResponseMessage(this, xhr, responseType));
+            };
+
+            if (progressCallback) {
+              xhr.upload.onprogress = progressCallback;
+            }
+
+            xhr.send(_this.formatContent());
+          });
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
       }
-
-      if (client.timeout !== undefined) {
-        xhr.timeout = client.timeout;
-      }
-
-      _this.configureXHR(xhr);
-
-      xhr.onload = function (e) {
-        resolve(new HttpResponseMessage(_this, xhr, responseType, client.reviver));
-      };
-
-      xhr.ontimeout = function (e) {
-        resolve(new HttpResponseMessage(this, xhr, responseType));
-      };
-
-      xhr.onerror = function (e) {
-        resolve(new HttpResponseMessage(this, xhr, responseType));
-      };
-
-      if (progressCallback) {
-        xhr.upload.onprogress = progressCallback;
-      }
-
-      xhr.send(_this.formatContent());
     });
-  };
+
+    return HttpRequestMessage;
+  })();
 
   exports.HttpRequestMessage = HttpRequestMessage;
 });

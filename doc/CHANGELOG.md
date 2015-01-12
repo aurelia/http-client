@@ -1,3 +1,11 @@
+### 0.4.1 (2015-01-12)
+
+
+#### Features
+
+* **http-client:** add http patch method ([77cfc39a](http://github.com/aurelia/http-client/commit/77cfc39a780683d77f29037612bd9d18853a4e98))
+
+
 ## 0.4.0 (2015-01-06)
 
 

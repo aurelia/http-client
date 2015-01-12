@@ -1,30 +1,58 @@
 define(["exports"], function (exports) {
   "use strict";
 
-  var Headers = function Headers() {
-    var headers = arguments[0] === undefined ? {} : arguments[0];
-    this.headers = headers;
+  var _prototypeProperties = function (child, staticProps, instanceProps) {
+    if (staticProps) Object.defineProperties(child, staticProps);
+    if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
   };
 
-  Headers.prototype.add = function (key, value) {
-    this.headers[key] = value;
-  };
+  var Headers = (function () {
+    var Headers = function Headers() {
+      var headers = arguments[0] === undefined ? {} : arguments[0];
+      this.headers = headers;
+    };
 
-  Headers.prototype.get = function (key) {
-    return this.headers[key];
-  };
+    _prototypeProperties(Headers, null, {
+      add: {
+        value: function (key, value) {
+          this.headers[key] = value;
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      },
+      get: {
+        value: function (key) {
+          return this.headers[key];
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      },
+      clear: {
+        value: function () {
+          this.headers = {};
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      },
+      configureXHR: {
+        value: function (xhr) {
+          var headers = this.headers, key;
 
-  Headers.prototype.clear = function () {
-    this.headers = {};
-  };
+          for (key in headers) {
+            xhr.setRequestHeader(key, headers[key]);
+          }
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      }
+    });
 
-  Headers.prototype.configureXHR = function (xhr) {
-    var headers = this.headers, key;
-
-    for (key in headers) {
-      xhr.setRequestHeader(key, headers[key]);
-    }
-  };
+    return Headers;
+  })();
 
   exports.Headers = Headers;
 });

@@ -5,9 +5,9 @@ import {JSONPRequestMessage} from './jsonp-request-message';
 import {Headers} from './headers';
 
 export class HttpClient {
-  constructor(){
-    this.baseUrl = null;
-    this.defaultRequestHeaders = new Headers();
+  constructor(baseUrl = null, defaultRequestHeaders = new Headers()){
+    this.baseUrl = baseUrl;
+    this.defaultRequestHeaders = defaultRequestHeaders;
   }
 
   send(requestMessage, progressCallback){
@@ -20,6 +20,10 @@ export class HttpClient {
 
   put(uri, content, replacer){
     return this.send(new HttpRequestMessage('PUT', join(this.baseUrl, uri), content, replacer || this.replacer).withHeaders(this.defaultRequestHeaders));
+  }
+
+  patch(uri, content, replacer){
+    return this.send(new HttpRequestMessage('PATCH', join(this.baseUrl, uri), content, replacer || this.replacer).withHeaders(this.defaultRequestHeaders));
   }
 
   post(uri, content, replacer){

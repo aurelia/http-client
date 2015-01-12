@@ -1,7 +1,7 @@
 System.register(["./headers", "./http-response-message"], function (_export) {
   "use strict";
 
-  var Headers, HttpResponseMessage, HttpRequestMessage;
+  var Headers, HttpResponseMessage, _prototypeProperties, HttpRequestMessage;
   return {
     setters: [function (_headers) {
       Headers = _headers.Headers;
@@ -9,87 +9,115 @@ System.register(["./headers", "./http-response-message"], function (_export) {
       HttpResponseMessage = _httpResponseMessage.HttpResponseMessage;
     }],
     execute: function () {
-      HttpRequestMessage = function HttpRequestMessage(method, uri, content, replacer) {
-        this.method = method;
-        this.uri = uri;
-        this.content = content;
-        this.headers = new Headers();
-        this.responseType = "json";
-        this.replacer = replacer;
+      _prototypeProperties = function (child, staticProps, instanceProps) {
+        if (staticProps) Object.defineProperties(child, staticProps);
+        if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
       };
 
-      HttpRequestMessage.prototype.withHeaders = function (headers) {
-        this.headers = headers;
-        return this;
-      };
+      HttpRequestMessage = (function () {
+        var HttpRequestMessage = function HttpRequestMessage(method, uri, content, replacer) {
+          this.method = method;
+          this.uri = uri;
+          this.content = content;
+          this.headers = new Headers();
+          this.responseType = "json";
+          this.replacer = replacer;
+        };
 
-      HttpRequestMessage.prototype.configureXHR = function (xhr) {
-        xhr.open(this.method, this.uri, true);
-        xhr.responseType = this.responseType;
-        this.headers.configureXHR(xhr);
-      };
+        _prototypeProperties(HttpRequestMessage, null, {
+          withHeaders: {
+            value: function (headers) {
+              this.headers = headers;
+              return this;
+            },
+            writable: true,
+            enumerable: true,
+            configurable: true
+          },
+          configureXHR: {
+            value: function (xhr) {
+              xhr.open(this.method, this.uri, true);
+              xhr.responseType = this.responseType;
+              this.headers.configureXHR(xhr);
+            },
+            writable: true,
+            enumerable: true,
+            configurable: true
+          },
+          formatContent: {
+            value: function () {
+              var content = this.content;
 
-      HttpRequestMessage.prototype.formatContent = function () {
-        var content = this.content;
+              if (window.FormData && content instanceof FormData) {
+                return content;
+              }
 
-        if (window.FormData && content instanceof FormData) {
-          return content;
-        }
+              if (window.Blob && content instanceof Blob) {
+                return content;
+              }
 
-        if (window.Blob && content instanceof Blob) {
-          return content;
-        }
+              if (window.ArrayBufferView && content instanceof ArrayBufferView) {
+                return content;
+              }
 
-        if (window.ArrayBufferView && content instanceof ArrayBufferView) {
-          return content;
-        }
+              if (content instanceof Document) {
+                return content;
+              }
 
-        if (content instanceof Document) {
-          return content;
-        }
+              if (typeof content === "string") {
+                return content;
+              }
 
-        if (typeof content === "string") {
-          return content;
-        }
+              return JSON.stringify(content, this.replacer);
+            },
+            writable: true,
+            enumerable: true,
+            configurable: true
+          },
+          send: {
+            value: function (client, progressCallback) {
+              var _this = this;
+              return new Promise(function (resolve, reject) {
+                var xhr = new XMLHttpRequest(),
+                    responseType = _this.responseType;
 
-        return JSON.stringify(content, this.replacer);
-      };
+                if (responseType === "json") {
+                  _this.responseType = "text";
+                }
 
-      HttpRequestMessage.prototype.send = function (client, progressCallback) {
-        var _this = this;
-        return new Promise(function (resolve, reject) {
-          var xhr = new XMLHttpRequest(), responseType = _this.responseType;
+                if (client.timeout !== undefined) {
+                  xhr.timeout = client.timeout;
+                }
 
-          if (responseType === "json") {
-            _this.responseType = "text";
+                _this.configureXHR(xhr);
+
+                xhr.onload = function (e) {
+                  resolve(new HttpResponseMessage(_this, xhr, responseType, client.reviver));
+                };
+
+                xhr.ontimeout = function (e) {
+                  resolve(new HttpResponseMessage(this, xhr, responseType));
+                };
+
+                xhr.onerror = function (e) {
+                  resolve(new HttpResponseMessage(this, xhr, responseType));
+                };
+
+                if (progressCallback) {
+                  xhr.upload.onprogress = progressCallback;
+                }
+
+                xhr.send(_this.formatContent());
+              });
+            },
+            writable: true,
+            enumerable: true,
+            configurable: true
           }
-
-          if (client.timeout !== undefined) {
-            xhr.timeout = client.timeout;
-          }
-
-          _this.configureXHR(xhr);
-
-          xhr.onload = function (e) {
-            resolve(new HttpResponseMessage(_this, xhr, responseType, client.reviver));
-          };
-
-          xhr.ontimeout = function (e) {
-            resolve(new HttpResponseMessage(this, xhr, responseType));
-          };
-
-          xhr.onerror = function (e) {
-            resolve(new HttpResponseMessage(this, xhr, responseType));
-          };
-
-          if (progressCallback) {
-            xhr.upload.onprogress = progressCallback;
-          }
-
-          xhr.send(_this.formatContent());
         });
-      };
 
+        return HttpRequestMessage;
+      })();
       _export("HttpRequestMessage", HttpRequestMessage);
     }
   };
