@@ -67,12 +67,12 @@ export class HttpRequestMessage {
         resolve(new HttpResponseMessage(this, xhr, responseType, client.reviver));
       };
 
-      xhr.ontimeout = function(e){
-        resolve(new HttpResponseMessage(this, xhr, responseType));
+      xhr.ontimeout = (e) => {
+        reject(new Error(e));
       };
 
-      xhr.onerror = function(e){
-        resolve(new HttpResponseMessage(this, xhr, responseType));
+      xhr.onerror = (e) => {
+        reject(new Error(e));
       };
 
       if(progressCallback){
