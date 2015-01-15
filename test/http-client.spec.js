@@ -58,7 +58,7 @@ describe('http client', () => {
         request.respondWith({ status: 200 });
       });
 
-      it('should retrive correct content', (done) => {
+      it('should retrieve correct content', (done) => {
         var client = new HttpClient(baseUrl);
 
         client.get('some/cool/path').then(response => {
@@ -151,7 +151,7 @@ describe('http client', () => {
         request.respondWith({ status: 200 });
       });
 
-      it('should retrive correct content', (done) => {
+      it('should retrieve correct content', (done) => {
         var client = new HttpClient(baseUrl);
 
         client.put('some/cool/path').then(response => {
@@ -244,7 +244,7 @@ describe('http client', () => {
         request.respondWith({ status: 200 });
       });
 
-      it('should retrive correct content', (done) => {
+      it('should retrieve correct content', (done) => {
         var client = new HttpClient(baseUrl);
 
         client.patch('some/cool/path').then(response => {
@@ -337,7 +337,7 @@ describe('http client', () => {
         request.respondWith({ status: 201 });
       });
 
-      it('should retrive correct content', (done) => {
+      it('should retrieve correct content', (done) => {
         var client = new HttpClient(baseUrl);
 
         client.post('some/cool/path').then(response => {
