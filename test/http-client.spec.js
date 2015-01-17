@@ -431,4 +431,85 @@ describe('http client', () => {
 
   });
 
+  describe('send', () => {
+
+    it('should reject on onerror', (done) => {
+      var client = new HttpClient();
+
+      client.get('some/cool/url').then(response => {
+
+      }, error => {
+        expect(error instanceof Error).toBe(true);
+        done();
+      });
+
+      jasmine.Ajax.requests.mostRecent().responseError(); 
+
+    });
+
+    it('should reject on ontimeout', (done) => {
+        jasmine.clock().install()
+        var client = new HttpClient();
+
+        client.get('some/cool/url').then(response => {
+        }, error => {
+          expect(error instanceof Error).toBe(true);
+          done();
+        });
+
+        jasmine.Ajax.requests.mostRecent().responseTimeout(); 
+        jasmine.clock().uninstall();
+    });
+
+    it('can parse request headers', (done) => {
+      var client = new HttpClient();
+
+      client.get('some/cool/url').then(response => {
+        expect(response.headers.get('Access-Control-Allow-Origin')).toBe('http://www.example.com');
+        done();
+      });
+
+      var request = jasmine.Ajax.requests.mostRecent();
+      request.respondWith({         
+        responseHeaders: [{ name: 'Access-Control-Allow-Origin', value: 'http://www.example.com'}] 
+      });
+
+    });
+
+    it('can parse multiple request headers', (done) => {
+      var client = new HttpClient();
+
+      client.get('some/cool/url').then(response => {
+        expect(response.headers.get('Access-Control-Allow-Origin')).toBe('http://www.example.com');
+        expect(response.headers.get('Content-Type')).toBe('application/json');
+        done();
+      });
+
+      var request = jasmine.Ajax.requests.mostRecent();
+      request.respondWith({         
+        responseHeaders: [
+          { name: 'Access-Control-Allow-Origin', value: 'http://www.example.com'},
+          { name: 'Content-Type', value: 'application/json'}
+        ] 
+      });
+      
+    });
+
+    it('can parse header values containing :', (done) => {
+      var client = new HttpClient();
+
+      client.get('some/cool/url').then(response => {
+        expect(response.headers.get('Some-Cosy-Header')).toBe('foo:bar');
+        done();
+      });
+
+      var request = jasmine.Ajax.requests.mostRecent();
+      request.respondWith({         
+        responseHeaders: [{ name: 'Some-Cosy-Header', value: 'foo:bar'}] 
+      });
+
+    });
+
+  });
+
 });
