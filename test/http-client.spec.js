@@ -508,7 +508,17 @@ describe('http client', () => {
       request.respondWith({         
         responseHeaders: [{ name: 'Some-Cosy-Header', value: 'foo:bar'}] 
       });
-    });     
+    });
+
+    it('should set callback on upload progress', () => {  
+      var client = new HttpClient();
+      var callback = function(){};
+
+      client.send(new HttpRequestMessage('GET', 'some/cool/url'), callback);
+
+      var response = jasmine.Ajax.requests.mostRecent();      
+      expect(response.upload.onprogress).toBe(callback);
+    });        
 
   });
 
