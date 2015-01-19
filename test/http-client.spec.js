@@ -1,4 +1,5 @@
 import {HttpClient} from '../src/index';
+import {HttpRequestMessage} from '../src/index';
 import {Headers} from '../src/index';
 
 describe('http client', () => {
@@ -436,7 +437,7 @@ describe('http client', () => {
     it('should reject on onerror', (done) => {
       var client = new HttpClient();
 
-      client.get('some/cool/url').then(response => {
+      client.send(new HttpRequestMessage('GET', 'some/cool/url')).then(response => {
 
       }, error => {
         expect(error instanceof Error).toBe(true);
@@ -451,7 +452,7 @@ describe('http client', () => {
         jasmine.clock().install()
         var client = new HttpClient();
 
-        client.get('some/cool/url').then(response => {
+        client.send(new HttpRequestMessage('GET', 'some/cool/url')).then(response => {
         }, error => {
           expect(error instanceof Error).toBe(true);
           done();
@@ -464,7 +465,7 @@ describe('http client', () => {
     it('can parse request headers', (done) => {
       var client = new HttpClient();
 
-      client.get('some/cool/url').then(response => {
+      client.send(new HttpRequestMessage('GET', 'some/cool/url')).then(response => {
         expect(response.headers.get('Access-Control-Allow-Origin')).toBe('http://www.example.com');
         done();
       });
@@ -479,7 +480,7 @@ describe('http client', () => {
     it('can parse multiple request headers', (done) => {
       var client = new HttpClient();
 
-      client.get('some/cool/url').then(response => {
+      client.send(new HttpRequestMessage('GET', 'some/cool/url')).then(response => {
         expect(response.headers.get('Access-Control-Allow-Origin')).toBe('http://www.example.com');
         expect(response.headers.get('Content-Type')).toBe('application/json');
         done();
@@ -498,7 +499,7 @@ describe('http client', () => {
     it('can parse header values containing :', (done) => {
       var client = new HttpClient();
 
-      client.get('some/cool/url').then(response => {
+      client.send(new HttpRequestMessage('GET', 'some/cool/url')).then(response => {
         expect(response.headers.get('Some-Cosy-Header')).toBe('foo:bar');
         done();
       });
@@ -507,8 +508,7 @@ describe('http client', () => {
       request.respondWith({         
         responseHeaders: [{ name: 'Some-Cosy-Header', value: 'foo:bar'}] 
       });
-
-    });
+    });     
 
   });
 
