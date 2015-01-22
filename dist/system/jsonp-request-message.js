@@ -13,14 +13,14 @@ System.register(["./http-response-message"], function (_export) {
       };
 
       JSONPRequestMessage = (function () {
-        var JSONPRequestMessage = function JSONPRequestMessage(uri, callbackParameterName) {
+        function JSONPRequestMessage(uri, callbackParameterName) {
           this.uri = uri;
           this.callbackParameterName = callbackParameterName;
-        };
+        }
 
         _prototypeProperties(JSONPRequestMessage, null, {
           send: {
-            value: function (client) {
+            value: function send(client) {
               var _this = this;
               return new Promise(function (resolve, reject) {
                 var callbackName = "jsonp_callback_" + Math.round(100000 * Math.random());

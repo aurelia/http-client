@@ -8,18 +8,18 @@ var _prototypeProperties = function (child, staticProps, instanceProps) {
 var Headers = require("./headers").Headers;
 var HttpResponseMessage = require("./http-response-message").HttpResponseMessage;
 var HttpRequestMessage = (function () {
-  var HttpRequestMessage = function HttpRequestMessage(method, uri, content, replacer) {
+  function HttpRequestMessage(method, uri, content, replacer) {
     this.method = method;
     this.uri = uri;
     this.content = content;
     this.headers = new Headers();
     this.responseType = "json";
     this.replacer = replacer;
-  };
+  }
 
   _prototypeProperties(HttpRequestMessage, null, {
     withHeaders: {
-      value: function (headers) {
+      value: function withHeaders(headers) {
         this.headers = headers;
         return this;
       },
@@ -28,7 +28,7 @@ var HttpRequestMessage = (function () {
       configurable: true
     },
     configureXHR: {
-      value: function (xhr) {
+      value: function configureXHR(xhr) {
         xhr.open(this.method, this.uri, true);
         xhr.responseType = this.responseType;
         this.headers.configureXHR(xhr);
@@ -38,7 +38,7 @@ var HttpRequestMessage = (function () {
       configurable: true
     },
     formatContent: {
-      value: function () {
+      value: function formatContent() {
         var content = this.content;
 
         if (window.FormData && content instanceof FormData) {
@@ -68,7 +68,7 @@ var HttpRequestMessage = (function () {
       configurable: true
     },
     send: {
-      value: function (client, progressCallback) {
+      value: function send(client, progressCallback) {
         var _this = this;
         return new Promise(function (resolve, reject) {
           var xhr = new XMLHttpRequest(),
@@ -89,11 +89,11 @@ var HttpRequestMessage = (function () {
           };
 
           xhr.ontimeout = function (e) {
-            resolve(new HttpResponseMessage(this, xhr, responseType));
+            reject(new Error(e));
           };
 
           xhr.onerror = function (e) {
-            resolve(new HttpResponseMessage(this, xhr, responseType));
+            reject(new Error(e));
           };
 
           if (progressCallback) {

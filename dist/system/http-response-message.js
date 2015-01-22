@@ -33,11 +33,11 @@ System.register(["./headers"], function (_export) {
       };
 
       HttpResponseMessage = (function () {
-        var HttpResponseMessage = function HttpResponseMessage(requestMessage, xhr, responseType, reviver) {
+        function HttpResponseMessage(requestMessage, xhr, responseType, reviver) {
           this.requestMessage = requestMessage;
           this.statusCode = xhr.status;
           this.response = xhr.response;
-          this.isSuccess = xhr.status === 200;
+          this.isSuccess = xhr.status >= 200 && xhr.status < 300;
           this.statusText = xhr.statusText;
           this.responseType = responseType;
           this.reviver = reviver;
@@ -47,7 +47,7 @@ System.register(["./headers"], function (_export) {
           } else {
             this.headers = new Headers();
           }
-        };
+        }
 
         _prototypeProperties(HttpResponseMessage, null, {
           content: {

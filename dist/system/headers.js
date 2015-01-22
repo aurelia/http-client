@@ -11,14 +11,14 @@ System.register([], function (_export) {
       };
 
       Headers = (function () {
-        var Headers = function Headers() {
+        function Headers() {
           var headers = arguments[0] === undefined ? {} : arguments[0];
           this.headers = headers;
-        };
+        }
 
         _prototypeProperties(Headers, null, {
           add: {
-            value: function (key, value) {
+            value: function add(key, value) {
               this.headers[key] = value;
             },
             writable: true,
@@ -26,7 +26,7 @@ System.register([], function (_export) {
             configurable: true
           },
           get: {
-            value: function (key) {
+            value: function get(key) {
               return this.headers[key];
             },
             writable: true,
@@ -34,7 +34,7 @@ System.register([], function (_export) {
             configurable: true
           },
           clear: {
-            value: function () {
+            value: function clear() {
               this.headers = {};
             },
             writable: true,
@@ -42,8 +42,9 @@ System.register([], function (_export) {
             configurable: true
           },
           configureXHR: {
-            value: function (xhr) {
-              var headers = this.headers, key;
+            value: function configureXHR(xhr) {
+              var headers = this.headers,
+                  key;
 
               for (key in headers) {
                 xhr.setRequestHeader(key, headers[key]);

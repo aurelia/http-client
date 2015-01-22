@@ -1,3 +1,13 @@
+### 0.4.2 (2015-01-22)
+
+
+#### Bug Fixes
+
+* **http-client-spec:** call send method ([7689a195](http://github.com/aurelia/http-client/commit/7689a195e344d0762445f0bfe2fb8b64b0e4790c))
+* **http-request-message:** reject on onerror and ontimeout ([e0880c39](http://github.com/aurelia/http-client/commit/e0880c39b1447c054cdf5c908b4e991ad3ed28d3))
+* **package:** update dependencies ([3697fb76](http://github.com/aurelia/http-client/commit/3697fb76f9be018823ad2a46d2c9136debd4d401))
+
+
 ### 0.4.1 (2015-01-12)
 
 

@@ -1,6 +1,6 @@
 {
   "name": "aurelia-http-client",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "A simple, restful, message-based wrapper around XMLHttpRequest.",
   "keywords": [
     "aurelia",

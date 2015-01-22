@@ -11,7 +11,7 @@ var HttpResponseMessage = require("./http-response-message").HttpResponseMessage
 var JSONPRequestMessage = require("./jsonp-request-message").JSONPRequestMessage;
 var Headers = require("./headers").Headers;
 var HttpClient = (function () {
-  var HttpClient = function HttpClient() {
+  function HttpClient() {
     var _this = this;
     var baseUrl = arguments[0] === undefined ? null : arguments[0];
     var defaultRequestHeaders = arguments[1] === undefined ? new Headers() : arguments[1];
@@ -19,11 +19,11 @@ var HttpClient = (function () {
       _this.baseUrl = baseUrl;
       _this.defaultRequestHeaders = defaultRequestHeaders;
     })();
-  };
+  }
 
   _prototypeProperties(HttpClient, null, {
     send: {
-      value: function (requestMessage, progressCallback) {
+      value: function send(requestMessage, progressCallback) {
         return requestMessage.send(this, progressCallback);
       },
       writable: true,
@@ -31,7 +31,7 @@ var HttpClient = (function () {
       configurable: true
     },
     get: {
-      value: function (uri) {
+      value: function get(uri) {
         return this.send(new HttpRequestMessage("GET", join(this.baseUrl, uri)).withHeaders(this.defaultRequestHeaders));
       },
       writable: true,
@@ -39,7 +39,7 @@ var HttpClient = (function () {
       configurable: true
     },
     put: {
-      value: function (uri, content, replacer) {
+      value: function put(uri, content, replacer) {
         return this.send(new HttpRequestMessage("PUT", join(this.baseUrl, uri), content, replacer || this.replacer).withHeaders(this.defaultRequestHeaders));
       },
       writable: true,
@@ -47,7 +47,7 @@ var HttpClient = (function () {
       configurable: true
     },
     patch: {
-      value: function (uri, content, replacer) {
+      value: function patch(uri, content, replacer) {
         return this.send(new HttpRequestMessage("PATCH", join(this.baseUrl, uri), content, replacer || this.replacer).withHeaders(this.defaultRequestHeaders));
       },
       writable: true,
@@ -55,7 +55,7 @@ var HttpClient = (function () {
       configurable: true
     },
     post: {
-      value: function (uri, content, replacer) {
+      value: function post(uri, content, replacer) {
         return this.send(new HttpRequestMessage("POST", join(this.baseUrl, uri), content, replacer || this.replacer).withHeaders(this.defaultRequestHeaders));
       },
       writable: true,
@@ -63,7 +63,7 @@ var HttpClient = (function () {
       configurable: true
     },
     "delete": {
-      value: function (uri) {
+      value: function _delete(uri) {
         return this.send(new HttpRequestMessage("DELETE", join(this.baseUrl, uri)).withHeaders(this.defaultRequestHeaders));
       },
       writable: true,
@@ -71,7 +71,7 @@ var HttpClient = (function () {
       configurable: true
     },
     jsonp: {
-      value: function (uri) {
+      value: function jsonp(uri) {
         var callbackParameterName = arguments[1] === undefined ? "jsoncallback" : arguments[1];
         return this.send(new JSONPRequestMessage(join(this.baseUrl, uri), callbackParameterName));
       },

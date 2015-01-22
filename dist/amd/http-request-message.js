@@ -9,18 +9,18 @@ define(["exports", "./headers", "./http-response-message"], function (exports, _
   var Headers = _headers.Headers;
   var HttpResponseMessage = _httpResponseMessage.HttpResponseMessage;
   var HttpRequestMessage = (function () {
-    var HttpRequestMessage = function HttpRequestMessage(method, uri, content, replacer) {
+    function HttpRequestMessage(method, uri, content, replacer) {
       this.method = method;
       this.uri = uri;
       this.content = content;
       this.headers = new Headers();
       this.responseType = "json";
       this.replacer = replacer;
-    };
+    }
 
     _prototypeProperties(HttpRequestMessage, null, {
       withHeaders: {
-        value: function (headers) {
+        value: function withHeaders(headers) {
           this.headers = headers;
           return this;
         },
@@ -29,7 +29,7 @@ define(["exports", "./headers", "./http-response-message"], function (exports, _
         configurable: true
       },
       configureXHR: {
-        value: function (xhr) {
+        value: function configureXHR(xhr) {
           xhr.open(this.method, this.uri, true);
           xhr.responseType = this.responseType;
           this.headers.configureXHR(xhr);
@@ -39,7 +39,7 @@ define(["exports", "./headers", "./http-response-message"], function (exports, _
         configurable: true
       },
       formatContent: {
-        value: function () {
+        value: function formatContent() {
           var content = this.content;
 
           if (window.FormData && content instanceof FormData) {
@@ -69,7 +69,7 @@ define(["exports", "./headers", "./http-response-message"], function (exports, _
         configurable: true
       },
       send: {
-        value: function (client, progressCallback) {
+        value: function send(client, progressCallback) {
           var _this = this;
           return new Promise(function (resolve, reject) {
             var xhr = new XMLHttpRequest(),
@@ -90,11 +90,11 @@ define(["exports", "./headers", "./http-response-message"], function (exports, _
             };
 
             xhr.ontimeout = function (e) {
-              resolve(new HttpResponseMessage(this, xhr, responseType));
+              reject(new Error(e));
             };
 
             xhr.onerror = function (e) {
-              resolve(new HttpResponseMessage(this, xhr, responseType));
+              reject(new Error(e));
             };
 
             if (progressCallback) {
