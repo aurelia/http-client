@@ -6,6 +6,7 @@ export class HttpRequestMessage {
     this.method = method;
     this.uri = uri;
     this.content = content;
+    this.params = {};
     this.headers = new Headers();
     this.responseType = 'json'; //text, arraybuffer, blob, document
     this.replacer = replacer;
@@ -16,8 +17,13 @@ export class HttpRequestMessage {
     return this;
   }
 
-  configureXHR(xhr){
-    xhr.open(this.method, this.uri, true);
+  withParams(params){
+    this.params = params || {};
+    return this;
+  }
+
+  configureXHR(xhr, params){
+    xhr.open(this.method, buildQueryString(this.uri, this.params), true);
     xhr.responseType = this.responseType;
     this.headers.configureXHR(xhr);
   }
@@ -82,4 +88,12 @@ export class HttpRequestMessage {
       xhr.send(this.formatContent());
     });
   }
+}
+
+function buildQueryString(uri, parameters){
+  if (!parameters || !Object.keys(parameters).length) return uri;
+
+  return String.prototype.concat.call(uri, '?', Object.keys(parameters).map((each) => {
+    return encodeURIComponent(each) + '=' + encodeURIComponent(parameters[each]);
+  }).join('&'));
 }

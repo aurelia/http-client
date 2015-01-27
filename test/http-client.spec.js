@@ -42,6 +42,22 @@ describe('http client', () => {
         expect(request.requestHeaders['Authorization']).toBe('bearer 123');
       });
 
+      it('should add parameters object as a query string', () => {
+        var client = new HttpClient(baseUrl);
+        var params = {
+          one: "one",
+          two: "two",
+          three: 3
+        };
+
+        client.get('path/with/params', params);
+
+        var request = jasmine.Ajax.requests.mostRecent();
+
+        expect(request.url).toBe(`${baseUrl}path/with/params?one=one&two=two&three=3`);
+        expect(request.method).toBe('GET');
+        expect(request.data()).toEqual({});
+      });
     });
 
     describe('response', () => {
