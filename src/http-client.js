@@ -14,8 +14,8 @@ export class HttpClient {
     return requestMessage.send(this, progressCallback);
   }
 
-  get(uri){
-    return this.send(new HttpRequestMessage('GET', join(this.baseUrl, uri)).withHeaders(this.defaultRequestHeaders));
+  get(uri, params){
+    return this.send(new HttpRequestMessage('GET', join(this.baseUrl, uri)).withParams(params).withHeaders(this.defaultRequestHeaders));
   }
 
   put(uri, content, replacer){
