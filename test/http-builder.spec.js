@@ -1,9 +1,8 @@
-import {HttpClient} from '../src/index';
 import {HttpBuilder} from '../src/http-builder';
 import {HttpRequestMessage} from '../src/index';
 import {Headers} from '../src/index';
 
-describe('http client', () => {
+describe('http-builder', () => {
 
   var baseUrl = "http://example.com/";
 
@@ -15,24 +14,12 @@ describe('http client', () => {
     jasmine.Ajax.uninstall();
   });
 
-  describe('request', () => {   
-    it('should return an HttpBuilder object', () => {      
-      var client = new HttpClient(baseUrl);
-
-      var requestBuilder = client.request();
-
-      expect(requestBuilder).toBeTruthy();
-      expect(requestBuilder instanceof HttpBuilder).toBe(true);
-      expect(requestBuilder.baseUrl).toEqual(baseUrl);
-    });
-  });
-
   describe('get', () => {   
 
     describe('request', () => { 
 
       it('should make expected request', () => {      
-        var client = new HttpClient(baseUrl);
+        var client = new HttpBuilder(baseUrl);
 
         client.get('some/cool/path');
 
@@ -46,7 +33,7 @@ describe('http client', () => {
       it('should provide expected request headers', () => {      
         var headers = new Headers();
         headers.add('Authorization', 'bearer 123');
-        var client = new HttpClient(undefined, headers);
+        var client = new HttpBuilder(undefined, headers);
 
         client.get('some/cool/path');
 
@@ -60,7 +47,7 @@ describe('http client', () => {
     describe('response', () => {
 
       it('should succeed on 200 response', (done) => {
-        var client = new HttpClient(baseUrl);
+        var client = new HttpBuilder(baseUrl);
 
         client.get('some/cool/path').then(response => {
           expect(response.isSuccess).toBe(true);
@@ -73,7 +60,7 @@ describe('http client', () => {
       });
 
       it('should retrieve correct content', (done) => {
-        var client = new HttpClient(baseUrl);
+        var client = new HttpBuilder(baseUrl);
 
         client.get('some/cool/path').then(response => {
           expect(response.content.name).toBe('Martin');
@@ -86,7 +73,7 @@ describe('http client', () => {
       });
 
       it('should not succeed on 500 response', (done) => {
-        var client = new HttpClient(baseUrl);
+        var client = new HttpBuilder(baseUrl);
 
         client.get('some/cool/path').then(response => {
           expect(response.isSuccess).toBe(false);
@@ -111,7 +98,7 @@ describe('http client', () => {
         var content = { firstName: "John", lastName: "Doe" };
         var headers = new Headers();
         headers.add('Content-Type', 'application/json');    
-        var client = new HttpClient(baseUrl, headers);
+        var client = new HttpBuilder(baseUrl, headers);
 
         client.put('some/cool/path', content);
 
@@ -126,7 +113,7 @@ describe('http client', () => {
         var content = { firstName: "John", lastName: "Doe" };
         var headers = new Headers();
         headers.add('Content-Type', 'application/json');    
-        var client = new HttpClient(baseUrl, headers);
+        var client = new HttpBuilder(baseUrl, headers);
 
         client.put('some/cool/path', content, ['firstName']);
 
@@ -139,7 +126,7 @@ describe('http client', () => {
       it('should provide expected request headers', () => {      
         var headers = new Headers();
         headers.add('Authorization', 'bearer 123');
-        var client = new HttpClient(undefined, headers);
+        var client = new HttpBuilder(undefined, headers);
 
         client.put('some/cool/path');
 
@@ -153,7 +140,7 @@ describe('http client', () => {
     describe('response', () => {
 
       it('should succeed on 200 response', (done) => {
-        var client = new HttpClient(baseUrl);
+        var client = new HttpBuilder(baseUrl);
 
         client.get('some/cool/path').then(response => {
           expect(response.isSuccess).toBe(true);
@@ -166,7 +153,7 @@ describe('http client', () => {
       });
 
       it('should retrieve correct content', (done) => {
-        var client = new HttpClient(baseUrl);
+        var client = new HttpBuilder(baseUrl);
 
         client.put('some/cool/path').then(response => {
           expect(response.content.name).toBe('Martin');
@@ -179,7 +166,7 @@ describe('http client', () => {
       });
 
       it('should not succeed on 500 response', (done) => {
-        var client = new HttpClient(baseUrl);
+        var client = new HttpBuilder(baseUrl);
 
         client.put('some/cool/path').then(response => {
           expect(response.isSuccess).toBe(false);
@@ -204,7 +191,7 @@ describe('http client', () => {
         var content = { firstName: "John", lastName: "Doe" };
         var headers = new Headers();
         headers.add('Content-Type', 'application/json');    
-        var client = new HttpClient(baseUrl, headers);
+        var client = new HttpBuilder(baseUrl, headers);
 
         client.patch('some/cool/path', content);
 
@@ -219,7 +206,7 @@ describe('http client', () => {
         var content = { firstName: "John", lastName: "Doe" };
         var headers = new Headers();
         headers.add('Content-Type', 'application/json');    
-        var client = new HttpClient(baseUrl, headers);
+        var client = new HttpBuilder(baseUrl, headers);
 
         client.patch('some/cool/path', content, ['firstName']);
 
@@ -232,7 +219,7 @@ describe('http client', () => {
       it('should provide expected request headers', () => {      
         var headers = new Headers();
         headers.add('Authorization', 'bearer 123');
-        var client = new HttpClient(undefined, headers);
+        var client = new HttpBuilder(undefined, headers);
 
         client.patch('some/cool/path');
 
@@ -246,7 +233,7 @@ describe('http client', () => {
     describe('response', () => {
 
       it('should succeed on 200 response', (done) => {
-        var client = new HttpClient(baseUrl);
+        var client = new HttpBuilder(baseUrl);
 
         client.put('some/cool/path').then(response => {
           expect(response.isSuccess).toBe(true);
@@ -259,7 +246,7 @@ describe('http client', () => {
       });
 
       it('should retrieve correct content', (done) => {
-        var client = new HttpClient(baseUrl);
+        var client = new HttpBuilder(baseUrl);
 
         client.patch('some/cool/path').then(response => {
           expect(response.content.name).toBe('Martin');
@@ -272,7 +259,7 @@ describe('http client', () => {
       });
 
       it('should not succeed on 500 response', (done) => {
-        var client = new HttpClient(baseUrl);
+        var client = new HttpBuilder(baseUrl);
 
         client.patch('some/cool/path').then(response => {
           expect(response.isSuccess).toBe(false);
@@ -297,7 +284,7 @@ describe('http client', () => {
         var content = { firstName: "John", lastName: "Doe" };
         var headers = new Headers();
         headers.add('Content-Type', 'application/json');    
-        var client = new HttpClient(baseUrl, headers);
+        var client = new HttpBuilder(baseUrl, headers);
 
         client.post('some/cool/path', content);
 
@@ -312,7 +299,7 @@ describe('http client', () => {
         var content = { firstName: "John", lastName: "Doe" };
         var headers = new Headers();
         headers.add('Content-Type', 'application/json');    
-        var client = new HttpClient(baseUrl, headers);
+        var client = new HttpBuilder(baseUrl, headers);
 
         client.post('some/cool/path', content, ['firstName']);
 
@@ -325,7 +312,7 @@ describe('http client', () => {
       it('should provide expected request headers', () => {      
         var headers = new Headers();
         headers.add('Authorization', 'bearer 123');
-        var client = new HttpClient(undefined, headers);
+        var client = new HttpBuilder(undefined, headers);
 
         client.post('some/cool/path');
 
@@ -339,7 +326,7 @@ describe('http client', () => {
     describe('response', () => {
 
       it('should succeed on 201 response', (done) => {
-        var client = new HttpClient(baseUrl);
+        var client = new HttpBuilder(baseUrl);
 
         client.post('some/cool/path').then(response => {
           expect(response.isSuccess).toBe(true);
@@ -352,7 +339,7 @@ describe('http client', () => {
       });
 
       it('should retrieve correct content', (done) => {
-        var client = new HttpClient(baseUrl);
+        var client = new HttpBuilder(baseUrl);
 
         client.post('some/cool/path').then(response => {
           expect(response.content.name).toBe('Martin');
@@ -365,7 +352,7 @@ describe('http client', () => {
       });
 
       it('should not succeed on 500 response', (done) => {
-        var client = new HttpClient(baseUrl);
+        var client = new HttpBuilder(baseUrl);
 
         client.post('some/cool/path').then(response => {
           expect(response.isSuccess).toBe(false);
@@ -385,7 +372,7 @@ describe('http client', () => {
       describe('request', () => { 
 
         it('should make expected request', () => {      
-          var client = new HttpClient(baseUrl);
+          var client = new HttpBuilder(baseUrl);
 
           client.delete('some/cool/path');
 
@@ -399,7 +386,7 @@ describe('http client', () => {
         it('should provide expected request headers', () => {      
           var headers = new Headers();
           headers.add('Authorization', 'bearer 123');
-          var client = new HttpClient(undefined, headers);
+          var client = new HttpBuilder(undefined, headers);
 
           client.delete('some/cool/path');
 
@@ -413,7 +400,7 @@ describe('http client', () => {
       describe('response', () => {
 
         it('should succeed on 200 response', (done) => {
-          var client = new HttpClient(baseUrl);
+          var client = new HttpBuilder(baseUrl);
 
           client.delete('some/cool/path').then(response => {
             expect(response.isSuccess).toBe(true);
@@ -426,7 +413,7 @@ describe('http client', () => {
         });
 
         it('should not succeed on 500 response', (done) => {
-          var client = new HttpClient(baseUrl);
+          var client = new HttpBuilder(baseUrl);
 
           client.delete('some/cool/path').then(response => {
             expect(response.isSuccess).toBe(false);
@@ -448,7 +435,7 @@ describe('http client', () => {
   describe('send', () => {
 
     it('should reject on onerror', (done) => {
-      var client = new HttpClient();
+      var client = new HttpBuilder();
 
       client.send(new HttpRequestMessage('GET', 'some/cool/url')).then(response => {
 
@@ -463,7 +450,7 @@ describe('http client', () => {
 
     it('should reject on ontimeout', (done) => {
         jasmine.clock().install()
-        var client = new HttpClient();
+        var client = new HttpBuilder();
 
         client.send(new HttpRequestMessage('GET', 'some/cool/url')).then(response => {
         }, error => {
@@ -476,7 +463,7 @@ describe('http client', () => {
     });
 
     it('can parse request headers', (done) => {
-      var client = new HttpClient();
+      var client = new HttpBuilder();
 
       client.send(new HttpRequestMessage('GET', 'some/cool/url')).then(response => {
         expect(response.headers.get('Access-Control-Allow-Origin')).toBe('http://www.example.com');
@@ -491,7 +478,7 @@ describe('http client', () => {
     });
 
     it('can parse multiple request headers', (done) => {
-      var client = new HttpClient();
+      var client = new HttpBuilder();
 
       client.send(new HttpRequestMessage('GET', 'some/cool/url')).then(response => {
         expect(response.headers.get('Access-Control-Allow-Origin')).toBe('http://www.example.com');
@@ -510,7 +497,7 @@ describe('http client', () => {
     });
 
     it('can parse header values containing :', (done) => {
-      var client = new HttpClient();
+      var client = new HttpBuilder();
 
       client.send(new HttpRequestMessage('GET', 'some/cool/url')).then(response => {
         expect(response.headers.get('Some-Cosy-Header')).toBe('foo:bar');
@@ -524,7 +511,7 @@ describe('http client', () => {
     });
 
     it('should set callback on upload progress', () => {  
-      var client = new HttpClient();
+      var client = new HttpBuilder();
       var callback = function(){};
 
       client.send(new HttpRequestMessage('GET', 'some/cool/url'), callback);
