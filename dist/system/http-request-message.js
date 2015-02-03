@@ -9,12 +9,9 @@ System.register(["./headers", "./http-response-message"], function (_export) {
       HttpResponseMessage = _httpResponseMessage.HttpResponseMessage;
     }],
     execute: function () {
-      _prototypeProperties = function (child, staticProps, instanceProps) {
-        if (staticProps) Object.defineProperties(child, staticProps);
-        if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
-      };
+      _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
 
-      HttpRequestMessage = (function () {
+      HttpRequestMessage = _export("HttpRequestMessage", (function () {
         function HttpRequestMessage(method, uri, content, replacer) {
           this.method = method;
           this.uri = uri;
@@ -31,7 +28,6 @@ System.register(["./headers", "./http-response-message"], function (_export) {
               return this;
             },
             writable: true,
-            enumerable: true,
             configurable: true
           },
           configureXHR: {
@@ -41,7 +37,6 @@ System.register(["./headers", "./http-response-message"], function (_export) {
               this.headers.configureXHR(xhr);
             },
             writable: true,
-            enumerable: true,
             configurable: true
           },
           formatContent: {
@@ -71,7 +66,6 @@ System.register(["./headers", "./http-response-message"], function (_export) {
               return JSON.stringify(content, this.replacer);
             },
             writable: true,
-            enumerable: true,
             configurable: true
           },
           send: {
@@ -96,11 +90,19 @@ System.register(["./headers", "./http-response-message"], function (_export) {
                 };
 
                 xhr.ontimeout = function (e) {
-                  reject(new Error(e));
+                  reject(new HttpResponseMessage(_this, {
+                    response: e,
+                    status: xhr.status,
+                    statusText: xhr.statusText
+                  }, "timeout"));
                 };
 
                 xhr.onerror = function (e) {
-                  reject(new Error(e));
+                  reject(new HttpResponseMessage(_this, {
+                    response: e,
+                    status: xhr.status,
+                    statusText: xhr.statusText
+                  }, "error"));
                 };
 
                 if (progressCallback) {
@@ -111,14 +113,12 @@ System.register(["./headers", "./http-response-message"], function (_export) {
               });
             },
             writable: true,
-            enumerable: true,
             configurable: true
           }
         });
 
         return HttpRequestMessage;
-      })();
-      _export("HttpRequestMessage", HttpRequestMessage);
+      })());
     }
   };
 });

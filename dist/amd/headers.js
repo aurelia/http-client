@@ -1,12 +1,9 @@
 define(["exports"], function (exports) {
   "use strict";
 
-  var _prototypeProperties = function (child, staticProps, instanceProps) {
-    if (staticProps) Object.defineProperties(child, staticProps);
-    if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
-  };
+  var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
 
-  var Headers = (function () {
+  var Headers = exports.Headers = (function () {
     function Headers() {
       var headers = arguments[0] === undefined ? {} : arguments[0];
       this.headers = headers;
@@ -18,7 +15,6 @@ define(["exports"], function (exports) {
           this.headers[key] = value;
         },
         writable: true,
-        enumerable: true,
         configurable: true
       },
       get: {
@@ -26,7 +22,6 @@ define(["exports"], function (exports) {
           return this.headers[key];
         },
         writable: true,
-        enumerable: true,
         configurable: true
       },
       clear: {
@@ -34,7 +29,6 @@ define(["exports"], function (exports) {
           this.headers = {};
         },
         writable: true,
-        enumerable: true,
         configurable: true
       },
       configureXHR: {
@@ -47,13 +41,11 @@ define(["exports"], function (exports) {
           }
         },
         writable: true,
-        enumerable: true,
         configurable: true
       }
     });
 
     return Headers;
   })();
-
-  exports.Headers = Headers;
+  exports.__esModule = true;
 });

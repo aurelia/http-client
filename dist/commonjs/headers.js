@@ -1,11 +1,8 @@
 "use strict";
 
-var _prototypeProperties = function (child, staticProps, instanceProps) {
-  if (staticProps) Object.defineProperties(child, staticProps);
-  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
-};
+var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
 
-var Headers = (function () {
+var Headers = exports.Headers = (function () {
   function Headers() {
     var headers = arguments[0] === undefined ? {} : arguments[0];
     this.headers = headers;
@@ -17,7 +14,6 @@ var Headers = (function () {
         this.headers[key] = value;
       },
       writable: true,
-      enumerable: true,
       configurable: true
     },
     get: {
@@ -25,7 +21,6 @@ var Headers = (function () {
         return this.headers[key];
       },
       writable: true,
-      enumerable: true,
       configurable: true
     },
     clear: {
@@ -33,7 +28,6 @@ var Headers = (function () {
         this.headers = {};
       },
       writable: true,
-      enumerable: true,
       configurable: true
     },
     configureXHR: {
@@ -46,12 +40,10 @@ var Headers = (function () {
         }
       },
       writable: true,
-      enumerable: true,
       configurable: true
     }
   });
 
   return Headers;
 })();
-
-exports.Headers = Headers;
+exports.__esModule = true;

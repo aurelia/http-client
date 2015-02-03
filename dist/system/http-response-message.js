@@ -27,12 +27,9 @@ System.register(["./headers"], function (_export) {
       Headers = _headers.Headers;
     }],
     execute: function () {
-      _prototypeProperties = function (child, staticProps, instanceProps) {
-        if (staticProps) Object.defineProperties(child, staticProps);
-        if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
-      };
+      _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
 
-      HttpResponseMessage = (function () {
+      HttpResponseMessage = _export("HttpResponseMessage", (function () {
         function HttpResponseMessage(requestMessage, xhr, responseType, reviver) {
           this.requestMessage = requestMessage;
           this.statusCode = xhr.status;
@@ -66,14 +63,12 @@ System.register(["./headers"], function (_export) {
 
               return this._content = this.response;
             },
-            enumerable: true,
             configurable: true
           }
         });
 
         return HttpResponseMessage;
-      })();
-      _export("HttpResponseMessage", HttpResponseMessage);
+      })());
     }
   };
 });

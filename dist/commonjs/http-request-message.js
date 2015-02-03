@@ -1,13 +1,10 @@
 "use strict";
 
-var _prototypeProperties = function (child, staticProps, instanceProps) {
-  if (staticProps) Object.defineProperties(child, staticProps);
-  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
-};
+var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
 
 var Headers = require("./headers").Headers;
 var HttpResponseMessage = require("./http-response-message").HttpResponseMessage;
-var HttpRequestMessage = (function () {
+var HttpRequestMessage = exports.HttpRequestMessage = (function () {
   function HttpRequestMessage(method, uri, content, replacer) {
     this.method = method;
     this.uri = uri;
@@ -24,7 +21,6 @@ var HttpRequestMessage = (function () {
         return this;
       },
       writable: true,
-      enumerable: true,
       configurable: true
     },
     configureXHR: {
@@ -34,7 +30,6 @@ var HttpRequestMessage = (function () {
         this.headers.configureXHR(xhr);
       },
       writable: true,
-      enumerable: true,
       configurable: true
     },
     formatContent: {
@@ -64,7 +59,6 @@ var HttpRequestMessage = (function () {
         return JSON.stringify(content, this.replacer);
       },
       writable: true,
-      enumerable: true,
       configurable: true
     },
     send: {
@@ -89,11 +83,19 @@ var HttpRequestMessage = (function () {
           };
 
           xhr.ontimeout = function (e) {
-            reject(new Error(e));
+            reject(new HttpResponseMessage(_this, {
+              response: e,
+              status: xhr.status,
+              statusText: xhr.statusText
+            }, "timeout"));
           };
 
           xhr.onerror = function (e) {
-            reject(new Error(e));
+            reject(new HttpResponseMessage(_this, {
+              response: e,
+              status: xhr.status,
+              statusText: xhr.statusText
+            }, "error"));
           };
 
           if (progressCallback) {
@@ -104,12 +106,10 @@ var HttpRequestMessage = (function () {
         });
       },
       writable: true,
-      enumerable: true,
       configurable: true
     }
   });
 
   return HttpRequestMessage;
 })();
-
-exports.HttpRequestMessage = HttpRequestMessage;
+exports.__esModule = true;

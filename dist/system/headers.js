@@ -5,12 +5,9 @@ System.register([], function (_export) {
   return {
     setters: [],
     execute: function () {
-      _prototypeProperties = function (child, staticProps, instanceProps) {
-        if (staticProps) Object.defineProperties(child, staticProps);
-        if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
-      };
+      _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
 
-      Headers = (function () {
+      Headers = _export("Headers", (function () {
         function Headers() {
           var headers = arguments[0] === undefined ? {} : arguments[0];
           this.headers = headers;
@@ -22,7 +19,6 @@ System.register([], function (_export) {
               this.headers[key] = value;
             },
             writable: true,
-            enumerable: true,
             configurable: true
           },
           get: {
@@ -30,7 +26,6 @@ System.register([], function (_export) {
               return this.headers[key];
             },
             writable: true,
-            enumerable: true,
             configurable: true
           },
           clear: {
@@ -38,7 +33,6 @@ System.register([], function (_export) {
               this.headers = {};
             },
             writable: true,
-            enumerable: true,
             configurable: true
           },
           configureXHR: {
@@ -51,14 +45,12 @@ System.register([], function (_export) {
               }
             },
             writable: true,
-            enumerable: true,
             configurable: true
           }
         });
 
         return Headers;
-      })();
-      _export("Headers", Headers);
+      })());
     }
   };
 });

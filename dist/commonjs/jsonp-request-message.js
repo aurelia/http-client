@@ -1,12 +1,9 @@
 "use strict";
 
-var _prototypeProperties = function (child, staticProps, instanceProps) {
-  if (staticProps) Object.defineProperties(child, staticProps);
-  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
-};
+var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
 
 var HttpResponseMessage = require("./http-response-message").HttpResponseMessage;
-var JSONPRequestMessage = (function () {
+var JSONPRequestMessage = exports.JSONPRequestMessage = (function () {
   function JSONPRequestMessage(uri, callbackParameterName) {
     this.uri = uri;
     this.callbackParameterName = callbackParameterName;
@@ -36,12 +33,10 @@ var JSONPRequestMessage = (function () {
         });
       },
       writable: true,
-      enumerable: true,
       configurable: true
     }
   });
 
   return JSONPRequestMessage;
 })();
-
-exports.JSONPRequestMessage = JSONPRequestMessage;
+exports.__esModule = true;

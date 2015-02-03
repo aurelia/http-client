@@ -1,10 +1,7 @@
 define(["exports", "./headers"], function (exports, _headers) {
   "use strict";
 
-  var _prototypeProperties = function (child, staticProps, instanceProps) {
-    if (staticProps) Object.defineProperties(child, staticProps);
-    if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
-  };
+  var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
 
   var Headers = _headers.Headers;
   function parseResponseHeaders(headerStr) {
@@ -27,7 +24,7 @@ define(["exports", "./headers"], function (exports, _headers) {
     return headers;
   }
 
-  var HttpResponseMessage = (function () {
+  var HttpResponseMessage = exports.HttpResponseMessage = (function () {
     function HttpResponseMessage(requestMessage, xhr, responseType, reviver) {
       this.requestMessage = requestMessage;
       this.statusCode = xhr.status;
@@ -61,13 +58,11 @@ define(["exports", "./headers"], function (exports, _headers) {
 
           return this._content = this.response;
         },
-        enumerable: true,
         configurable: true
       }
     });
 
     return HttpResponseMessage;
   })();
-
-  exports.HttpResponseMessage = HttpResponseMessage;
+  exports.__esModule = true;
 });

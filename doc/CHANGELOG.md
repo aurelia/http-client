@@ -1,3 +1,11 @@
+### 0.4.4 (2015-02-03)
+
+
+#### Bug Fixes
+
+* **all:** errors should still return HttpResponseMessage ([43f3cf4f](http://github.com/aurelia/http-client/commit/43f3cf4ffdd9690bebb99cffe699eacf3477de94))
+
+
 ### 0.4.3 (2015-01-24)
 
 

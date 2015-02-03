@@ -6,4 +6,5 @@ define(["exports", "./http-client", "./http-request-message", "./http-response-m
   exports.HttpResponseMessage = _httpResponseMessage.HttpResponseMessage;
   exports.JSONPRequestMessage = _jsonpRequestMessage.JSONPRequestMessage;
   exports.Headers = _headers.Headers;
+  exports.__esModule = true;
 });

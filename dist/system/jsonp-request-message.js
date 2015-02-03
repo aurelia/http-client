@@ -7,12 +7,9 @@ System.register(["./http-response-message"], function (_export) {
       HttpResponseMessage = _httpResponseMessage.HttpResponseMessage;
     }],
     execute: function () {
-      _prototypeProperties = function (child, staticProps, instanceProps) {
-        if (staticProps) Object.defineProperties(child, staticProps);
-        if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
-      };
+      _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
 
-      JSONPRequestMessage = (function () {
+      JSONPRequestMessage = _export("JSONPRequestMessage", (function () {
         function JSONPRequestMessage(uri, callbackParameterName) {
           this.uri = uri;
           this.callbackParameterName = callbackParameterName;
@@ -42,14 +39,12 @@ System.register(["./http-response-message"], function (_export) {
               });
             },
             writable: true,
-            enumerable: true,
             configurable: true
           }
         });
 
         return JSONPRequestMessage;
-      })();
-      _export("JSONPRequestMessage", JSONPRequestMessage);
+      })());
     }
   };
 });

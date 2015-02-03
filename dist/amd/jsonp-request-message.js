@@ -1,13 +1,10 @@
 define(["exports", "./http-response-message"], function (exports, _httpResponseMessage) {
   "use strict";
 
-  var _prototypeProperties = function (child, staticProps, instanceProps) {
-    if (staticProps) Object.defineProperties(child, staticProps);
-    if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
-  };
+  var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
 
   var HttpResponseMessage = _httpResponseMessage.HttpResponseMessage;
-  var JSONPRequestMessage = (function () {
+  var JSONPRequestMessage = exports.JSONPRequestMessage = (function () {
     function JSONPRequestMessage(uri, callbackParameterName) {
       this.uri = uri;
       this.callbackParameterName = callbackParameterName;
@@ -37,13 +34,11 @@ define(["exports", "./http-response-message"], function (exports, _httpResponseM
           });
         },
         writable: true,
-        enumerable: true,
         configurable: true
       }
     });
 
     return JSONPRequestMessage;
   })();
-
-  exports.JSONPRequestMessage = JSONPRequestMessage;
+  exports.__esModule = true;
 });

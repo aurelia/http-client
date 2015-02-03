@@ -1,24 +1,18 @@
 "use strict";
 
-var _prototypeProperties = function (child, staticProps, instanceProps) {
-  if (staticProps) Object.defineProperties(child, staticProps);
-  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
-};
+var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
 
 var join = require("aurelia-path").join;
 var HttpRequestMessage = require("./http-request-message").HttpRequestMessage;
 var HttpResponseMessage = require("./http-response-message").HttpResponseMessage;
 var JSONPRequestMessage = require("./jsonp-request-message").JSONPRequestMessage;
 var Headers = require("./headers").Headers;
-var HttpClient = (function () {
+var HttpClient = exports.HttpClient = (function () {
   function HttpClient() {
-    var _this = this;
     var baseUrl = arguments[0] === undefined ? null : arguments[0];
     var defaultRequestHeaders = arguments[1] === undefined ? new Headers() : arguments[1];
-    return (function () {
-      _this.baseUrl = baseUrl;
-      _this.defaultRequestHeaders = defaultRequestHeaders;
-    })();
+    this.baseUrl = baseUrl;
+    this.defaultRequestHeaders = defaultRequestHeaders;
   }
 
   _prototypeProperties(HttpClient, null, {
@@ -27,7 +21,6 @@ var HttpClient = (function () {
         return requestMessage.send(this, progressCallback);
       },
       writable: true,
-      enumerable: true,
       configurable: true
     },
     get: {
@@ -35,7 +28,6 @@ var HttpClient = (function () {
         return this.send(new HttpRequestMessage("GET", join(this.baseUrl, uri)).withHeaders(this.defaultRequestHeaders));
       },
       writable: true,
-      enumerable: true,
       configurable: true
     },
     put: {
@@ -43,7 +35,6 @@ var HttpClient = (function () {
         return this.send(new HttpRequestMessage("PUT", join(this.baseUrl, uri), content, replacer || this.replacer).withHeaders(this.defaultRequestHeaders));
       },
       writable: true,
-      enumerable: true,
       configurable: true
     },
     patch: {
@@ -51,7 +42,6 @@ var HttpClient = (function () {
         return this.send(new HttpRequestMessage("PATCH", join(this.baseUrl, uri), content, replacer || this.replacer).withHeaders(this.defaultRequestHeaders));
       },
       writable: true,
-      enumerable: true,
       configurable: true
     },
     post: {
@@ -59,7 +49,6 @@ var HttpClient = (function () {
         return this.send(new HttpRequestMessage("POST", join(this.baseUrl, uri), content, replacer || this.replacer).withHeaders(this.defaultRequestHeaders));
       },
       writable: true,
-      enumerable: true,
       configurable: true
     },
     "delete": {
@@ -67,7 +56,6 @@ var HttpClient = (function () {
         return this.send(new HttpRequestMessage("DELETE", join(this.baseUrl, uri)).withHeaders(this.defaultRequestHeaders));
       },
       writable: true,
-      enumerable: true,
       configurable: true
     },
     jsonp: {
@@ -76,12 +64,10 @@ var HttpClient = (function () {
         return this.send(new JSONPRequestMessage(join(this.baseUrl, uri), callbackParameterName));
       },
       writable: true,
-      enumerable: true,
       configurable: true
     }
   });
 
   return HttpClient;
 })();
-
-exports.HttpClient = HttpClient;
+exports.__esModule = true;

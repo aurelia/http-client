@@ -1,9 +1,6 @@
 "use strict";
 
-var _prototypeProperties = function (child, staticProps, instanceProps) {
-  if (staticProps) Object.defineProperties(child, staticProps);
-  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
-};
+var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
 
 var Headers = require("./headers").Headers;
 function parseResponseHeaders(headerStr) {
@@ -26,7 +23,7 @@ function parseResponseHeaders(headerStr) {
   return headers;
 }
 
-var HttpResponseMessage = (function () {
+var HttpResponseMessage = exports.HttpResponseMessage = (function () {
   function HttpResponseMessage(requestMessage, xhr, responseType, reviver) {
     this.requestMessage = requestMessage;
     this.statusCode = xhr.status;
@@ -60,12 +57,10 @@ var HttpResponseMessage = (function () {
 
         return this._content = this.response;
       },
-      enumerable: true,
       configurable: true
     }
   });
 
   return HttpResponseMessage;
 })();
-
-exports.HttpResponseMessage = HttpResponseMessage;
+exports.__esModule = true;
