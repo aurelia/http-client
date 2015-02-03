@@ -68,11 +68,19 @@ export class HttpRequestMessage {
       };
 
       xhr.ontimeout = (e) => {
-        reject(new Error(e));
+        reject(new HttpResponseMessage(this, {
+          response:e,
+          status:xhr.status,
+          statusText:xhr.statusText
+        }, 'timeout'));
       };
 
       xhr.onerror = (e) => {
-        reject(new Error(e));
+        reject(new HttpResponseMessage(this, {
+          response:e,
+          status:xhr.status,
+          statusText:xhr.statusText
+        }, 'error'));
       };
 
       if(progressCallback){
