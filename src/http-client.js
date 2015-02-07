@@ -14,27 +14,37 @@ export class HttpClient {
     return requestMessage.send(this, progressCallback);
   }
 
-  get(uri){
-    return this.send(new HttpRequestMessage('GET', join(this.baseUrl, uri)).withHeaders(this.defaultRequestHeaders));
+  get(uri, params){
+    let req = new HttpRequestMessage('GET', join(this.baseUrl, uri)).withParams(params).withHeaders(this.defaultRequestHeaders);
+    return this.send(req);
   }
 
-  put(uri, content, replacer){
-    return this.send(new HttpRequestMessage('PUT', join(this.baseUrl, uri), content, replacer || this.replacer).withHeaders(this.defaultRequestHeaders));
+  put(uri, opts = {}, replacer = undefined){
+    let req = new HttpRequestMessage('PUT', join(this.baseUrl, uri), replacer || this.replacer).withHeaders(this.defaultRequestHeaders);
+    if (opts.params) req.withParams(opts.params);
+    if (opts.content) req.withContent(opts.content);
+    return this.send(req);
   }
 
-  patch(uri, content, replacer){
-    return this.send(new HttpRequestMessage('PATCH', join(this.baseUrl, uri), content, replacer || this.replacer).withHeaders(this.defaultRequestHeaders));
+  patch(uri, opts = {}, replacer = undefined){
+    let req = new HttpRequestMessage('PATCH', join(this.baseUrl, uri), replacer || this.replacer).withHeaders(this.defaultRequestHeaders);
+    if (opts.params) req.withParams(opts.params);
+    if (opts.content) req.withContent(opts.content);
+    return this.send(req);
   }
 
-  post(uri, content, replacer){
-    return this.send(new HttpRequestMessage('POST', join(this.baseUrl, uri), content, replacer || this.replacer).withHeaders(this.defaultRequestHeaders));
+  post(uri, opts = {}, replacer = undefined){
+    let req = new HttpRequestMessage('POST', join(this.baseUrl, uri), replacer || this.replacer).withHeaders(this.defaultRequestHeaders)
+    if (opts.params) req.withParams(opts.params);
+    if (opts.content) req.withContent(opts.content);
+    return this.send(req);
   }
 
-  delete(uri){
-    return this.send(new HttpRequestMessage('DELETE', join(this.baseUrl, uri)).withHeaders(this.defaultRequestHeaders));
+  delete(uri, params){
+    return this.send(new HttpRequestMessage('DELETE', join(this.baseUrl, uri)).withParams(params).withHeaders(this.defaultRequestHeaders));
   }
 
   jsonp(uri, callbackParameterName='jsoncallback'){
-    return this.send(new JSONPRequestMessage(join(this.baseUrl, uri), callbackParameterName));
+    return this.send(new JSONPRequestMessage(join(this.baseUrl, uri), {callbackParameterName, params}));
   }
 }
