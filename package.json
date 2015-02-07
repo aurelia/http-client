@@ -25,7 +25,7 @@
       "lib": "dist"
     },
     "dependencies": {
-      "aurelia-path": "^0.4.1",
+      "aurelia-path": "^0.4.2",
       "core-js": "npm:core-js@^0.4.1"
     }
   },

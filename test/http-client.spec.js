@@ -42,6 +42,18 @@ describe('http client', () => {
         expect(request.requestHeaders['Authorization']).toBe('bearer 123');
       });
 
+      it('should accept query parameters', () => {
+        var client = new HttpClient(baseUrl);
+
+        client.get('some/cool/path', {some: 'cool', fun: ['stuff', {foo: 'bar'}]});
+
+        var request = jasmine.Ajax.requests.mostRecent();
+
+        expect(request.url).toBe(`${baseUrl}some/cool/path?some=cool&fun%5B%5D=stuff&fun%5B1%5D%5Bfoo%5D=bar`)
+        expect(request.method).toBe('GET')
+        expect(request.data()).toEqual({})
+      })
+
     });
 
     describe('response', () => {
@@ -100,7 +112,7 @@ describe('http client', () => {
         headers.add('Content-Type', 'application/json');
         var client = new HttpClient(baseUrl, headers);
 
-        client.put('some/cool/path', content);
+        client.put('some/cool/path', {content});
 
         var request = jasmine.Ajax.requests.mostRecent();
 
@@ -115,7 +127,7 @@ describe('http client', () => {
         headers.add('Content-Type', 'application/json');
         var client = new HttpClient(baseUrl, headers);
 
-        client.put('some/cool/path', content, ['firstName']);
+        client.put('some/cool/path', {content}, ['firstName']);
 
         var request = jasmine.Ajax.requests.mostRecent();
 
@@ -134,6 +146,24 @@ describe('http client', () => {
 
         expect(request.requestHeaders['Authorization']).toBe('bearer 123');
       });
+
+      it('should accept query parameters', () => {
+        var content = { firstName: "John", lastName: "Doe" };
+        var headers = new Headers();
+        headers.add('Content-Type', 'application/json');
+        var client = new HttpClient(baseUrl, headers);
+
+        client.put('some/cool/path', {
+          params: {some: 'cool', fun: ['stuff', {foo: 'bar'}]},
+          content: content
+        });
+
+        var request = jasmine.Ajax.requests.mostRecent();
+
+        expect(request.url).toBe(`${baseUrl}some/cool/path?some=cool&fun%5B%5D=stuff&fun%5B1%5D%5Bfoo%5D=bar`)
+        expect(request.method).toBe('PUT')
+        expect(request.data()).toEqual(content)
+      })
 
     });
 
@@ -193,7 +223,7 @@ describe('http client', () => {
         headers.add('Content-Type', 'application/json');
         var client = new HttpClient(baseUrl, headers);
 
-        client.patch('some/cool/path', content);
+        client.patch('some/cool/path', {content: content});
 
         var request = jasmine.Ajax.requests.mostRecent();
 
@@ -208,7 +238,7 @@ describe('http client', () => {
         headers.add('Content-Type', 'application/json');
         var client = new HttpClient(baseUrl, headers);
 
-        client.patch('some/cool/path', content, ['firstName']);
+        client.patch('some/cool/path', {content: content}, ['firstName']);
 
         var request = jasmine.Ajax.requests.mostRecent();
 
@@ -227,6 +257,24 @@ describe('http client', () => {
 
         expect(request.requestHeaders['Authorization']).toBe('bearer 123');
       });
+
+      it('should accept query parameters', () => {
+        var content = { firstName: "John", lastName: "Doe" };
+        var headers = new Headers();
+        headers.add('Content-Type', 'application/json');
+        var client = new HttpClient(baseUrl, headers);
+
+        client.post('some/cool/path', {
+          params: {some: 'cool', fun: ['stuff', {foo: 'bar'}]},
+          content: content
+        });
+
+        var request = jasmine.Ajax.requests.mostRecent();
+
+        expect(request.url).toBe(`${baseUrl}some/cool/path?some=cool&fun%5B%5D=stuff&fun%5B1%5D%5Bfoo%5D=bar`)
+        expect(request.method).toBe('POST')
+        expect(request.data()).toEqual(content)
+      })
 
     });
 
@@ -286,7 +334,7 @@ describe('http client', () => {
         headers.add('Content-Type', 'application/json');
         var client = new HttpClient(baseUrl, headers);
 
-        client.post('some/cool/path', content);
+        client.post('some/cool/path', {content: content});
 
         var request = jasmine.Ajax.requests.mostRecent();
 
@@ -301,7 +349,7 @@ describe('http client', () => {
         headers.add('Content-Type', 'application/json');
         var client = new HttpClient(baseUrl, headers);
 
-        client.post('some/cool/path', content, ['firstName']);
+        client.post('some/cool/path', {content: content}, ['firstName']);
 
         var request = jasmine.Ajax.requests.mostRecent();
 
@@ -320,6 +368,24 @@ describe('http client', () => {
 
         expect(request.requestHeaders['Authorization']).toBe('bearer 123');
       });
+
+      it('should accept query parameters', () => {
+        var content = { firstName: "John", lastName: "Doe" };
+        var headers = new Headers();
+        headers.add('Content-Type', 'application/json');
+        var client = new HttpClient(baseUrl, headers);
+
+        client.post('some/cool/path', {
+          params: {some: 'cool', fun: ['stuff', {foo: 'bar'}]},
+          content: content
+        });
+
+        var request = jasmine.Ajax.requests.mostRecent();
+
+        expect(request.url).toBe(`${baseUrl}some/cool/path?some=cool&fun%5B%5D=stuff&fun%5B1%5D%5Bfoo%5D=bar`)
+        expect(request.method).toBe('POST')
+        expect(request.data()).toEqual(content)
+      })
 
     });
 
@@ -394,6 +460,17 @@ describe('http client', () => {
 
           expect(request.requestHeaders['Authorization']).toBe('bearer 123');
         });
+
+        it('should accept query parameters', () => {
+          var client = new HttpClient(baseUrl);
+
+          client.delete('some/cool/path', {some: 'cool', fun: ['stuff', {foo: 'bar'}]});
+
+          var request = jasmine.Ajax.requests.mostRecent();
+
+          expect(request.url).toBe(`${baseUrl}some/cool/path?some=cool&fun%5B%5D=stuff&fun%5B1%5D%5Bfoo%5D=bar`)
+          expect(request.method).toBe('DELETE')
+        })
 
       });
 

@@ -1,14 +1,19 @@
 import {Headers} from './headers';
 import {HttpResponseMessage} from './http-response-message';
+import {buildParams} from 'aurelia-path';
 
 export class HttpRequestMessage {
-  constructor(method, uri, content, replacer){
+  constructor(method, uri, replacer){
     this.method = method;
     this.uri = uri;
-    this.content = content;
     this.headers = new Headers();
     this.responseType = 'json'; //text, arraybuffer, blob, document
     this.replacer = replacer;
+  }
+
+  get fullUri () {
+    let params = buildParams(this.params)
+    return params ? `${this.uri}?${params}` : this.uri;
   }
 
   withHeaders(headers){
@@ -16,8 +21,18 @@ export class HttpRequestMessage {
     return this;
   }
 
+  withParams(params){
+    this.params = params;
+    return this;
+  }
+
+  withContent(content){
+    this.content = content;
+    return this;
+  }
+
   configureXHR(xhr){
-    xhr.open(this.method, this.uri, true);
+    xhr.open(this.method, this.fullUri, true);
     xhr.responseType = this.responseType;
     this.headers.configureXHR(xhr);
   }
