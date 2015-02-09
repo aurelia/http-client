@@ -1,40 +1,44 @@
-import {join} from 'aurelia-path';
-import {HttpRequestMessage} from './http-request-message';
-import {HttpResponseMessage} from './http-response-message';
-import {JSONPRequestMessage} from './jsonp-request-message';
 import {Headers} from './headers';
+import {HttpBuilder} from './http-builder';
 
 export class HttpClient {
   constructor(baseUrl = null, defaultRequestHeaders = new Headers()){
-    this.baseUrl = baseUrl;
-    this.defaultRequestHeaders = defaultRequestHeaders;
-  }
+    this.request = () => new HttpBuilder(baseUrl, defaultRequestHeaders);
+    
+    this.send = (...args) => {
+        var builder = this.request();
+        return builder.send.call(builder, ...args);
+    };
 
-  send(requestMessage, progressCallback){
-    return requestMessage.send(this, progressCallback);
-  }
-
-  get(uri){
-    return this.send(new HttpRequestMessage('GET', join(this.baseUrl, uri)).withHeaders(this.defaultRequestHeaders));
-  }
-
-  put(uri, content, replacer){
-    return this.send(new HttpRequestMessage('PUT', join(this.baseUrl, uri), content, replacer || this.replacer).withHeaders(this.defaultRequestHeaders));
-  }
-
-  patch(uri, content, replacer){
-    return this.send(new HttpRequestMessage('PATCH', join(this.baseUrl, uri), content, replacer || this.replacer).withHeaders(this.defaultRequestHeaders));
-  }
-
-  post(uri, content, replacer){
-    return this.send(new HttpRequestMessage('POST', join(this.baseUrl, uri), content, replacer || this.replacer).withHeaders(this.defaultRequestHeaders));
-  }
-
-  delete(uri){
-    return this.send(new HttpRequestMessage('DELETE', join(this.baseUrl, uri)).withHeaders(this.defaultRequestHeaders));
-  }
-
-  jsonp(uri, callbackParameterName='jsoncallback'){
-    return this.send(new JSONPRequestMessage(join(this.baseUrl, uri), callbackParameterName));
+    
+    this.get = (...args) => {
+        var builder = this.request();
+        return builder.get.call(builder, ...args);
+    };
+    
+    this.put = (...args) => {
+        var builder = this.request();
+        return builder.put.call(builder, ...args);
+    };
+   
+    this.patch = (...args) => {
+        var builder = this.request();
+        return builder.patch.call(builder, ...args);
+    };
+    
+    this.post = (...args) => {
+        var builder = this.request();
+        return builder.post.call(builder, ...args);
+    };
+    
+    this.delete = (...args) => {
+        var builder = this.request();
+        return builder.delete.call(builder, ...args);
+    };
+    
+    this.jsonp = (...args) => {
+        var builder = this.request();
+        return builder.jsonp.call(builder, ...args);
+    };
   }
 }
