@@ -1,7 +1,6 @@
 import {HttpClient} from '../src/index';
 import {HttpRequestMessage, HttpResponseMessage} from '../src/index';
 import {HttpBuilder} from '../src/http-builder';
-import {HttpRequestMessage} from '../src/index';
 import {Headers} from '../src/index';
 
 describe('http client', () => {
@@ -16,8 +15,8 @@ describe('http client', () => {
     jasmine.Ajax.uninstall();
   });
 
-  describe('request', () => {   
-    it('should return an HttpBuilder object', () => {      
+  describe('request', () => {
+    it('should return an HttpBuilder object', () => {
       var client = new HttpClient(baseUrl);
 
       var requestBuilder = client.request();
