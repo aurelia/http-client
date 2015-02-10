@@ -1,44 +1,93 @@
 import {Headers} from './headers';
-import {HttpBuilder} from './http-builder';
+import {RequestBuilder} from './request-builder';
+import {HttpRequestMessage,HttpRequestMessageProcessor} from './http-request-message';
+import {JSONPRequestMessage,JSONPRequestMessageProcessor} from './jsonp-request-message';
+
+var emptyTransformers = [];
+
+function trackRequestStart(client, processor){
+  client.requests.push(processor);
+  client.isRequesting = true;
+}
+
+function trackRequestEnd(client, processor){
+  var index = client.requests.indexOf(processor);
+
+  client.requests.splice(index, 1);
+  client.isRequesting = client.requests.length > 0;
+
+  if(!client.isRequesting){
+    //TODO: raise an event indicating all requests are done
+  }
+}
 
 export class HttpClient {
-  constructor(baseUrl = null, defaultRequestHeaders = new Headers()){
-    this.request = () => new HttpBuilder(baseUrl, defaultRequestHeaders);
-    
-    this.send = (...args) => {
-        var builder = this.request();
-        return builder.send.call(builder, ...args);
+  constructor(baseUrl = null, requestHeaders = new Headers()){
+    this.baseUrl = baseUrl;
+    this.requestHeaders = requestHeaders;
+    this.requestTransformers = [];
+    this.requestProcessors = new Map();
+    this.requestProcessors.set(HttpRequestMessage, HttpRequestMessageProcessor);
+    this.requestProcessors.set(JSONPRequestMessage, JSONPRequestMessageProcessor);
+    this.requests = [];
+    this.isRequesting = false;
+  }
+
+  get request(){
+    return new RequestBuilder(this);
+  }
+
+  send(message, transformers=emptyTransformers){
+    var ProcessorType = this.requestProcessors.get(message.constructor),
+        processor, promise;
+
+    if(!ProcessorType){
+        throw new Error(`No request message processor for ${message.constructor}.`);
+    }
+
+    processor = new ProcessorType();
+    trackRequestStart(this, processor);
+    this.requestTransformers.concat(transformers).forEach(x => x(this, processor, message));
+    promise = processor.process(this, message);
+
+    promise.abort = promise.cancel = function() {
+      processor.abort();
     };
 
-    
-    this.get = (...args) => {
-        var builder = this.request();
-        return builder.get.call(builder, ...args);
-    };
-    
-    this.put = (...args) => {
-        var builder = this.request();
-        return builder.put.call(builder, ...args);
-    };
-   
-    this.patch = (...args) => {
-        var builder = this.request();
-        return builder.patch.call(builder, ...args);
-    };
-    
-    this.post = (...args) => {
-        var builder = this.request();
-        return builder.post.call(builder, ...args);
-    };
-    
-    this.delete = (...args) => {
-        var builder = this.request();
-        return builder.delete.call(builder, ...args);
-    };
-    
-    this.jsonp = (...args) => {
-        var builder = this.request();
-        return builder.jsonp.call(builder, ...args);
-    };
+    return promise.then(response => {
+      trackRequestEnd(this, processor);
+      return response;
+    }).catch(response => {
+      trackRequestEnd(this, processor);
+      throw response;
+    });
+  }
+
+  delete(uri){
+    return this.request.delete(uri);
+  }
+
+  get(uri){
+    return this.request.get(uri);
+  }
+
+  head(uri){
+    return this.request.head(uri);
+  }
+
+  put(uri, content){
+    return this.request.put(uri, content);
+  }
+
+  patch(uri, content){
+    return this.request.patch(uri, content);
+  }
+
+  post(uri, content){
+    return this.request.post(uri, content);
+  }
+
+  jsonp(uri, callbackParameterName='jsoncallback'){
+    return this.request.jsonp(uri, callbackParameterName);
   }
 }

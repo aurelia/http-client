@@ -1,30 +1,112 @@
+import {join} from 'aurelia-path';
 import {Headers} from './headers';
 import {HttpResponseMessage} from './http-response-message';
 
 export class HttpRequestMessage {
-  constructor(method, uri, content, replacer){
+  constructor(method, uri, content, headers){
     this.method = method;
     this.uri = uri;
     this.content = content;
-    this.headers = new Headers();
+    this.headers = headers || new Headers();
     this.responseType = 'json'; //text, arraybuffer, blob, document
-    this.replacer = replacer;
+  }
+}
+
+function timeoutTransformer(client, processor, message, xhr){
+  var timeout = message.timeout || client.timeout;
+  if(timeout !== undefined){
+    xhr.timeout = timeout;
+  }
+}
+
+function credentialsTransformer(client, processor, message, xhr){
+  var withCredentials = message.withCredentials || client.withCredentials;
+  if(withCredentials !== undefined){
+    xhr.withCredentials = withCredentials;
+  }
+}
+
+function progressTransformer(client, processor, message, xhr){
+  if(message.progressCallback){
+    xhr.upload.onprogress = message.progressCallback;
+  }
+}
+
+function responseTypeTransformer(client, processor, message, xhr){
+  var responseType = message.responseType;
+
+  if(responseType === 'json'){
+    responseType = 'text'; //IE does not support json
   }
 
-  withHeaders(headers){
-    this.headers = headers;
-    return this;
+  xhr.responseType = responseType;
+}
+
+function headerTransformer(client, processor, message, xhr){
+  message.headers.configureXHR(xhr);
+}
+
+export class HttpRequestMessageProcessor {
+  constructor(){
+    this.transformers = [
+      timeoutTransformer,
+      credentialsTransformer,
+      progressTransformer,
+      responseTypeTransformer,
+      headerTransformer
+    ];
   }
 
-  configureXHR(xhr){
-    xhr.open(this.method, this.uri, true);
-    xhr.responseType = this.responseType;
-    this.headers.configureXHR(xhr);
+  abort(){
+    this.xhr.abort();
   }
 
-  formatContent(){
-    var content = this.content;
+  process(client, message){
+    return new Promise((resolve, reject) => {
+      var xhr = this.xhr = new XMLHttpRequest(),
+          uri = join(message.baseUrl || client.baseUrl, message.uri);
 
+      this.transformers.forEach(x => x(client, this, message, xhr));
+      xhr.open(message.method, uri, true);
+
+      xhr.onload = (e) => {
+        var response = new HttpResponseMessage(message, xhr, message.responseType, message.reviver || client.reviver);
+        if(response.isSuccess){
+          resolve(response);
+        }else{
+          reject(response);
+        }
+      };
+
+      xhr.ontimeout = (e) => {
+        reject(new HttpResponseMessage(message, {
+          response:e,
+          status:xhr.status,
+          statusText:xhr.statusText
+        }, 'timeout'));
+      };
+
+      xhr.onerror = (e) => {
+        reject(new HttpResponseMessage(message, {
+          response:e,
+          status:xhr.status,
+          statusText:xhr.statusText
+        }, 'error'));
+      };
+
+      xhr.onabort = (e) => {
+        reject(new HttpResponseMessage(message, {
+          response:e,
+          status:xhr.status,
+          statusText:xhr.statusText
+        }, 'abort'));
+      };
+
+      xhr.send(this.formatContent(message.content, message.replacer || client.replacer));
+    });
+  }
+
+  formatContent(content, replacer){
     if(window.FormData && content instanceof FormData){
       return content;
     }
@@ -45,49 +127,6 @@ export class HttpRequestMessage {
       return content;
     }
 
-    return JSON.stringify(content, this.replacer);
-  }
-
-  send(client, progressCallback){
-    return new Promise((resolve, reject) => {
-      var xhr = new XMLHttpRequest(),
-          responseType = this.responseType;
-
-      if(responseType === 'json'){
-        this.responseType = 'text'; //IE does not support json
-      }
-
-      if(client.timeout !== undefined){
-        xhr.timeout = client.timeout;
-      }
-
-      this.configureXHR(xhr);
-
-      xhr.onload = (e) => {
-        resolve(new HttpResponseMessage(this, xhr, responseType, client.reviver));
-      };
-
-      xhr.ontimeout = (e) => {
-        reject(new HttpResponseMessage(this, {
-          response:e,
-          status:xhr.status,
-          statusText:xhr.statusText
-        }, 'timeout'));
-      };
-
-      xhr.onerror = (e) => {
-        reject(new HttpResponseMessage(this, {
-          response:e,
-          status:xhr.status,
-          statusText:xhr.statusText
-        }, 'error'));
-      };
-
-      if(progressCallback){
-        xhr.upload.onprogress = progressCallback;
-      }
-
-      xhr.send(this.formatContent());
-    });
+    return JSON.stringify(content, replacer);
   }
 }

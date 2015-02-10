@@ -15,6 +15,16 @@ export class Headers {
     this.headers = {};
   }
 
+  clone(){
+    var headers = {};
+
+    for(var key in this.headers) {
+      headers[key] = this.headers[key];
+    }
+
+    return new Headers(headers);
+  }
+
   configureXHR(xhr){
     var headers = this.headers, key;
 
