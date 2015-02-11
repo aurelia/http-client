@@ -1,7 +1,7 @@
 import {join, buildQueryString} from 'aurelia-path';
 
 export function uriTransformer(client, processor, message, xhr){
-  var uri = join(message.baseUrl || client.baseUrl, message.uri),
+  var uri = join(message.baseUrl, message.uri),
       qs;
 
   if(message.params){
@@ -13,23 +13,20 @@ export function uriTransformer(client, processor, message, xhr){
 }
 
 export function timeoutTransformer(client, processor, message, xhr){
-  var timeout = message.timeout || client.timeout;
-  if(timeout !== undefined){
-    xhr.timeout = timeout;
+  if(message.timeout !== undefined){
+    xhr.timeout = message.timeout;
   }
 }
 
 export function callbackParameterNameTransformer(client, processor, message, xhr){
-  var callbackParameterName = message.callbackParameterName || client.callbackParameterName;
-  if(callbackParameterName !== undefined){
-    xhr.callbackParameterName = callbackParameterName;
+  if(message.callbackParameterName !== undefined){
+    xhr.callbackParameterName = message.callbackParameterName;
   }
 }
 
 export function credentialsTransformer(client, processor, message, xhr){
-  var withCredentials = message.withCredentials || client.withCredentials;
-  if(withCredentials !== undefined){
-    xhr.withCredentials = withCredentials;
+  if(message.withCredentials !== undefined){
+    xhr.withCredentials = message.withCredentials;
   }
 }
 

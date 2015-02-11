@@ -19,7 +19,8 @@ describe('http client', () => {
     describe('request', () => {
 
       it('should make expected request', () => {
-        var client = new HttpClient(baseUrl);
+        var client = new HttpClient()
+          .configure(x => x.withBaseUrl(baseUrl));
 
         client.get('some/cool/path');
 
@@ -31,9 +32,11 @@ describe('http client', () => {
       });
 
       it('should provide expected request headers', () => {
-        var headers = new Headers();
-        headers.add('Authorization', 'bearer 123');
-        var client = new HttpClient(undefined, headers);
+        var client = new HttpClient()
+          .configure(x => {
+            x.withBaseUrl(baseUrl);
+            x.withHeader('Authorization', 'bearer 123');
+          });
 
         client.get('some/cool/path');
 
@@ -47,7 +50,8 @@ describe('http client', () => {
     describe('response', () => {
 
       it('should succeed on 200 response', (done) => {
-        var client = new HttpClient(baseUrl);
+        var client = new HttpClient()
+          .configure(x => x.withBaseUrl(baseUrl));
 
         client.get('some/cool/path').then(response => {
           expect(response.isSuccess).toBe(true);
@@ -60,7 +64,8 @@ describe('http client', () => {
       });
 
       it('should retrieve correct content', (done) => {
-        var client = new HttpClient(baseUrl);
+        var client = new HttpClient()
+          .configure(x => x.withBaseUrl(baseUrl));
 
         client.get('some/cool/path').then(response => {
           expect(response.content.name).toBe('Martin');
@@ -73,7 +78,8 @@ describe('http client', () => {
       });
 
       it('should not succeed on 500 response', (done) => {
-        var client = new HttpClient(baseUrl);
+        var client = new HttpClient()
+          .configure(x => x.withBaseUrl(baseUrl));
 
         client.get('some/cool/path').catch(response => {
           expect(response.isSuccess).toBe(false);
@@ -96,9 +102,11 @@ describe('http client', () => {
 
       it('should make expected request', () => {
         var content = { firstName: "John", lastName: "Doe" };
-        var headers = new Headers();
-        headers.add('Content-Type', 'application/json');
-        var client = new HttpClient(baseUrl, headers);
+        var client = new HttpClient()
+          .configure(x => {
+            x.withBaseUrl(baseUrl);
+            x.withHeader('Content-Type', 'application/json');
+          });
 
         client.put('some/cool/path', content);
 
@@ -111,9 +119,11 @@ describe('http client', () => {
 
       it('should only include content properties specified in the replacer array', () => {
         var content = { firstName: "John", lastName: "Doe" };
-        var headers = new Headers();
-        headers.add('Content-Type', 'application/json');
-        var client = new HttpClient(baseUrl, headers);
+        var client = new HttpClient()
+          .configure(x => {
+            x.withBaseUrl(baseUrl);
+            x.withHeader('Content-Type', 'application/json');
+          });
 
         client.request
           .withReplacer(['firstName'])
@@ -126,9 +136,11 @@ describe('http client', () => {
       });
 
       it('should provide expected request headers', () => {
-        var headers = new Headers();
-        headers.add('Authorization', 'bearer 123');
-        var client = new HttpClient(undefined, headers);
+        var client = new HttpClient()
+          .configure(x => {
+            x.withBaseUrl(baseUrl);
+            x.withHeader('Authorization', 'bearer 123');
+          });
 
         client.put('some/cool/path');
 
@@ -142,7 +154,8 @@ describe('http client', () => {
     describe('response', () => {
 
       it('should succeed on 200 response', (done) => {
-        var client = new HttpClient(baseUrl);
+        var client = new HttpClient()
+          .configure(x => x.withBaseUrl(baseUrl));
 
         client.get('some/cool/path').then(response => {
           expect(response.isSuccess).toBe(true);
@@ -155,7 +168,8 @@ describe('http client', () => {
       });
 
       it('should retrieve correct content', (done) => {
-        var client = new HttpClient(baseUrl);
+        var client = new HttpClient()
+          .configure(x => x.withBaseUrl(baseUrl));
 
         client.put('some/cool/path').then(response => {
           expect(response.content.name).toBe('Martin');
@@ -168,7 +182,8 @@ describe('http client', () => {
       });
 
       it('should not succeed on 500 response', (done) => {
-        var client = new HttpClient(baseUrl);
+        var client = new HttpClient()
+          .configure(x => x.withBaseUrl(baseUrl));
 
         client.put('some/cool/path').catch(response => {
           expect(response.isSuccess).toBe(false);
@@ -191,9 +206,11 @@ describe('http client', () => {
 
       it('should make expected request', () => {
         var content = { firstName: "John", lastName: "Doe" };
-        var headers = new Headers();
-        headers.add('Content-Type', 'application/json');
-        var client = new HttpClient(baseUrl, headers);
+        var client = new HttpClient()
+          .configure(x => {
+            x.withBaseUrl(baseUrl);
+            x.withHeader('Content-Type', 'application/json');
+          });
 
         client.patch('some/cool/path', content);
 
@@ -206,9 +223,11 @@ describe('http client', () => {
 
       it('should only include content properties specified in the replacer array', () => {
         var content = { firstName: "John", lastName: "Doe" };
-        var headers = new Headers();
-        headers.add('Content-Type', 'application/json');
-        var client = new HttpClient(baseUrl, headers);
+        var client = new HttpClient()
+          .configure(x => {
+            x.withBaseUrl(baseUrl);
+            x.withHeader('Content-Type', 'application/json');
+          });
 
         client.request
           .withReplacer(['firstName'])
@@ -221,9 +240,11 @@ describe('http client', () => {
       });
 
       it('should provide expected request headers', () => {
-        var headers = new Headers();
-        headers.add('Authorization', 'bearer 123');
-        var client = new HttpClient(undefined, headers);
+        var client = new HttpClient()
+          .configure(x => {
+            x.withBaseUrl(baseUrl);
+            x.withHeader('Authorization', 'bearer 123');
+          });
 
         client.patch('some/cool/path');
 
@@ -237,7 +258,8 @@ describe('http client', () => {
     describe('response', () => {
 
       it('should succeed on 200 response', (done) => {
-        var client = new HttpClient(baseUrl);
+        var client = new HttpClient()
+          .configure(x => x.withBaseUrl(baseUrl));
 
         client.put('some/cool/path').then(response => {
           expect(response.isSuccess).toBe(true);
@@ -250,7 +272,8 @@ describe('http client', () => {
       });
 
       it('should retrieve correct content', (done) => {
-        var client = new HttpClient(baseUrl);
+        var client = new HttpClient()
+          .configure(x => x.withBaseUrl(baseUrl));
 
         client.patch('some/cool/path').then(response => {
           expect(response.content.name).toBe('Martin');
@@ -263,7 +286,8 @@ describe('http client', () => {
       });
 
       it('should not succeed on 500 response', (done) => {
-        var client = new HttpClient(baseUrl);
+        var client = new HttpClient()
+          .configure(x => x.withBaseUrl(baseUrl));
 
         client.patch('some/cool/path').catch(response => {
           expect(response.isSuccess).toBe(false);
@@ -286,9 +310,11 @@ describe('http client', () => {
 
       it('should make expected request', () => {
         var content = { firstName: "John", lastName: "Doe" };
-        var headers = new Headers();
-        headers.add('Content-Type', 'application/json');
-        var client = new HttpClient(baseUrl, headers);
+        var client = new HttpClient()
+          .configure(x => {
+            x.withBaseUrl(baseUrl);
+            x.withHeader('Content-Type', 'application/json');
+          });
 
         client.post('some/cool/path', content);
 
@@ -301,9 +327,11 @@ describe('http client', () => {
 
       it('should only include content properties specified in the replacer array', () => {
         var content = { firstName: "John", lastName: "Doe" };
-        var headers = new Headers();
-        headers.add('Content-Type', 'application/json');
-        var client = new HttpClient(baseUrl, headers);
+        var client = new HttpClient()
+          .configure(x => {
+            x.withBaseUrl(baseUrl);
+            x.withHeader('Content-Type', 'application/json');
+          });
 
         client.request
           .withReplacer(['firstName'])
@@ -316,9 +344,11 @@ describe('http client', () => {
       });
 
       it('should provide expected request headers', () => {
-        var headers = new Headers();
-        headers.add('Authorization', 'bearer 123');
-        var client = new HttpClient(undefined, headers);
+        var client = new HttpClient()
+          .configure(x => {
+            x.withBaseUrl(baseUrl);
+            x.withHeader('Authorization', 'bearer 123');
+          });
 
         client.post('some/cool/path');
 
@@ -332,7 +362,8 @@ describe('http client', () => {
     describe('response', () => {
 
       it('should succeed on 201 response', (done) => {
-        var client = new HttpClient(baseUrl);
+        var client = new HttpClient()
+          .configure(x => x.withBaseUrl(baseUrl));
 
         client.post('some/cool/path').then(response => {
           expect(response.isSuccess).toBe(true);
@@ -345,7 +376,8 @@ describe('http client', () => {
       });
 
       it('should retrieve correct content', (done) => {
-        var client = new HttpClient(baseUrl);
+        var client = new HttpClient()
+          .configure(x => x.withBaseUrl(baseUrl));
 
         client.post('some/cool/path').then(response => {
           expect(response.content.name).toBe('Martin');
@@ -358,7 +390,8 @@ describe('http client', () => {
       });
 
       it('should not succeed on 500 response', (done) => {
-        var client = new HttpClient(baseUrl);
+        var client = new HttpClient()
+          .configure(x => x.withBaseUrl(baseUrl));
 
         client.post('some/cool/path').catch(response => {
           expect(response.isSuccess).toBe(false);
@@ -379,7 +412,8 @@ describe('http client', () => {
     describe('request', () => {
 
       it('should make expected request', () => {
-        var client = new HttpClient(baseUrl);
+        var client = new HttpClient()
+          .configure(x => x.withBaseUrl(baseUrl));
 
         client.delete('some/cool/path');
 
@@ -391,9 +425,11 @@ describe('http client', () => {
       });
 
       it('should provide expected request headers', () => {
-        var headers = new Headers();
-        headers.add('Authorization', 'bearer 123');
-        var client = new HttpClient(undefined, headers);
+        var client = new HttpClient()
+          .configure(x => {
+            x.withBaseUrl(baseUrl);
+            x.withHeader('Authorization', 'bearer 123');
+          });
 
         client.delete('some/cool/path');
 
@@ -407,7 +443,8 @@ describe('http client', () => {
     describe('response', () => {
 
       it('should succeed on 200 response', (done) => {
-        var client = new HttpClient(baseUrl);
+        var client = new HttpClient()
+          .configure(x => x.withBaseUrl(baseUrl));
 
         client.delete('some/cool/path').then(response => {
           expect(response.isSuccess).toBe(true);
@@ -420,7 +457,8 @@ describe('http client', () => {
       });
 
       it('should not succeed on 500 response', (done) => {
-        var client = new HttpClient(baseUrl);
+        var client = new HttpClient()
+          .configure(x => x.withBaseUrl(baseUrl));
 
         client.delete('some/cool/path').catch(response => {
           expect(response.isSuccess).toBe(false);

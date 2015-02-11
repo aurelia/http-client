@@ -5,7 +5,7 @@ import {JSONPRequestMessage} from './jsonp-request-message';
 export class RequestBuilder {
 	constructor (client) {
 		this.client = client;
-		this.transformers = [];
+		this.transformers = client.requestTransformers.slice(0);
 	}
 
 	static addHelper(name, fn){
@@ -16,32 +16,32 @@ export class RequestBuilder {
 	}
 
 	delete(uri){
-		var message = new HttpRequestMessage('DELETE', uri, null, this.client.requestHeaders.clone());
+		var message = new HttpRequestMessage('DELETE', uri);
 		return this.client.send(message, this.transformers);
 	}
 
 	get(uri){
-		var message = new HttpRequestMessage('GET', uri, null, this.client.requestHeaders.clone());
+		var message = new HttpRequestMessage('GET', uri);
 		return this.client.send(message, this.transformers);
 	}
 
 	head(uri){
-		var message = new HttpRequestMessage('HEAD', uri, null, this.client.requestHeaders.clone());
+		var message = new HttpRequestMessage('HEAD', uri);
 		return this.client.send(message, this.transformers);
 	}
 
 	put(uri, content){
-		var message = new HttpRequestMessage('PUT', uri, content, this.client.requestHeaders.clone());
+		var message = new HttpRequestMessage('PUT', uri, content);
 		return this.client.send(message, this.transformers);
 	}
 
 	patch(uri, content){
-		var message = new HttpRequestMessage('PATCH', uri, content, this.client.requestHeaders.clone());
+		var message = new HttpRequestMessage('PATCH', uri, content);
 		return this.client.send(message, this.transformers);
 	}
 
 	post(uri, content){
-		var message = new HttpRequestMessage('POST', uri, content, this.client.requestHeaders.clone());
+		var message = new HttpRequestMessage('POST', uri, content);
 		return this.client.send(message, this.transformers);
 	}
 

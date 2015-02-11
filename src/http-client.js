@@ -3,8 +3,6 @@ import {RequestBuilder} from './request-builder';
 import {HttpRequestMessage,HttpRequestMessageProcessor} from './http-request-message';
 import {JSONPRequestMessage,JSONPRequestMessageProcessor} from './jsonp-request-message';
 
-var emptyTransformers = [];
-
 function trackRequestStart(client, processor){
   client.requests.push(processor);
   client.isRequesting = true;
@@ -22,9 +20,7 @@ function trackRequestEnd(client, processor){
 }
 
 export class HttpClient {
-  constructor(baseUrl = null, requestHeaders = new Headers()){
-    this.baseUrl = baseUrl;
-    this.requestHeaders = requestHeaders;
+  constructor(){
     this.requestTransformers = [];
     this.requestProcessors = new Map();
     this.requestProcessors.set(HttpRequestMessage, HttpRequestMessageProcessor);
@@ -37,7 +33,14 @@ export class HttpClient {
     return new RequestBuilder(this);
   }
 
-  send(message, transformers=emptyTransformers){
+  configure(fn){
+    var builder = new RequestBuilder(this);
+    fn(builder);
+    this.requestTransformers = builder.transformers;
+    return this;
+  }
+
+  send(message, transformers){
     var ProcessorType = this.requestProcessors.get(message.constructor),
         processor, promise;
 
@@ -47,7 +50,7 @@ export class HttpClient {
 
     processor = new ProcessorType();
     trackRequestStart(this, processor);
-    this.requestTransformers.concat(transformers).forEach(x => x(this, processor, message));
+    (transformers || this.requestTransformers).forEach(x => x(this, processor, message));
     promise = processor.process(this, message);
 
     promise.abort = promise.cancel = function() {

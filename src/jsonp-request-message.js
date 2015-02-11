@@ -59,6 +59,8 @@ class JSONPXHR {
       this.onabort(new Error('abort'));
     }
   }
+
+  setRequestHeader(){}
 }
 
 export class JSONPRequestMessageProcessor {
