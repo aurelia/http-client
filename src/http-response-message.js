@@ -50,6 +50,10 @@ export class HttpResponseMessage {
       return this._content;
     }
 
+    if(this.response === undefined || this.response === null){
+      return this._content = this.response;
+    }
+
     if(this.responseType === 'json'){
       return this._content = JSON.parse(this.response, this.reviver);
     }
