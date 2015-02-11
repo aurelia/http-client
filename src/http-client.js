@@ -4,18 +4,18 @@ import {HttpRequestMessage,HttpRequestMessageProcessor} from './http-request-mes
 import {JSONPRequestMessage,JSONPRequestMessageProcessor} from './jsonp-request-message';
 
 function trackRequestStart(client, processor){
-  client.requests.push(processor);
+  client.pendingRequests.push(processor);
   client.isRequesting = true;
 }
 
 function trackRequestEnd(client, processor){
-  var index = client.requests.indexOf(processor);
+  var index = client.pendingRequests.indexOf(processor);
 
-  client.requests.splice(index, 1);
-  client.isRequesting = client.requests.length > 0;
+  client.pendingRequests.splice(index, 1);
+  client.isRequesting = client.pendingRequests.length > 0;
 
-  if(!client.isRequesting){
-    //TODO: raise an event indicating all requests are done
+  if(!client.isRequesting && client.onRequestsComplete){
+    client.onRequestsComplete();
   }
 }
 
@@ -25,7 +25,7 @@ export class HttpClient {
     this.requestProcessors = new Map();
     this.requestProcessors.set(HttpRequestMessage, HttpRequestMessageProcessor);
     this.requestProcessors.set(JSONPRequestMessage, JSONPRequestMessageProcessor);
-    this.requests = [];
+    this.pendingRequests = [];
     this.isRequesting = false;
   }
 
