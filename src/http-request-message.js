@@ -6,7 +6,8 @@ import {
   credentialsTransformer,
   progressTransformer,
   responseTypeTransformer,
-  headerTransformer
+  headerTransformer,
+  contentTransformer
 } from './transformers';
 
 export class HttpRequestMessage {
@@ -27,7 +28,8 @@ export class HttpRequestMessageProcessor {
       credentialsTransformer,
       progressTransformer,
       responseTypeTransformer,
-      headerTransformer
+      headerTransformer,
+      contentTransformer
     ];
   }
 
@@ -43,7 +45,7 @@ export class HttpRequestMessageProcessor {
       xhr.open(message.method, message.fullUri || message.uri, true);
 
       xhr.onload = (e) => {
-        var response = new HttpResponseMessage(message, xhr, message.responseType, message.reviver || client.reviver);
+        var response = new HttpResponseMessage(message, xhr, message.responseType, message.reviver);
         if(response.isSuccess){
           resolve(response);
         }else{
@@ -75,35 +77,7 @@ export class HttpRequestMessageProcessor {
         }, 'abort'));
       };
 
-      xhr.send(this.formatContent(message.content, message.replacer || client.replacer));
+      xhr.send(message.content);
     });
-  }
-
-  formatContent(content, replacer){
-    if(window.FormData && content instanceof FormData){
-      return content;
-    }
-
-    if(window.Blob && content instanceof Blob){
-      return content;
-    }
-
-    if(window.ArrayBufferView && content instanceof ArrayBufferView){
-      return content;
-    }
-
-    if(content instanceof Document){
-      return content;
-    }
-
-    if(typeof content === 'string'){
-      return content;
-    }
-
-    if(content === null || content === undefined){
-      return content;
-    }
-
-    return JSON.stringify(content, replacer);
   }
 }
