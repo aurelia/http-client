@@ -57,6 +57,12 @@ RequestBuilder.addHelper('withBaseUrl', function(baseUrl){
 	}
 });
 
+RequestBuilder.addHelper('withParams', function(params){
+	return function(client, processor, message){
+		message.params = params;
+	}
+});
+
 RequestBuilder.addHelper('withResponseType', function(responseType){
 	return function(client, processor, message){
 		message.responseType = responseType;

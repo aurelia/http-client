@@ -1,6 +1,13 @@
-import {join} from 'aurelia-path';
 import {Headers} from './headers';
 import {HttpResponseMessage} from './http-response-message';
+import {
+  uriTransformer,
+  timeoutTransformer,
+  credentialsTransformer,
+  progressTransformer,
+  responseTypeTransformer,
+  headerTransformer
+} from './transformers';
 
 export class HttpRequestMessage {
   constructor(method, uri, content, headers){
@@ -12,43 +19,10 @@ export class HttpRequestMessage {
   }
 }
 
-function timeoutTransformer(client, processor, message, xhr){
-  var timeout = message.timeout || client.timeout;
-  if(timeout !== undefined){
-    xhr.timeout = timeout;
-  }
-}
-
-function credentialsTransformer(client, processor, message, xhr){
-  var withCredentials = message.withCredentials || client.withCredentials;
-  if(withCredentials !== undefined){
-    xhr.withCredentials = withCredentials;
-  }
-}
-
-function progressTransformer(client, processor, message, xhr){
-  if(message.progressCallback){
-    xhr.upload.onprogress = message.progressCallback;
-  }
-}
-
-function responseTypeTransformer(client, processor, message, xhr){
-  var responseType = message.responseType;
-
-  if(responseType === 'json'){
-    responseType = 'text'; //IE does not support json
-  }
-
-  xhr.responseType = responseType;
-}
-
-function headerTransformer(client, processor, message, xhr){
-  message.headers.configureXHR(xhr);
-}
-
 export class HttpRequestMessageProcessor {
   constructor(){
     this.transformers = [
+      uriTransformer,
       timeoutTransformer,
       credentialsTransformer,
       progressTransformer,
@@ -63,11 +37,10 @@ export class HttpRequestMessageProcessor {
 
   process(client, message){
     return new Promise((resolve, reject) => {
-      var xhr = this.xhr = new XMLHttpRequest(),
-          uri = join(message.baseUrl || client.baseUrl, message.uri);
+      var xhr = this.xhr = new XMLHttpRequest();
 
       this.transformers.forEach(x => x(client, this, message, xhr));
-      xhr.open(message.method, uri, true);
+      xhr.open(message.method, message.fullUri || message.uri, true);
 
       xhr.onload = (e) => {
         var response = new HttpResponseMessage(message, xhr, message.responseType, message.reviver || client.reviver);

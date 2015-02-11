@@ -1,6 +1,10 @@
-import {join} from 'aurelia-path';
 import {Headers} from './headers';
 import {HttpResponseMessage} from './http-response-message';
+import {
+  uriTransformer,
+  timeoutTransformer,
+  callbackParameterNameTransformer
+} from './transformers';
 
 export class JSONPRequestMessage {
   constructor(uri, callbackParameterName){
@@ -57,23 +61,10 @@ class JSONPXHR {
   }
 }
 
-function timeoutTransformer(client, processor, message, xhr){
-  var timeout = message.timeout || client.timeout;
-  if(timeout !== undefined){
-    xhr.timeout = timeout;
-  }
-}
-
-function callbackParameterNameTransformer(client, processor, message, xhr){
-  var callbackParameterName = message.callbackParameterName || client.callbackParameterName;
-  if(callbackParameterName !== undefined){
-    xhr.callbackParameterName = callbackParameterName;
-  }
-}
-
 export class JSONPRequestMessageProcessor {
   constructor(){
     this.transformers = [
+      uriTransformer,
       timeoutTransformer,
       callbackParameterNameTransformer
     ];
@@ -85,11 +76,10 @@ export class JSONPRequestMessageProcessor {
 
   process(client, message){
     return new Promise((resolve, reject) => {
-      var xhr = this.xhr = new JSONPXHR(),
-          uri = join(message.baseUrl || client.baseUrl, message.uri);
+      var xhr = this.xhr = new JSONPXHR();
 
       this.transformers.forEach(x => x(client, this, message, xhr));
-      xhr.open(message.method, uri, true);
+      xhr.open(message.method, message.fullUri || message.uri, true);
 
       xhr.onload = (e) => {
         var response = new HttpResponseMessage(message, xhr, message.responseType, message.reviver || client.reviver);
