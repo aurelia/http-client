@@ -1,7 +1,6 @@
 import {Headers} from './headers';
 import {RequestMessageProcessor} from './request-message-processor';
 import {
-  uriTransformer,
   timeoutTransformer,
   credentialsTransformer,
   progressTransformer,
@@ -22,7 +21,6 @@ export class HttpRequestMessage {
 
 export function createHttpRequestMessageProcessor(){
   return new RequestMessageProcessor(XMLHttpRequest, [
-    uriTransformer,
     timeoutTransformer,
     credentialsTransformer,
     progressTransformer,

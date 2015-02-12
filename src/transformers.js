@@ -1,17 +1,3 @@
-import {join, buildQueryString} from 'aurelia-path';
-
-export function uriTransformer(client, processor, message, xhr){
-  var uri = join(message.baseUrl, message.uri),
-      qs;
-
-  if(message.params){
-    qs = buildQueryString(message.params);
-    uri = qs ? `${uri}?${qs}` : uri;
-  }
-
-  message.fullUri = uri;
-}
-
 export function timeoutTransformer(client, processor, message, xhr){
   if(message.timeout !== undefined){
     xhr.timeout = message.timeout;

@@ -1,7 +1,6 @@
 import {Headers} from './headers';
 import {RequestMessageProcessor} from './request-message-processor';
 import {
-  uriTransformer,
   timeoutTransformer,
   callbackParameterNameTransformer
 } from './transformers';
@@ -65,7 +64,6 @@ class JSONPXHR {
 
 export function createJSONPRequestMessageProcessor(){
   return new RequestMessageProcessor(JSONPXHR, [
-    uriTransformer,
     timeoutTransformer,
     callbackParameterNameTransformer
   ]);
