@@ -44,23 +44,31 @@ define(["exports", "./headers"], function (exports, _headers) {
     _prototypeProperties(HttpResponseMessage, null, {
       content: {
         get: function () {
-          if (this._content !== undefined) {
-            return this._content;
-          }
+          try {
+            if (this._content !== undefined) {
+              return this._content;
+            }
 
-          if (this.response === undefined || this.response === null) {
+            if (this.response === undefined || this.response === null) {
+              return this._content = this.response;
+            }
+
+            if (this.responseType === "json") {
+              return this._content = JSON.parse(this.response, this.reviver);
+            }
+
+            if (this.reviver) {
+              return this._content = this.reviver(this.response);
+            }
+
             return this._content = this.response;
-          }
+          } catch (e) {
+            if (this.isSuccess) {
+              throw e;
+            }
 
-          if (this.responseType === "json") {
-            return this._content = JSON.parse(this.response, this.reviver);
+            return this._content = null;
           }
-
-          if (this.reviver) {
-            return this._content = this.reviver(this.response);
-          }
-
-          return this._content = this.response;
         },
         configurable: true
       }

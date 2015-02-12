@@ -1,3 +1,11 @@
+### 0.5.1 (2015-02-12)
+
+
+#### Bug Fixes
+
+* **http-response-message:** prevent throws on content with unsuccessful requests ([a8a0c3d7](http://github.com/aurelia/http-client/commit/a8a0c3d7df437783f768771981fa327d9bbbd9cd))
+
+
 ## 0.5.0 (2015-02-12)
 
 
