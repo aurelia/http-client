@@ -5,4 +5,5 @@ exports.HttpRequestMessage = require("./http-request-message").HttpRequestMessag
 exports.HttpResponseMessage = require("./http-response-message").HttpResponseMessage;
 exports.JSONPRequestMessage = require("./jsonp-request-message").JSONPRequestMessage;
 exports.Headers = require("./headers").Headers;
+exports.RequestBuilder = require("./request-builder").RequestBuilder;
 exports.__esModule = true;

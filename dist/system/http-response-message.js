@@ -34,7 +34,7 @@ System.register(["./headers"], function (_export) {
           this.requestMessage = requestMessage;
           this.statusCode = xhr.status;
           this.response = xhr.response;
-          this.isSuccess = xhr.status >= 200 && xhr.status < 300;
+          this.isSuccess = xhr.status >= 200 && xhr.status < 400;
           this.statusText = xhr.statusText;
           this.responseType = responseType;
           this.reviver = reviver;
@@ -51,6 +51,10 @@ System.register(["./headers"], function (_export) {
             get: function () {
               if (this._content !== undefined) {
                 return this._content;
+              }
+
+              if (this.response === undefined || this.response === null) {
+                return this._content = this.response;
               }
 
               if (this.responseType === "json") {

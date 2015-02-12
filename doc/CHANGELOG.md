@@ -1,3 +1,26 @@
+## 0.5.0 (2015-02-12)
+
+
+#### Bug Fixes
+
+* **build:** add missing bower bump ([59e8a734](http://github.com/aurelia/http-client/commit/59e8a734b555440ee26737040778dd18b2189d86))
+* **http-response-message:** account for null or undefined response ([63639cf6](http://github.com/aurelia/http-client/commit/63639cf66d6abee4e44d7bfc02d5d4f8a4f5e44f))
+* **request-message-processor:** apply transforms after hr.open ([d5893dfd](http://github.com/aurelia/http-client/commit/d5893dfd737b8782bbd2bd7bc9915d01dfe928f2))
+
+
+#### Features
+
+* **all:**
+  * add support for query string building ([3c80d9e0](http://github.com/aurelia/http-client/commit/3c80d9e04ca9cfe56aa48ce53a2616b2fe32f4dc))
+  * massive re-design of http client ([f344819f](http://github.com/aurelia/http-client/commit/f344819f9c01ed6a7aba589d5bb56d01b0a832dd))
+* **http-client:**
+  * add support for options ([8d10c4a1](http://github.com/aurelia/http-client/commit/8d10c4a115c674222c3b7af4870d9511a368a825))
+  * add onRequestsComplete event ([dab95e6f](http://github.com/aurelia/http-client/commit/dab95e6fe89a1fd847b2000eb80b6ac4f4c3237b))
+  * new client configuration api ([6c1b0e96](http://github.com/aurelia/http-client/commit/6c1b0e9671fb97286545ab6cdd706127b7ba2159))
+  * add HttpBuilder API. ([831c45fa](http://github.com/aurelia/http-client/commit/831c45faa3168e71d7abd2a65c6772a25516865e), closes [#4](http://github.com/aurelia/http-client/issues/4))
+* **transformers:** handle content via a transformer ([5d3f4c02](http://github.com/aurelia/http-client/commit/5d3f4c02494aafd06418298ba3bf50c2e6307626))
+
+
 ### 0.4.4 (2015-02-03)
 
 

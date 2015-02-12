@@ -1,40 +1,106 @@
-import {join} from 'aurelia-path';
-import {HttpRequestMessage} from './http-request-message';
-import {HttpResponseMessage} from './http-response-message';
-import {JSONPRequestMessage} from './jsonp-request-message';
 import {Headers} from './headers';
+import {RequestBuilder} from './request-builder';
+import {HttpRequestMessage,createHttpRequestMessageProcessor} from './http-request-message';
+import {JSONPRequestMessage,createJSONPRequestMessageProcessor} from './jsonp-request-message';
+
+function trackRequestStart(client, processor){
+  client.pendingRequests.push(processor);
+  client.isRequesting = true;
+}
+
+function trackRequestEnd(client, processor){
+  var index = client.pendingRequests.indexOf(processor);
+
+  client.pendingRequests.splice(index, 1);
+  client.isRequesting = client.pendingRequests.length > 0;
+
+  if(!client.isRequesting && client.onRequestsComplete){
+    client.onRequestsComplete();
+  }
+}
 
 export class HttpClient {
-  constructor(baseUrl = null, defaultRequestHeaders = new Headers()){
-    this.baseUrl = baseUrl;
-    this.defaultRequestHeaders = defaultRequestHeaders;
+  constructor(){
+    this.requestTransformers = [];
+    this.requestProcessorFactories = new Map();
+    this.requestProcessorFactories.set(HttpRequestMessage, createHttpRequestMessageProcessor);
+    this.requestProcessorFactories.set(JSONPRequestMessage, createJSONPRequestMessageProcessor);
+    this.pendingRequests = [];
+    this.isRequesting = false;
   }
 
-  send(requestMessage, progressCallback){
-    return requestMessage.send(this, progressCallback);
+  get request(){
+    return new RequestBuilder(this);
   }
 
-  get(uri){
-    return this.send(new HttpRequestMessage('GET', join(this.baseUrl, uri)).withHeaders(this.defaultRequestHeaders));
+  configure(fn){
+    var builder = new RequestBuilder(this);
+    fn(builder);
+    this.requestTransformers = builder.transformers;
+    return this;
   }
 
-  put(uri, content, replacer){
-    return this.send(new HttpRequestMessage('PUT', join(this.baseUrl, uri), content, replacer || this.replacer).withHeaders(this.defaultRequestHeaders));
-  }
+  send(message, transformers){
+    var createProcessor = this.requestProcessorFactories.get(message.constructor),
+        processor, promise, i, ii;
 
-  patch(uri, content, replacer){
-    return this.send(new HttpRequestMessage('PATCH', join(this.baseUrl, uri), content, replacer || this.replacer).withHeaders(this.defaultRequestHeaders));
-  }
+    if(!createProcessor){
+        throw new Error(`No request message processor factory for ${message.constructor}.`);
+    }
 
-  post(uri, content, replacer){
-    return this.send(new HttpRequestMessage('POST', join(this.baseUrl, uri), content, replacer || this.replacer).withHeaders(this.defaultRequestHeaders));
+    processor = createProcessor();
+    trackRequestStart(this, processor);
+
+    transformers = transformers || this.requestTransformers;
+
+    for(i = 0, ii = transformers.length; i < ii; ++i){
+      transformers[i](this, processor, message);
+    }
+
+    promise = processor.process(this, message);
+
+    promise.abort = promise.cancel = function() {
+      processor.abort();
+    };
+
+    return promise.then(response => {
+      trackRequestEnd(this, processor);
+      return response;
+    }).catch(response => {
+      trackRequestEnd(this, processor);
+      throw response;
+    });
   }
 
   delete(uri){
-    return this.send(new HttpRequestMessage('DELETE', join(this.baseUrl, uri)).withHeaders(this.defaultRequestHeaders));
+    return this.request.delete(uri);
+  }
+
+  get(uri){
+    return this.request.get(uri);
+  }
+
+  head(uri){
+    return this.request.head(uri);
   }
 
   jsonp(uri, callbackParameterName='jsoncallback'){
-    return this.send(new JSONPRequestMessage(join(this.baseUrl, uri), callbackParameterName));
+    return this.request.jsonp(uri, callbackParameterName);
+  }
+
+  options(uri){
+    return this.request.options(uri);
+  }
+
+  put(uri, content){
+    return this.request.put(uri, content);
+  }
+
+  patch(uri, content){
+    return this.request.patch(uri, content);
+  }
+
+  post(uri, content){
+    return this.request.post(uri, content);
   }
 }

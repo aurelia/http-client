@@ -1,4 +1,4 @@
-System.register(["./http-client", "./http-request-message", "./http-response-message", "./jsonp-request-message", "./headers"], function (_export) {
+System.register(["./http-client", "./http-request-message", "./http-response-message", "./jsonp-request-message", "./headers", "./request-builder"], function (_export) {
   "use strict";
 
   return {
@@ -12,6 +12,8 @@ System.register(["./http-client", "./http-request-message", "./http-response-mes
       _export("JSONPRequestMessage", _jsonpRequestMessage.JSONPRequestMessage);
     }, function (_headers) {
       _export("Headers", _headers.Headers);
+    }, function (_requestBuilder) {
+      _export("RequestBuilder", _requestBuilder.RequestBuilder);
     }],
     execute: function () {}
   };
