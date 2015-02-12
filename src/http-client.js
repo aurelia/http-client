@@ -1,7 +1,7 @@
 import {Headers} from './headers';
 import {RequestBuilder} from './request-builder';
-import {HttpRequestMessage,HttpRequestMessageProcessor} from './http-request-message';
-import {JSONPRequestMessage,JSONPRequestMessageProcessor} from './jsonp-request-message';
+import {HttpRequestMessage,createHttpRequestMessageProcessor} from './http-request-message';
+import {JSONPRequestMessage,createJSONPRequestMessageProcessor} from './jsonp-request-message';
 
 function trackRequestStart(client, processor){
   client.pendingRequests.push(processor);
@@ -22,9 +22,9 @@ function trackRequestEnd(client, processor){
 export class HttpClient {
   constructor(){
     this.requestTransformers = [];
-    this.requestProcessors = new Map();
-    this.requestProcessors.set(HttpRequestMessage, HttpRequestMessageProcessor);
-    this.requestProcessors.set(JSONPRequestMessage, JSONPRequestMessageProcessor);
+    this.requestProcessorFactories = new Map();
+    this.requestProcessorFactories.set(HttpRequestMessage, createHttpRequestMessageProcessor);
+    this.requestProcessorFactories.set(JSONPRequestMessage, createJSONPRequestMessageProcessor);
     this.pendingRequests = [];
     this.isRequesting = false;
   }
@@ -41,16 +41,22 @@ export class HttpClient {
   }
 
   send(message, transformers){
-    var ProcessorType = this.requestProcessors.get(message.constructor),
-        processor, promise;
+    var createProcessor = this.requestProcessorFactories.get(message.constructor),
+        processor, promise, i, ii;
 
-    if(!ProcessorType){
-        throw new Error(`No request message processor for ${message.constructor}.`);
+    if(!createProcessor){
+        throw new Error(`No request message processor factory for ${message.constructor}.`);
     }
 
-    processor = new ProcessorType();
+    processor = createProcessor();
     trackRequestStart(this, processor);
-    (transformers || this.requestTransformers).forEach(x => x(this, processor, message));
+
+    transformers = transformers || this.requestTransformers;
+
+    for(i = 0, ii = transformers.length; i < ii; ++i){
+      transformers[i](this, processor, message);
+    }
+
     promise = processor.process(this, message);
 
     promise.abort = promise.cancel = function() {

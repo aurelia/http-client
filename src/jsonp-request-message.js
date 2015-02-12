@@ -1,5 +1,5 @@
 import {Headers} from './headers';
-import {HttpResponseMessage} from './http-response-message';
+import {RequestMessageProcessor} from './request-message-processor';
 import {
   uriTransformer,
   timeoutTransformer,
@@ -63,52 +63,10 @@ class JSONPXHR {
   setRequestHeader(){}
 }
 
-export class JSONPRequestMessageProcessor {
-  constructor(){
-    this.transformers = [
-      uriTransformer,
-      timeoutTransformer,
-      callbackParameterNameTransformer
-    ];
-  }
-
-  abort(){
-    this.xhr.abort();
-  }
-
-  process(client, message){
-    return new Promise((resolve, reject) => {
-      var xhr = this.xhr = new JSONPXHR();
-
-      this.transformers.forEach(x => x(client, this, message, xhr));
-      xhr.open(message.method, message.fullUri || message.uri, true);
-
-      xhr.onload = (e) => {
-        var response = new HttpResponseMessage(message, xhr, message.responseType, message.reviver || client.reviver);
-        if(response.isSuccess){
-          resolve(response);
-        }else{
-          reject(response);
-        }
-      };
-
-      xhr.ontimeout = (e) => {
-        reject(new HttpResponseMessage(message, {
-          response:e,
-          status:xhr.status,
-          statusText:xhr.statusText
-        }, 'timeout'));
-      };
-
-      xhr.onabort = (e) => {
-        reject(new HttpResponseMessage(message, {
-          response:e,
-          status:xhr.status,
-          statusText:xhr.statusText
-        }, 'abort'));
-      };
-
-      xhr.send();
-    });
-  }
+export function createJSONPRequestMessageProcessor(){
+  return new RequestMessageProcessor(JSONPXHR, [
+    uriTransformer,
+    timeoutTransformer,
+    callbackParameterNameTransformer
+  ]);
 }
