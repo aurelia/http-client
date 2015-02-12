@@ -1,3 +1,11 @@
+### 0.5.2 (2015-02-12)
+
+
+#### Bug Fixes
+
+* **event:** switch from hook to event ([01628f42](http://github.com/aurelia/http-client/commit/01628f42884c899ea5b6cc64ac118e5c8f9413c1))
+
+
 ### 0.5.1 (2015-02-12)
 
 

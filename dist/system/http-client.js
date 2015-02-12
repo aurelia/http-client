@@ -15,8 +15,11 @@ System.register(["./headers", "./request-builder", "./http-request-message", "./
     client.pendingRequests.splice(index, 1);
     client.isRequesting = client.pendingRequests.length > 0;
 
-    if (!client.isRequesting && client.onRequestsComplete) {
-      client.onRequestsComplete();
+    if (!client.isRequesting) {
+      var evt = new window.CustomEvent("aurelia-http-client-requests-drained", { bubbles: true, cancelable: true });
+      setTimeout(function () {
+        return document.dispatchEvent(evt);
+      }, 1);
     }
   }
 
