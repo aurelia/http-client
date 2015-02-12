@@ -84,6 +84,14 @@ export class HttpClient {
     return this.request.head(uri);
   }
 
+  jsonp(uri, callbackParameterName='jsoncallback'){
+    return this.request.jsonp(uri, callbackParameterName);
+  }
+
+  options(uri){
+    return this.request.options(uri);
+  }
+
   put(uri, content){
     return this.request.put(uri, content);
   }
@@ -94,9 +102,5 @@ export class HttpClient {
 
   post(uri, content){
     return this.request.post(uri, content);
-  }
-
-  jsonp(uri, callbackParameterName='jsoncallback'){
-    return this.request.jsonp(uri, callbackParameterName);
   }
 }

@@ -30,6 +30,16 @@ export class RequestBuilder {
 		return this.client.send(message, this.transformers);
 	}
 
+	jsonp(uri, callbackParameterName='jsoncallback'){
+		var message = new JSONPRequestMessage(uri, callbackParameterName);
+		return this.client.send(message, this.transformers);
+	}
+
+	options(uri){
+		var message = new HttpRequestMessage('OPTIONS', uri);
+		return this.client.send(message, this.transformers);
+	}
+
 	put(uri, content){
 		var message = new HttpRequestMessage('PUT', uri, content);
 		return this.client.send(message, this.transformers);
@@ -42,11 +52,6 @@ export class RequestBuilder {
 
 	post(uri, content){
 		var message = new HttpRequestMessage('POST', uri, content);
-		return this.client.send(message, this.transformers);
-	}
-
-	jsonp(uri, callbackParameterName='jsoncallback'){
-		var message = new JSONPRequestMessage(uri, callbackParameterName);
 		return this.client.send(message, this.transformers);
 	}
 }
