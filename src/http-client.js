@@ -3,27 +3,11 @@ import {RequestBuilder} from './request-builder';
 import {HttpRequestMessage,createHttpRequestMessageProcessor} from './http-request-message';
 import {JSONPRequestMessage,createJSONPRequestMessageProcessor} from './jsonp-request-message';
 
- /**
-   * Queue a pending request processor for an HttpClient instance and set its request state to active.
-   *
-   * @method trackRequestStart
-   * @param {HttpClient} client An HttpClient instance.
-   * @param {RequestMessageProcessor} processor The XHR processor.
-   * @private
-   */
 function trackRequestStart(client, processor){
   client.pendingRequests.push(processor);
   client.isRequesting = true;
 }
 
- /**
-   * Remove a request processor from a client's pending requests queue.
-   *
-   * @method trackRequestEnd
-   * @param {HttpClient} client An HttpClient instance.
-   * @param {RequestMessageProcessor} processor The XHR processor.
-   * @private
-   */
 function trackRequestEnd(client, processor){
   var index = client.pendingRequests.indexOf(processor);
 
@@ -53,7 +37,7 @@ export class HttpClient {
   }
 
   /**
-   * The RequestBuilder for this HttpClient instance.
+   * Returns a new RequestBuilder for this HttpClient instance which can be used to build and send HTTP requests.
    *
    * @property request
    * @type RequestBuilder
@@ -63,10 +47,10 @@ export class HttpClient {
   }
 
   /**
-   * Configure this HttpClient's RequestBuilder instance. 
+   * Configure this HttpClient with default settings to be used by all requests.
    *
    * @method configure
-   * @param {Function} fn A function that takes this HttpClient's RequestBuilder as an argument.
+   * @param {Function} fn A function that takes a RequestBuilder as an argument.
    * @chainable
    */
   configure(fn){
@@ -77,7 +61,7 @@ export class HttpClient {
   }
 
   /**
-   * Starts an XHR transfer. 
+   * Sends a message using the underlying networking stack.
    *
    * @method send
    * @param message A configured HttpRequestMessage or JSONPRequestMessage.
@@ -117,7 +101,7 @@ export class HttpClient {
   }
 
   /**
-   * Sends an HTTP DELETE request. 
+   * Sends an HTTP DELETE request.
    *
    * @method delete
    * @param {String} uri The target URI.
@@ -128,7 +112,7 @@ export class HttpClient {
   }
 
   /**
-   * Sends an HTTP GET request. 
+   * Sends an HTTP GET request.
    *
    * @method get
    * @param {String} uri The target URI.
@@ -139,7 +123,7 @@ export class HttpClient {
   }
 
   /**
-   * Sends an HTTP HEAD request. 
+   * Sends an HTTP HEAD request.
    *
    * @method head
    * @param {String} uri The target URI.
@@ -150,7 +134,7 @@ export class HttpClient {
   }
 
   /**
-   * Sends a JSONP request. 
+   * Sends a JSONP request.
    *
    * @method jsonp
    * @param {String} uri The target URI.
@@ -162,7 +146,7 @@ export class HttpClient {
   }
 
   /**
-   * Sends an HTTP OPTIONS request. 
+   * Sends an HTTP OPTIONS request.
    *
    * @method options
    * @param {String} uri The target URI.
@@ -173,7 +157,7 @@ export class HttpClient {
   }
 
   /**
-   * Sends an HTTP PUT request. 
+   * Sends an HTTP PUT request.
    *
    * @method put
    * @param {String} uri The target URI.
@@ -185,7 +169,7 @@ export class HttpClient {
   }
 
   /**
-   * Sends an HTTP PATCH request. 
+   * Sends an HTTP PATCH request.
    *
    * @method patch
    * @param {String} uri The target URI.
@@ -197,7 +181,7 @@ export class HttpClient {
   }
 
   /**
-   * Sends an HTTP POST request. 
+   * Sends an HTTP POST request.
    *
    * @method post
    * @param {String} uri The target URI.

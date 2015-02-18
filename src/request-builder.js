@@ -3,7 +3,7 @@ import {HttpRequestMessage} from './http-request-message';
 import {JSONPRequestMessage} from './jsonp-request-message';
 
 /**
-* A builder class allowing fluent composition of HTTP request.
+* A builder class allowing fluent composition of HTTP requests.
 *
 * @class RequestBuilder
 * @constructor
@@ -15,7 +15,7 @@ export class RequestBuilder {
 	}
 
 	/**
-	* Add a user-defined request transformer to the RequestBuilder. 
+	* Adds a user-defined request transformer to the RequestBuilder.
 	*
 	* @method addHelper
 	* @param {String} name The name of the helper to add.
@@ -30,7 +30,7 @@ export class RequestBuilder {
 	}
 
 	/**
-	* Sends an HTTP DELETE request. 
+	* Sends an HTTP DELETE request.
 	*
 	* @method delete
 	* @param {String} uri The target URI.
@@ -42,7 +42,7 @@ export class RequestBuilder {
 	}
 
 	/**
-	* Sends an HTTP GET request. 
+	* Sends an HTTP GET request.
 	*
 	* @method get
 	* @param {String} uri The target URI.
@@ -54,7 +54,7 @@ export class RequestBuilder {
 	}
 
 	/**
-	* Sends an HTTP HEAD request. 
+	* Sends an HTTP HEAD request.
 	*
 	* @method head
 	* @param {String} uri The target URI.
@@ -66,7 +66,7 @@ export class RequestBuilder {
 	}
 
 	/**
-	* Sends a JSONP request. 
+	* Sends a JSONP request.
 	*
 	* @method jsonp
 	* @param {String} uri The target URI.
@@ -79,7 +79,7 @@ export class RequestBuilder {
 	}
 
 	/**
-	* Sends an HTTP OPTIONS request. 
+	* Sends an HTTP OPTIONS request.
 	*
 	* @method options
 	* @param {String} uri The target URI.
@@ -91,7 +91,7 @@ export class RequestBuilder {
 	}
 
 	/**
-	* Sends an HTTP PUT request. 
+	* Sends an HTTP PUT request.
 	*
 	* @method put
 	* @param {String} uri The target URI.
@@ -104,7 +104,7 @@ export class RequestBuilder {
 	}
 
 	/**
-	* Sends an HTTP PATCH request. 
+	* Sends an HTTP PATCH request.
 	*
 	* @method patch
 	* @param {String} uri The target URI.
@@ -117,7 +117,7 @@ export class RequestBuilder {
 	}
 
 	/**
-	* Sends an HTTP POST request. 
+	* Sends an HTTP POST request.
 	*
 	* @method post
 	* @param {String} uri The target URI.
