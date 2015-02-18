@@ -5,14 +5,12 @@ import {JSONPRequestMessage,createJSONPRequestMessageProcessor} from './jsonp-re
 
 function trackRequestStart(client, processor){
   client.pendingRequests.push(processor);
-  client.isRequesting = true;
 }
 
 function trackRequestEnd(client, processor){
   var index = client.pendingRequests.indexOf(processor);
 
   client.pendingRequests.splice(index, 1);
-  client.isRequesting = client.pendingRequests.length > 0;
 
   if(!client.isRequesting){
     var evt = new window.CustomEvent('aurelia-http-client-requests-drained', { bubbles: true, cancelable: true });
@@ -27,7 +25,10 @@ export class HttpClient {
     this.requestProcessorFactories.set(HttpRequestMessage, createHttpRequestMessageProcessor);
     this.requestProcessorFactories.set(JSONPRequestMessage, createJSONPRequestMessageProcessor);
     this.pendingRequests = [];
-    this.isRequesting = false;
+  }
+
+  get isRequesting() {
+    return !!this.pendingRequests.length;
   }
 
   get request(){
