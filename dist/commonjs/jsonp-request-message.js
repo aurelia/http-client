@@ -2,14 +2,22 @@
 
 var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
 
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
 exports.createJSONPRequestMessageProcessor = createJSONPRequestMessageProcessor;
+
 var Headers = require("./headers").Headers;
+
 var RequestMessageProcessor = require("./request-message-processor").RequestMessageProcessor;
+
 var _transformers = require("./transformers");
 
 var timeoutTransformer = _transformers.timeoutTransformer;
 var callbackParameterNameTransformer = _transformers.callbackParameterNameTransformer;
+
 var JSONPRequestMessage = exports.JSONPRequestMessage = function JSONPRequestMessage(uri, callbackParameterName) {
+  _classCallCheck(this, JSONPRequestMessage);
+
   this.method = "JSONP";
   this.uri = uri;
   this.content = undefined;
@@ -19,7 +27,9 @@ var JSONPRequestMessage = exports.JSONPRequestMessage = function JSONPRequestMes
 };
 
 var JSONPXHR = (function () {
-  function JSONPXHR() {}
+  function JSONPXHR() {
+    _classCallCheck(this, JSONPXHR);
+  }
 
   _prototypeProperties(JSONPXHR, null, {
     open: {
@@ -34,6 +44,7 @@ var JSONPXHR = (function () {
     send: {
       value: function send() {
         var _this = this;
+
         var uri = this.uri + (this.uri.indexOf("?") >= 0 ? "&" : "?") + this.callbackParameterName + "=" + this.callbackName;
 
         window[this.callbackName] = function (data) {
@@ -87,4 +98,7 @@ var JSONPXHR = (function () {
 function createJSONPRequestMessageProcessor() {
   return new RequestMessageProcessor(JSONPXHR, [timeoutTransformer, callbackParameterNameTransformer]);
 }
-exports.__esModule = true;
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});

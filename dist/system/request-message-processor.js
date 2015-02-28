@@ -1,8 +1,5 @@
 System.register(["./http-response-message", "aurelia-path"], function (_export) {
-  "use strict";
-
-  var HttpResponseMessage, join, buildQueryString, _prototypeProperties, RequestMessageProcessor;
-
+  var HttpResponseMessage, join, buildQueryString, _prototypeProperties, _classCallCheck, RequestMessageProcessor;
 
   function buildFullUri(message) {
     var uri = join(message.baseUrl, message.uri),
@@ -24,10 +21,16 @@ System.register(["./http-response-message", "aurelia-path"], function (_export) 
       buildQueryString = _aureliaPath.buildQueryString;
     }],
     execute: function () {
+      "use strict";
+
       _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
+
+      _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
       RequestMessageProcessor = _export("RequestMessageProcessor", (function () {
         function RequestMessageProcessor(xhrType, transformers) {
+          _classCallCheck(this, RequestMessageProcessor);
+
           this.XHRType = xhrType;
           this.transformers = transformers;
         }
@@ -35,7 +38,10 @@ System.register(["./http-response-message", "aurelia-path"], function (_export) 
         _prototypeProperties(RequestMessageProcessor, null, {
           abort: {
             value: function abort() {
-              this.xhr.abort();
+              //The logic here is if the xhr object is not set then there is nothing to abort so the intent was carried out
+              if (this.xhr) {
+                this.xhr.abort();
+              }
             },
             writable: true,
             configurable: true
@@ -43,6 +49,7 @@ System.register(["./http-response-message", "aurelia-path"], function (_export) 
           process: {
             value: function process(client, message) {
               var _this = this;
+
               return new Promise(function (resolve, reject) {
                 var xhr = _this.xhr = new _this.XHRType(),
                     transformers = _this.transformers,

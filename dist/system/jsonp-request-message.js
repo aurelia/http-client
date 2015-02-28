@@ -1,12 +1,12 @@
 System.register(["./headers", "./request-message-processor", "./transformers"], function (_export) {
-  "use strict";
+  var Headers, RequestMessageProcessor, timeoutTransformer, callbackParameterNameTransformer, _prototypeProperties, _classCallCheck, JSONPRequestMessage, JSONPXHR;
 
-  var Headers, RequestMessageProcessor, timeoutTransformer, callbackParameterNameTransformer, _prototypeProperties, JSONPRequestMessage, JSONPXHR;
   _export("createJSONPRequestMessageProcessor", createJSONPRequestMessageProcessor);
 
   function createJSONPRequestMessageProcessor() {
     return new RequestMessageProcessor(JSONPXHR, [timeoutTransformer, callbackParameterNameTransformer]);
   }
+
   return {
     setters: [function (_headers) {
       Headers = _headers.Headers;
@@ -17,9 +17,15 @@ System.register(["./headers", "./request-message-processor", "./transformers"], 
       callbackParameterNameTransformer = _transformers.callbackParameterNameTransformer;
     }],
     execute: function () {
+      "use strict";
+
       _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
 
+      _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
       JSONPRequestMessage = _export("JSONPRequestMessage", function JSONPRequestMessage(uri, callbackParameterName) {
+        _classCallCheck(this, JSONPRequestMessage);
+
         this.method = "JSONP";
         this.uri = uri;
         this.content = undefined;
@@ -27,8 +33,11 @@ System.register(["./headers", "./request-message-processor", "./transformers"], 
         this.responseType = "jsonp";
         this.callbackParameterName = callbackParameterName;
       });
+
       JSONPXHR = (function () {
-        function JSONPXHR() {}
+        function JSONPXHR() {
+          _classCallCheck(this, JSONPXHR);
+        }
 
         _prototypeProperties(JSONPXHR, null, {
           open: {
@@ -43,6 +52,7 @@ System.register(["./headers", "./request-message-processor", "./transformers"], 
           send: {
             value: function send() {
               var _this = this;
+
               var uri = this.uri + (this.uri.indexOf("?") >= 0 ? "&" : "?") + this.callbackParameterName + "=" + this.callbackName;
 
               window[this.callbackName] = function (data) {

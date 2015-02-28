@@ -1,3 +1,11 @@
+### 0.5.4 (2015-02-27)
+
+
+#### Bug Fixes
+
+* **package:** update dependencies ([382e877b](http://github.com/aurelia/http-client/commit/382e877bd7e5f71d22863ab97df0f472db32c7ac))
+
+
 ### 0.5.3 (2015-02-18)
 
 

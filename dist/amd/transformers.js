@@ -8,6 +8,7 @@ define(["exports"], function (exports) {
   exports.responseTypeTransformer = responseTypeTransformer;
   exports.headerTransformer = headerTransformer;
   exports.contentTransformer = contentTransformer;
+
   function timeoutTransformer(client, processor, message, xhr) {
     if (message.timeout !== undefined) {
       xhr.timeout = message.timeout;
@@ -36,7 +37,7 @@ define(["exports"], function (exports) {
     var responseType = message.responseType;
 
     if (responseType === "json") {
-      responseType = "text";
+      responseType = "text"; //IE does not support json
     }
 
     xhr.responseType = responseType;
@@ -73,5 +74,8 @@ define(["exports"], function (exports) {
 
     message.content = JSON.stringify(message.content, message.replacer);
   }
-  exports.__esModule = true;
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
 });

@@ -3,29 +3,14 @@ define(["exports", "./headers"], function (exports, _headers) {
 
   var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
 
+  var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
   var Headers = _headers.Headers;
-  function parseResponseHeaders(headerStr) {
-    var headers = {};
-    if (!headerStr) {
-      return headers;
-    }
-
-    var headerPairs = headerStr.split("\r\n");
-    for (var i = 0; i < headerPairs.length; i++) {
-      var headerPair = headerPairs[i];
-      var index = headerPair.indexOf(": ");
-      if (index > 0) {
-        var key = headerPair.substring(0, index);
-        var val = headerPair.substring(index + 2);
-        headers[key] = val;
-      }
-    }
-
-    return headers;
-  }
 
   var HttpResponseMessage = exports.HttpResponseMessage = (function () {
     function HttpResponseMessage(requestMessage, xhr, responseType, reviver) {
+      _classCallCheck(this, HttpResponseMessage);
+
       this.requestMessage = requestMessage;
       this.statusCode = xhr.status;
       this.response = xhr.response;
@@ -35,7 +20,7 @@ define(["exports", "./headers"], function (exports, _headers) {
       this.reviver = reviver;
 
       if (xhr.getAllResponseHeaders) {
-        this.headers = new Headers(parseResponseHeaders(xhr.getAllResponseHeaders()));
+        this.headers = Headers.parse(xhr.getAllResponseHeaders());
       } else {
         this.headers = new Headers();
       }
@@ -76,5 +61,8 @@ define(["exports", "./headers"], function (exports, _headers) {
 
     return HttpResponseMessage;
   })();
-  exports.__esModule = true;
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
 });

@@ -20,7 +20,10 @@ export class RequestMessageProcessor {
   }
 
   abort(){
-    this.xhr.abort();
+    //The logic here is if the xhr object is not set then there is nothing to abort so the intent was carried out
+    if(this.xhr){
+      this.xhr.abort();
+    }
   }
 
   process(client, message){

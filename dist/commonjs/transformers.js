@@ -7,6 +7,7 @@ exports.progressTransformer = progressTransformer;
 exports.responseTypeTransformer = responseTypeTransformer;
 exports.headerTransformer = headerTransformer;
 exports.contentTransformer = contentTransformer;
+
 function timeoutTransformer(client, processor, message, xhr) {
   if (message.timeout !== undefined) {
     xhr.timeout = message.timeout;
@@ -35,7 +36,7 @@ function responseTypeTransformer(client, processor, message, xhr) {
   var responseType = message.responseType;
 
   if (responseType === "json") {
-    responseType = "text";
+    responseType = "text"; //IE does not support json
   }
 
   xhr.responseType = responseType;
@@ -72,4 +73,7 @@ function contentTransformer(client, processor, message, xhr) {
 
   message.content = JSON.stringify(message.content, message.replacer);
 }
-exports.__esModule = true;
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});

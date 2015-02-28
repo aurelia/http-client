@@ -3,10 +3,11 @@ define(["exports", "./http-response-message", "aurelia-path"], function (exports
 
   var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
 
+  var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
   var HttpResponseMessage = _httpResponseMessage.HttpResponseMessage;
   var join = _aureliaPath.join;
   var buildQueryString = _aureliaPath.buildQueryString;
-
 
   function buildFullUri(message) {
     var uri = join(message.baseUrl, message.uri),
@@ -22,6 +23,8 @@ define(["exports", "./http-response-message", "aurelia-path"], function (exports
 
   var RequestMessageProcessor = exports.RequestMessageProcessor = (function () {
     function RequestMessageProcessor(xhrType, transformers) {
+      _classCallCheck(this, RequestMessageProcessor);
+
       this.XHRType = xhrType;
       this.transformers = transformers;
     }
@@ -29,7 +32,10 @@ define(["exports", "./http-response-message", "aurelia-path"], function (exports
     _prototypeProperties(RequestMessageProcessor, null, {
       abort: {
         value: function abort() {
-          this.xhr.abort();
+          //The logic here is if the xhr object is not set then there is nothing to abort so the intent was carried out
+          if (this.xhr) {
+            this.xhr.abort();
+          }
         },
         writable: true,
         configurable: true
@@ -37,6 +43,7 @@ define(["exports", "./http-response-message", "aurelia-path"], function (exports
       process: {
         value: function process(client, message) {
           var _this = this;
+
           return new Promise(function (resolve, reject) {
             var xhr = _this.xhr = new _this.XHRType(),
                 transformers = _this.transformers,
@@ -93,5 +100,8 @@ define(["exports", "./http-response-message", "aurelia-path"], function (exports
 
     return RequestMessageProcessor;
   })();
-  exports.__esModule = true;
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
 });

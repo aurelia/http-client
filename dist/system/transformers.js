@@ -1,6 +1,4 @@
 System.register([], function (_export) {
-  "use strict";
-
   _export("timeoutTransformer", timeoutTransformer);
 
   _export("callbackParameterNameTransformer", callbackParameterNameTransformer);
@@ -43,7 +41,7 @@ System.register([], function (_export) {
     var responseType = message.responseType;
 
     if (responseType === "json") {
-      responseType = "text";
+      responseType = "text"; //IE does not support json
     }
 
     xhr.responseType = responseType;
@@ -80,8 +78,11 @@ System.register([], function (_export) {
 
     message.content = JSON.stringify(message.content, message.replacer);
   }
+
   return {
     setters: [],
-    execute: function () {}
+    execute: function () {
+      "use strict";
+    }
   };
 });
