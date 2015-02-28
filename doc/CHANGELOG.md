@@ -1,3 +1,11 @@
+### 0.5.5 (2015-02-28)
+
+
+#### Bug Fixes
+
+* **package:** change jspm directories ([191dde2d](http://github.com/aurelia/http-client/commit/191dde2d3dbff814f6bfb784acee519f99b3984d))
+
+
 ### 0.5.4 (2015-02-27)
 
 
