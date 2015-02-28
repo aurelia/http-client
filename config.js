@@ -9,7 +9,7 @@ System.config({
 
 System.config({
   "map": {
-    "aurelia-path": "github:aurelia/path@0.4.4",
+    "aurelia-path": "github:aurelia/path@0.4.5",
     "core-js": "npm:core-js@0.4.10",
     "github:jspm/nodelibs-process@0.1.1": {
       "process": "npm:process@0.10.0"
