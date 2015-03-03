@@ -2,7 +2,7 @@ System.config({
   "paths": {
     "*": "*.js",
     "github:*": "jspm_packages/github/*.js",
-    "aurelia-http-client/*": "dist/*.js",
+    "aurelia-http-client/*": "dist/system/*.js",
     "npm:*": "jspm_packages/npm/*.js"
   }
 });
