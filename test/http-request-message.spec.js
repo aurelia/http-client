@@ -28,19 +28,20 @@ describe("http-request-message", () => {
     let httpRequestMessage = new HttpRequestMessage(method, uri, content);
     expect(httpRequestMessage.headers).toEqual(jasmine.any(Headers));
   });
-});
 
-describe("createHttpRequestMessageProcessor",() => {
-  it("should create a RequestMessageProcessor with an XMLHttpRequest and the correct transformers", () => {
-    let httpProcessor = createHttpRequestMessageProcessor();
+  describe("createHttpRequestMessageProcessor",() => {
+    it("should create a RequestMessageProcessor with an XMLHttpRequest and the correct transformers", () => {
+      let httpProcessor = createHttpRequestMessageProcessor();
 
-    expect(httpProcessor).toEqual(jasmine.any(RequestMessageProcessor));
-    expect(httpProcessor.XHRType).toBe(XMLHttpRequest);
-    expect(httpProcessor.transformers).toContain(timeoutTransformer);
-    expect(httpProcessor.transformers).toContain(credentialsTransformer);
-    expect(httpProcessor.transformers).toContain(progressTransformer);
-    expect(httpProcessor.transformers).toContain(responseTypeTransformer);
-    expect(httpProcessor.transformers).toContain(headerTransformer);
-    expect(httpProcessor.transformers).toContain(contentTransformer);
+      expect(httpProcessor).toEqual(jasmine.any(RequestMessageProcessor));
+      expect(httpProcessor.XHRType).toBe(XMLHttpRequest);
+      expect(httpProcessor.transformers).toContain(timeoutTransformer);
+      expect(httpProcessor.transformers).toContain(credentialsTransformer);
+      expect(httpProcessor.transformers).toContain(progressTransformer);
+      expect(httpProcessor.transformers).toContain(responseTypeTransformer);
+      expect(httpProcessor.transformers).toContain(headerTransformer);
+      expect(httpProcessor.transformers).toContain(contentTransformer);
+    });
   });
+
 });
