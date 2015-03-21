@@ -125,7 +125,7 @@ describe('http client', () => {
             x.withHeader('Content-Type', 'application/json');
           });
 
-        client.request
+        client.createRequest()
           .withReplacer(['firstName'])
           .put('some/cool/path', content);
 
@@ -229,7 +229,7 @@ describe('http client', () => {
             x.withHeader('Content-Type', 'application/json');
           });
 
-        client.request
+        client.createRequest()
           .withReplacer(['firstName'])
           .patch('some/cool/path', content);
 
@@ -333,7 +333,7 @@ describe('http client', () => {
             x.withHeader('Content-Type', 'application/json');
           });
 
-        client.request
+        client.createRequest()
           .withReplacer(['firstName'])
           .post('some/cool/path', content);
 
@@ -562,7 +562,7 @@ describe('http client', () => {
       var client = new HttpClient();
       var callback = function(){};
 
-      client.request
+      client.createRequest()
         .withProgressCallback(callback)
         .get('some/cool/url');
 

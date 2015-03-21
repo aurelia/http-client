@@ -37,16 +37,6 @@ export class HttpClient {
   }
 
   /**
-   * Returns a new RequestBuilder for this HttpClient instance which can be used to build and send HTTP requests.
-   *
-   * @property request
-   * @type RequestBuilder
-   */
-  get request(){
-    return new RequestBuilder(this);
-  }
-
-  /**
    * Configure this HttpClient with default settings to be used by all requests.
    *
    * @method configure
@@ -58,6 +48,16 @@ export class HttpClient {
     fn(builder);
     this.requestTransformers = builder.transformers;
     return this;
+  }
+
+  /**
+   * Returns a new RequestBuilder for this HttpClient instance that can be used to build and send HTTP requests.
+   *
+   * @method createRequest
+   * @type RequestBuilder
+   */
+  createRequest(){
+    return new RequestBuilder(this);
   }
 
   /**
@@ -108,7 +108,7 @@ export class HttpClient {
    * @return {Promise} A cancellable promise object.
    */
   delete(uri){
-    return this.request.delete(uri);
+    return this.createRequest().delete(uri);
   }
 
   /**
@@ -119,7 +119,7 @@ export class HttpClient {
    * @return {Promise} A cancellable promise object.
    */
   get(uri){
-    return this.request.get(uri);
+    return this.createRequest().get(uri);
   }
 
   /**
@@ -130,7 +130,7 @@ export class HttpClient {
    * @return {Promise} A cancellable promise object.
    */
   head(uri){
-    return this.request.head(uri);
+    return this.createRequest().head(uri);
   }
 
   /**
@@ -142,7 +142,7 @@ export class HttpClient {
    * @return {Promise} A cancellable promise object.
    */
   jsonp(uri, callbackParameterName='jsoncallback'){
-    return this.request.jsonp(uri, callbackParameterName);
+    return this.createRequest().jsonp(uri, callbackParameterName);
   }
 
   /**
@@ -153,7 +153,7 @@ export class HttpClient {
    * @return {Promise} A cancellable promise object.
    */
   options(uri){
-    return this.request.options(uri);
+    return this.createRequest().options(uri);
   }
 
   /**
@@ -165,7 +165,7 @@ export class HttpClient {
    * @return {Promise} A cancellable promise object.
    */
   put(uri, content){
-    return this.request.put(uri, content);
+    return this.createRequest().put(uri, content);
   }
 
   /**
@@ -177,7 +177,7 @@ export class HttpClient {
    * @return {Promise} A cancellable promise object.
    */
   patch(uri, content){
-    return this.request.patch(uri, content);
+    return this.createRequest().patch(uri, content);
   }
 
   /**
@@ -189,6 +189,6 @@ export class HttpClient {
    * @return {Promise} A cancellable promise object.
    */
   post(uri, content){
-    return this.request.post(uri, content);
+    return this.createRequest().post(uri, content);
   }
 }
