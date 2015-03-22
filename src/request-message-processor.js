@@ -2,7 +2,7 @@ import {HttpResponseMessage} from './http-response-message';
 import {join, buildQueryString} from 'aurelia-path';
 
 function buildFullUri(message){
-  var uri = join(message.baseUrl, message.uri),
+  var uri = join(message.baseUri, message.uri),
       qs;
 
   if(message.params){
