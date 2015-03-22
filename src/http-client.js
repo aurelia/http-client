@@ -54,10 +54,17 @@ export class HttpClient {
    * Returns a new RequestBuilder for this HttpClient instance that can be used to build and send HTTP requests.
    *
    * @method createRequest
+   * @param uri The target URI.
    * @type RequestBuilder
    */
-  createRequest(){
-    return new RequestBuilder(this);
+  createRequest(uri){
+    let builder = new RequestBuilder(this);
+
+    if(uri) {
+      builder.withUri(uri);
+    }
+
+    return builder;
   }
 
   /**
@@ -108,7 +115,7 @@ export class HttpClient {
    * @return {Promise} A cancellable promise object.
    */
   delete(uri){
-    return this.createRequest().delete(uri);
+    return this.createRequest(uri).asDelete().send();
   }
 
   /**
@@ -119,7 +126,7 @@ export class HttpClient {
    * @return {Promise} A cancellable promise object.
    */
   get(uri){
-    return this.createRequest().get(uri);
+    return this.createRequest(uri).asGet().send();
   }
 
   /**
@@ -130,7 +137,7 @@ export class HttpClient {
    * @return {Promise} A cancellable promise object.
    */
   head(uri){
-    return this.createRequest().head(uri);
+    return this.createRequest(uri).asHead().send();
   }
 
   /**
@@ -138,11 +145,10 @@ export class HttpClient {
    *
    * @method jsonp
    * @param {String} uri The target URI.
-   * @param {String} [callbackParameterName=jsoncallback] The target Javascript expression to invoke.
    * @return {Promise} A cancellable promise object.
    */
   jsonp(uri, callbackParameterName='jsoncallback'){
-    return this.createRequest().jsonp(uri, callbackParameterName);
+    return this.createRequest(uri).withJsonpParameter(callbackParameterName).send();
   }
 
   /**
@@ -153,7 +159,7 @@ export class HttpClient {
    * @return {Promise} A cancellable promise object.
    */
   options(uri){
-    return this.createRequest().options(uri);
+    return this.createRequest(uri).asOptions().send();
   }
 
   /**
@@ -165,7 +171,7 @@ export class HttpClient {
    * @return {Promise} A cancellable promise object.
    */
   put(uri, content){
-    return this.createRequest().put(uri, content);
+    return this.createRequest(uri).asPut().withContent(content).send();
   }
 
   /**
@@ -177,7 +183,7 @@ export class HttpClient {
    * @return {Promise} A cancellable promise object.
    */
   patch(uri, content){
-    return this.createRequest().patch(uri, content);
+    return this.createRequest(uri).asPatch().withContent(content).send();
   }
 
   /**
@@ -189,6 +195,6 @@ export class HttpClient {
    * @return {Promise} A cancellable promise object.
    */
   post(uri, content){
-    return this.createRequest().post(uri, content);
+    return this.createRequest(uri).asPost().withContent(content).send();
   }
 }
