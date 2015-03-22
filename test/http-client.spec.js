@@ -125,9 +125,11 @@ describe('http client', () => {
             x.withHeader('Content-Type', 'application/json');
           });
 
-        client.createRequest()
+        client.createRequest('some/cool/path')
+          .asPut()
+          .withContent(content)
           .withReplacer(['firstName'])
-          .put('some/cool/path', content);
+          .send();
 
         var request = jasmine.Ajax.requests.mostRecent();
 
@@ -229,9 +231,11 @@ describe('http client', () => {
             x.withHeader('Content-Type', 'application/json');
           });
 
-        client.createRequest()
+        client.createRequest('some/cool/path')
+          .asPatch()
+          .withContent(content)
           .withReplacer(['firstName'])
-          .patch('some/cool/path', content);
+          .send();
 
         var request = jasmine.Ajax.requests.mostRecent();
 
@@ -333,9 +337,11 @@ describe('http client', () => {
             x.withHeader('Content-Type', 'application/json');
           });
 
-        client.createRequest()
+        client.createRequest('some/cool/path')
+          .asPost()
+          .withContent(content)
           .withReplacer(['firstName'])
-          .post('some/cool/path', content);
+          .send();
 
         var request = jasmine.Ajax.requests.mostRecent();
 
@@ -562,9 +568,10 @@ describe('http client', () => {
       var client = new HttpClient();
       var callback = function(){};
 
-      client.createRequest()
+      client.createRequest('some/cool/url')
+        .asGet()
         .withProgressCallback(callback)
-        .get('some/cool/url');
+        .send();
 
       var response = jasmine.Ajax.requests.mostRecent();
       expect(response.upload.onprogress).toBe(callback);
