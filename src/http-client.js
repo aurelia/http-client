@@ -148,7 +148,7 @@ export class HttpClient {
    * @return {Promise} A cancellable promise object.
    */
   jsonp(uri, callbackParameterName='jsoncallback'){
-    return this.createRequest(uri).withJsonpParameter(callbackParameterName).send();
+    return this.createRequest(uri).asJsonp(callbackParameterName).send();
   }
 
   /**

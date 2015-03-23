@@ -84,7 +84,7 @@ RequestBuilder.addHelper('asPut', function(){
 	};
 });
 
-RequestBuilder.addHelper('withJsonpParameter', function(jsonpParameterName){
+RequestBuilder.addHelper('asJsonp', function(jsonpParameterName){
 	this.useJsonp = true;
 	return function(client, processor, message){
 		message.jsonpParameterName =  jsonpParameterName;
