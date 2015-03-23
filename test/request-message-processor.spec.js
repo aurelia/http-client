@@ -39,7 +39,7 @@ describe("Request message processor", () => {
       message = {
         method: 'get',
         params: [],
-        baseUrl: '',
+        baseUri: '',
         uri: 'some/uri',
         content: {},
         responseType: "test",
@@ -63,8 +63,8 @@ describe("Request message processor", () => {
       expect(sendSpy).toHaveBeenCalledWith(message.content);
     });
 
-    it("will combine the message baseUrl and message uri and set it to the fullUri", () => {
-      message.baseUrl = "/the/base";
+    it("will combine the message baseUri and message uri and set it to the fullUri", () => {
+      message.baseUri = "/the/base";
       message.uri = "and/the/path";
 
       reqProcessor.process(client, message);

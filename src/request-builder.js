@@ -103,9 +103,9 @@ RequestBuilder.addHelper('withContent', function(content){
 	};
 });
 
-RequestBuilder.addHelper('withBaseUrl', function(baseUrl){
+RequestBuilder.addHelper('withBaseUri', function(baseUri){
 	return function(client, processor, message){
-		message.baseUrl = baseUrl;
+		message.baseUri = baseUri;
 	}
 });
 
