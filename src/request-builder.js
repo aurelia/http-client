@@ -84,10 +84,10 @@ RequestBuilder.addHelper('asPut', function(){
 	};
 });
 
-RequestBuilder.addHelper('asJsonp', function(jsonpParameterName){
+RequestBuilder.addHelper('asJsonp', function(callbackParameterName){
 	this.useJsonp = true;
 	return function(client, processor, message){
-		message.jsonpParameterName =  jsonpParameterName;
+		message.callbackParameterName =  callbackParameterName;
 	};
 });
 
