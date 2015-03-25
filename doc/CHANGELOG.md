@@ -1,3 +1,20 @@
+## 0.6.0 (2015-03-24)
+
+
+#### Bug Fixes
+
+* **http-client:** rename withJsonpParameter to asJsonp ([c70eedd8](http://github.com/aurelia/http-client/commit/c70eedd83380a0f5ea474f35b4f32a3bd5c40078))
+* **request-builder:**
+  * incorrect jsonp callback property name ([267ec3ec](http://github.com/aurelia/http-client/commit/267ec3ecd3721583a493653178689a539c873a5d))
+  * rename baseUrl to baseUri for consistency ([1fd381e9](http://github.com/aurelia/http-client/commit/1fd381e957b32d9e69966a5b60ed48f0943dcb99))
+
+
+#### Features
+
+* **http-client:** improve API for creating new requests ([93a6e38a](http://github.com/aurelia/http-client/commit/93a6e38a151b85926d2acf069cfcee0221c6b23b), closes [#27](http://github.com/aurelia/http-client/issues/27))
+* **request-builder:** allow message parameters to be fully specified without sending the message ([06d84947](http://github.com/aurelia/http-client/commit/06d84947dd9e3e19028571ce0134639113ce5410), closes [#29](http://github.com/aurelia/http-client/issues/29))
+
+
 ### 0.5.5 (2015-02-28)
 
 

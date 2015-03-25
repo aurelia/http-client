@@ -12,7 +12,7 @@ var join = _aureliaPath.join;
 var buildQueryString = _aureliaPath.buildQueryString;
 
 function buildFullUri(message) {
-  var uri = join(message.baseUrl, message.uri),
+  var uri = join(message.baseUri, message.uri),
       qs;
 
   if (message.params) {

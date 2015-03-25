@@ -22,6 +22,7 @@ define(["exports", "aurelia-path", "./http-request-message", "./jsonp-request-me
 
 			this.client = client;
 			this.transformers = client.requestTransformers.slice(0);
+			this.useJsonp = false;
 		}
 
 		_prototypeProperties(RequestBuilder, {
@@ -46,143 +47,17 @@ define(["exports", "aurelia-path", "./http-request-message", "./jsonp-request-me
 				configurable: true
 			}
 		}, {
-			"delete": {
+			send: {
 
 				/**
-    * Sends an HTTP DELETE request.
+    * Sends the request.
     *
-    * @method delete
-    * @param {String} uri The target URI.
+    * @method send
     * @return {Promise} A cancellable promise object.
     */
 
-				value: function _delete(uri) {
-					var message = new HttpRequestMessage("DELETE", uri);
-					return this.client.send(message, this.transformers);
-				},
-				writable: true,
-				configurable: true
-			},
-			get: {
-
-				/**
-    * Sends an HTTP GET request.
-    *
-    * @method get
-    * @param {String} uri The target URI.
-    * @return {Promise} A cancellable promise object.
-    */
-
-				value: function get(uri) {
-					var message = new HttpRequestMessage("GET", uri);
-					return this.client.send(message, this.transformers);
-				},
-				writable: true,
-				configurable: true
-			},
-			head: {
-
-				/**
-    * Sends an HTTP HEAD request.
-    *
-    * @method head
-    * @param {String} uri The target URI.
-    * @return {Promise} A cancellable promise object.
-    */
-
-				value: function head(uri) {
-					var message = new HttpRequestMessage("HEAD", uri);
-					return this.client.send(message, this.transformers);
-				},
-				writable: true,
-				configurable: true
-			},
-			jsonp: {
-
-				/**
-    * Sends a JSONP request.
-    *
-    * @method jsonp
-    * @param {String} uri The target URI.
-    * @param {String} [callbackParameterName=jsoncallback] The target Javascript expression to invoke.
-    * @return {Promise} A cancellable promise object.
-    */
-
-				value: function jsonp(uri) {
-					var callbackParameterName = arguments[1] === undefined ? "jsoncallback" : arguments[1];
-
-					var message = new JSONPRequestMessage(uri, callbackParameterName);
-					return this.client.send(message, this.transformers);
-				},
-				writable: true,
-				configurable: true
-			},
-			options: {
-
-				/**
-    * Sends an HTTP OPTIONS request.
-    *
-    * @method options
-    * @param {String} uri The target URI.
-    * @return {Promise} A cancellable promise object.
-    */
-
-				value: function options(uri) {
-					var message = new HttpRequestMessage("OPTIONS", uri);
-					return this.client.send(message, this.transformers);
-				},
-				writable: true,
-				configurable: true
-			},
-			put: {
-
-				/**
-    * Sends an HTTP PUT request.
-    *
-    * @method put
-    * @param {String} uri The target URI.
-    * @param {Object} uri The request payload.
-    * @return {Promise} A cancellable promise object.
-    */
-
-				value: function put(uri, content) {
-					var message = new HttpRequestMessage("PUT", uri, content);
-					return this.client.send(message, this.transformers);
-				},
-				writable: true,
-				configurable: true
-			},
-			patch: {
-
-				/**
-    * Sends an HTTP PATCH request.
-    *
-    * @method patch
-    * @param {String} uri The target URI.
-    * @param {Object} uri The request payload.
-    * @return {Promise} A cancellable promise object.
-    */
-
-				value: function patch(uri, content) {
-					var message = new HttpRequestMessage("PATCH", uri, content);
-					return this.client.send(message, this.transformers);
-				},
-				writable: true,
-				configurable: true
-			},
-			post: {
-
-				/**
-    * Sends an HTTP POST request.
-    *
-    * @method post
-    * @param {String} uri The target URI.
-    * @param {Object} uri The request payload.
-    * @return {Promise} A cancellable promise object.
-    */
-
-				value: function post(uri, content) {
-					var message = new HttpRequestMessage("POST", uri, content);
+				value: function send() {
+					var message = this.useJsonp ? new JSONPRequestMessage() : new HttpRequestMessage();
 					return this.client.send(message, this.transformers);
 				},
 				writable: true,
@@ -193,9 +68,70 @@ define(["exports", "aurelia-path", "./http-request-message", "./jsonp-request-me
 		return RequestBuilder;
 	})();
 
-	RequestBuilder.addHelper("withBaseUrl", function (baseUrl) {
+	RequestBuilder.addHelper("asDelete", function () {
 		return function (client, processor, message) {
-			message.baseUrl = baseUrl;
+			message.method = "DELETE";
+		};
+	});
+
+	RequestBuilder.addHelper("asGet", function () {
+		return function (client, processor, message) {
+			message.method = "GET";
+		};
+	});
+
+	RequestBuilder.addHelper("asHead", function () {
+		return function (client, processor, message) {
+			message.method = "HEAD";
+		};
+	});
+
+	RequestBuilder.addHelper("asOptions", function () {
+		return function (client, processor, message) {
+			message.method = "OPTIONS";
+		};
+	});
+
+	RequestBuilder.addHelper("asPatch", function () {
+		return function (client, processor, message) {
+			message.method = "PATCH";
+		};
+	});
+
+	RequestBuilder.addHelper("asPost", function () {
+		return function (client, processor, message) {
+			message.method = "POST";
+		};
+	});
+
+	RequestBuilder.addHelper("asPut", function () {
+		return function (client, processor, message) {
+			message.method = "PUT";
+		};
+	});
+
+	RequestBuilder.addHelper("asJsonp", function (callbackParameterName) {
+		this.useJsonp = true;
+		return function (client, processor, message) {
+			message.callbackParameterName = callbackParameterName;
+		};
+	});
+
+	RequestBuilder.addHelper("withUri", function (uri) {
+		return function (client, processor, message) {
+			message.uri = uri;
+		};
+	});
+
+	RequestBuilder.addHelper("withContent", function (content) {
+		return function (client, processor, message) {
+			message.content = content;
+		};
+	});
+
+	RequestBuilder.addHelper("withBaseUri", function (baseUri) {
+		return function (client, processor, message) {
+			message.baseUri = baseUri;
 		};
 	});
 

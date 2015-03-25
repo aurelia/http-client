@@ -12,6 +12,7 @@ export class RequestBuilder {
 	constructor (client) {
 		this.client = client;
 		this.transformers = client.requestTransformers.slice(0);
+		this.useJsonp = false;
 	}
 
 	/**
@@ -30,109 +31,81 @@ export class RequestBuilder {
 	}
 
 	/**
-	* Sends an HTTP DELETE request.
+	* Sends the request.
 	*
-	* @method delete
-	* @param {String} uri The target URI.
+	* @method send
 	* @return {Promise} A cancellable promise object.
 	*/
-	delete(uri){
-		var message = new HttpRequestMessage('DELETE', uri);
-		return this.client.send(message, this.transformers);
-	}
-
-	/**
-	* Sends an HTTP GET request.
-	*
-	* @method get
-	* @param {String} uri The target URI.
-	* @return {Promise} A cancellable promise object.
-	*/
-	get(uri){
-		var message = new HttpRequestMessage('GET', uri);
-		return this.client.send(message, this.transformers);
-	}
-
-	/**
-	* Sends an HTTP HEAD request.
-	*
-	* @method head
-	* @param {String} uri The target URI.
-	* @return {Promise} A cancellable promise object.
-	*/
-	head(uri){
-		var message = new HttpRequestMessage('HEAD', uri);
-		return this.client.send(message, this.transformers);
-	}
-
-	/**
-	* Sends a JSONP request.
-	*
-	* @method jsonp
-	* @param {String} uri The target URI.
-	* @param {String} [callbackParameterName=jsoncallback] The target Javascript expression to invoke.
-	* @return {Promise} A cancellable promise object.
-	*/
-	jsonp(uri, callbackParameterName='jsoncallback'){
-		var message = new JSONPRequestMessage(uri, callbackParameterName);
-		return this.client.send(message, this.transformers);
-	}
-
-	/**
-	* Sends an HTTP OPTIONS request.
-	*
-	* @method options
-	* @param {String} uri The target URI.
-	* @return {Promise} A cancellable promise object.
-	*/
-	options(uri){
-		var message = new HttpRequestMessage('OPTIONS', uri);
-		return this.client.send(message, this.transformers);
-	}
-
-	/**
-	* Sends an HTTP PUT request.
-	*
-	* @method put
-	* @param {String} uri The target URI.
-	* @param {Object} uri The request payload.
-	* @return {Promise} A cancellable promise object.
-	*/
-	put(uri, content){
-		var message = new HttpRequestMessage('PUT', uri, content);
-		return this.client.send(message, this.transformers);
-	}
-
-	/**
-	* Sends an HTTP PATCH request.
-	*
-	* @method patch
-	* @param {String} uri The target URI.
-	* @param {Object} uri The request payload.
-	* @return {Promise} A cancellable promise object.
-	*/
-	patch(uri, content){
-		var message = new HttpRequestMessage('PATCH', uri, content);
-		return this.client.send(message, this.transformers);
-	}
-
-	/**
-	* Sends an HTTP POST request.
-	*
-	* @method post
-	* @param {String} uri The target URI.
-	* @param {Object} uri The request payload.
-	* @return {Promise} A cancellable promise object.
-	*/
-	post(uri, content){
-		var message = new HttpRequestMessage('POST', uri, content);
+	send(){
+		let message = this.useJsonp ? new JSONPRequestMessage() : new HttpRequestMessage();
 		return this.client.send(message, this.transformers);
 	}
 }
 
-RequestBuilder.addHelper('withBaseUrl', function(baseUrl){
+RequestBuilder.addHelper('asDelete', function(){
 	return function(client, processor, message){
-		message.baseUrl = baseUrl;
+		message.method = 'DELETE';
+	};
+});
+
+RequestBuilder.addHelper('asGet', function(){
+	return function(client, processor, message){
+		message.method = 'GET';
+	};
+});
+
+RequestBuilder.addHelper('asHead', function(){
+	return function(client, processor, message){
+		message.method = 'HEAD';
+	};
+});
+
+RequestBuilder.addHelper('asOptions', function(){
+	return function(client, processor, message){
+		message.method = 'OPTIONS';
+	};
+});
+
+RequestBuilder.addHelper('asPatch', function(){
+	return function(client, processor, message){
+		message.method = 'PATCH';
+	};
+});
+
+RequestBuilder.addHelper('asPost', function(){
+	return function(client, processor, message){
+		message.method = 'POST';
+	};
+});
+
+RequestBuilder.addHelper('asPut', function(){
+	return function(client, processor, message){
+		message.method = 'PUT';
+	};
+});
+
+RequestBuilder.addHelper('asJsonp', function(callbackParameterName){
+	this.useJsonp = true;
+	return function(client, processor, message){
+		message.callbackParameterName =  callbackParameterName;
+	};
+});
+
+RequestBuilder.addHelper('withUri', function(uri){
+	return function(client, processor, message){
+		message.uri = uri;
+	};
+});
+
+RequestBuilder.addHelper('withContent', function(content){
+	return function(client, processor, message){
+		message.content = content;
+	};
+});
+
+RequestBuilder.addHelper('withBaseUri', function(baseUri){
+	return function(client, processor, message){
+		message.baseUri = baseUri;
 	}
 });
 

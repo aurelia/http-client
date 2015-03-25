@@ -2,7 +2,7 @@ System.register(["./http-response-message", "aurelia-path"], function (_export) 
   var HttpResponseMessage, join, buildQueryString, _prototypeProperties, _classCallCheck, RequestMessageProcessor;
 
   function buildFullUri(message) {
-    var uri = join(message.baseUrl, message.uri),
+    var uri = join(message.baseUri, message.uri),
         qs;
 
     if (message.params) {

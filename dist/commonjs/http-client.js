@@ -57,20 +57,6 @@ var HttpClient = exports.HttpClient = (function () {
   }
 
   _prototypeProperties(HttpClient, null, {
-    request: {
-
-      /**
-       * Returns a new RequestBuilder for this HttpClient instance which can be used to build and send HTTP requests.
-       *
-       * @property request
-       * @type RequestBuilder
-       */
-
-      get: function () {
-        return new RequestBuilder(this);
-      },
-      configurable: true
-    },
     configure: {
 
       /**
@@ -86,6 +72,28 @@ var HttpClient = exports.HttpClient = (function () {
         fn(builder);
         this.requestTransformers = builder.transformers;
         return this;
+      },
+      writable: true,
+      configurable: true
+    },
+    createRequest: {
+
+      /**
+       * Returns a new RequestBuilder for this HttpClient instance that can be used to build and send HTTP requests.
+       *
+       * @method createRequest
+       * @param uri The target URI.
+       * @type RequestBuilder
+       */
+
+      value: function createRequest(uri) {
+        var builder = new RequestBuilder(this);
+
+        if (uri) {
+          builder.withUri(uri);
+        }
+
+        return builder;
       },
       writable: true,
       configurable: true
@@ -151,7 +159,7 @@ var HttpClient = exports.HttpClient = (function () {
        */
 
       value: function _delete(uri) {
-        return this.request["delete"](uri);
+        return this.createRequest(uri).asDelete().send();
       },
       writable: true,
       configurable: true
@@ -167,7 +175,7 @@ var HttpClient = exports.HttpClient = (function () {
        */
 
       value: function get(uri) {
-        return this.request.get(uri);
+        return this.createRequest(uri).asGet().send();
       },
       writable: true,
       configurable: true
@@ -183,7 +191,7 @@ var HttpClient = exports.HttpClient = (function () {
        */
 
       value: function head(uri) {
-        return this.request.head(uri);
+        return this.createRequest(uri).asHead().send();
       },
       writable: true,
       configurable: true
@@ -195,14 +203,13 @@ var HttpClient = exports.HttpClient = (function () {
        *
        * @method jsonp
        * @param {String} uri The target URI.
-       * @param {String} [callbackParameterName=jsoncallback] The target Javascript expression to invoke.
        * @return {Promise} A cancellable promise object.
        */
 
       value: function jsonp(uri) {
         var callbackParameterName = arguments[1] === undefined ? "jsoncallback" : arguments[1];
 
-        return this.request.jsonp(uri, callbackParameterName);
+        return this.createRequest(uri).asJsonp(callbackParameterName).send();
       },
       writable: true,
       configurable: true
@@ -218,7 +225,7 @@ var HttpClient = exports.HttpClient = (function () {
        */
 
       value: function options(uri) {
-        return this.request.options(uri);
+        return this.createRequest(uri).asOptions().send();
       },
       writable: true,
       configurable: true
@@ -235,7 +242,7 @@ var HttpClient = exports.HttpClient = (function () {
        */
 
       value: function put(uri, content) {
-        return this.request.put(uri, content);
+        return this.createRequest(uri).asPut().withContent(content).send();
       },
       writable: true,
       configurable: true
@@ -252,7 +259,7 @@ var HttpClient = exports.HttpClient = (function () {
        */
 
       value: function patch(uri, content) {
-        return this.request.patch(uri, content);
+        return this.createRequest(uri).asPatch().withContent(content).send();
       },
       writable: true,
       configurable: true
@@ -269,7 +276,7 @@ var HttpClient = exports.HttpClient = (function () {
        */
 
       value: function post(uri, content) {
-        return this.request.post(uri, content);
+        return this.createRequest(uri).asPost().withContent(content).send();
       },
       writable: true,
       configurable: true
