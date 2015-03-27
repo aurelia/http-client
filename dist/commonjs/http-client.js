@@ -131,19 +131,19 @@ var HttpClient = exports.HttpClient = (function () {
           transformers[i](this, processor, message);
         }
 
-        promise = processor.process(this, message);
-
-        promise.abort = promise.cancel = function () {
-          processor.abort();
-        };
-
-        return promise.then(function (response) {
+        promise = processor.process(this, message).then(function (response) {
           trackRequestEnd(_this, processor);
           return response;
         })["catch"](function (response) {
           trackRequestEnd(_this, processor);
           throw response;
         });
+
+        promise.abort = promise.cancel = function () {
+          processor.abort();
+        };
+
+        return promise;
       },
       writable: true,
       configurable: true

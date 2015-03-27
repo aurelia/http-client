@@ -80,7 +80,7 @@ export class HttpClient {
         processor, promise, i, ii;
 
     if(!createProcessor){
-        throw new Error(`No request message processor factory for ${message.constructor}.`);
+      throw new Error(`No request message processor factory for ${message.constructor}.`);
     }
 
     processor = createProcessor();
@@ -92,19 +92,19 @@ export class HttpClient {
       transformers[i](this, processor, message);
     }
 
-    promise = processor.process(this, message);
-
-    promise.abort = promise.cancel = function() {
-      processor.abort();
-    };
-
-    return promise.then(response => {
+    promise = processor.process(this, message).then(response => {
       trackRequestEnd(this, processor);
       return response;
     }).catch(response => {
       trackRequestEnd(this, processor);
       throw response;
     });
+
+    promise.abort = promise.cancel = function() {
+      processor.abort();
+    };
+
+    return promise;
   }
 
   /**

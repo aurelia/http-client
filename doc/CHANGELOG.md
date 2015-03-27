@@ -1,3 +1,11 @@
+### 0.6.1 (2015-03-27)
+
+
+#### Bug Fixes
+
+* **http-client:** abort/cancel  attached to wrong promise instance ([add453c7](http://github.com/aurelia/http-client/commit/add453c79fd7a1fd0e2cb94f6ee49aecac715c64), closes [#32](http://github.com/aurelia/http-client/issues/32))
+
+
 ## 0.6.0 (2015-03-24)
 
 
