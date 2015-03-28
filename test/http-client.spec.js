@@ -510,6 +510,19 @@ describe('http client', () => {
         jasmine.clock().uninstall();
     });
 
+    it('should reject when aborted', (done) => {
+      var client = new HttpClient();
+
+      var promise = client.send(new HttpRequestMessage('GET', 'some/cool/url'));
+      promise.catch((response, reason) => {
+        expect(response instanceof HttpResponseMessage).toBe(true);
+        expect(response.responseType).toBe('abort');
+        done();
+      });
+
+      promise.abort();
+    });
+
     it('can parse request headers', (done) => {
       var client = new HttpClient();
 
