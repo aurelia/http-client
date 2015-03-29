@@ -1,3 +1,5 @@
+/*jshint -W093 */
+
 import {Headers} from './headers';
 
 export class HttpResponseMessage {
@@ -37,24 +39,24 @@ export class HttpResponseMessage {
       }
 
       if(this.response === undefined || this.response === null){
-        return this._content = this.response; // jshint ignore:line
+        return this._content = this.response;
       }
 
       if(this.responseType === 'json'){
-        return this._content = JSON.parse(this.response, this.reviver); // jshint ignore:line
+        return this._content = JSON.parse(this.response, this.reviver);
       }
 
       if(this.reviver){
-        return this._content = this.reviver(this.response); // jshint ignore:line
+        return this._content = this.reviver(this.response);
       }
 
-      return this._content = this.response; // jshint ignore:line
+      return this._content = this.response;
     }catch(e){
       if(this.isSuccess){
         throw e;
       }
 
-      return this._content = null; // jshint ignore:line
+      return this._content = null;
     }
   }
 }
