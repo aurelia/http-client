@@ -1,4 +1,4 @@
-import {HttpResponseMessage} from '../src/http-response-message';
+import {HttpResponseMessage, mimeTypes} from '../src/http-response-message';
 import {Headers} from '../src/headers';
 
 describe("HttpResponseMessage", () => {
@@ -47,9 +47,47 @@ describe("HttpResponseMessage", () => {
       let xhrMock = jasmine.createSpyObj("xhr", ["getAllResponseHeaders"]);
       xhrMock.getAllResponseHeaders.and.returnValue("");
 
-      let httpResponse = new HttpResponseMessage({}, xhrMock);
+      new HttpResponseMessage({}, xhrMock);
       expect(xhrMock.getAllResponseHeaders).toHaveBeenCalled();
       expect(parseSpy).toHaveBeenCalledWith("");
+    });
+
+    it("will set responseType to an aliased version of the mimetype detected in the Content-Type header, will also store the original mimetype as mimeType", () => {
+      runContentTypeExpectations([
+        {contentType:"text/yml",mimeType:"text/yml",type:"yml"},
+        {contentType:"text/xml",mimeType:"text/xml",type:"xml"},
+        {contentType:"text/markdown",mimeType:"text/markdown",type:"md"}
+      ]);
+    });
+
+    it("will split the Content-Type using the ; delimeter and use the first part as the mimeType", () => {
+      runContentTypeExpectations([
+        {contentType:"text/html; charset=utf-8",mimeType:"text/html",type:"html"},
+        {contentType:"application/atom+xml; type=feed",mimeType:"application/atom+xml",type:"atom"},
+        {contentType:"application/json;   odata=verbose",mimeType:"application/json",type:"json"}
+      ]);
+    });
+
+    it("will use the mimeType as the responseType if there is no alias for it in the mimeTypes map", () => {
+      runContentTypeExpectations([
+        {contentType:"text/foo",mimeType:"text/foo",type:"text/foo"},
+        {contentType:"text/foo; charset=utf-8",mimeType:"text/foo",type:"text/foo"}
+      ]);
+    });
+
+    it("will set responseType to the responseType specified in the request if no Content-Type header was found, mimeType will be null", () => {
+      runContentTypeExpectations([
+        {contentType:undefined,mimeType:null,type:"json",requestType:"json"},
+        {contentType:undefined,mimeType:null,type:"html",requestType:"html"},
+        {contentType:undefined,mimeType:null,type:"text/html",requestType:"text/html"},
+        {contentType:undefined,mimeType:null,type:"something",requestType:"something"}
+      ]);
+    });
+
+    it("will use json if no responseType for the request was null", () => {
+      runContentTypeExpectations([
+        {contentType:undefined,mimeType:null,type:null,requestType:"json"}
+      ]);
     });
   });
 
@@ -113,3 +151,50 @@ describe("HttpResponseMessage", () => {
     });
   });
 });
+
+/**
+ * Run an array of expectations for testing content-type headers and responseTypes
+ *
+ * Sets up a request to have a response with a certain Content-Type and checks if the
+ * response has the correct `responseType` set.
+ * Will check if the `responseType` has been aliased according to the `mimeTypes` map.
+ * Will check if the response has the original mimetype stored in the `mimeType` property.
+ *
+ * an expectation object should be the following format:
+ * {
+ *  contentType:"text/html; charset=utf-8",
+ *  mimeType:"text/html",
+ *  type:"html",
+ *  requestType:"json"
+ * },
+ *
+ *
+ * With these settings it will set the Content-Type header to "text/html; charset=utf-8" in the mock response,
+ * and expect it to be resolved to a `mimeType` of "text/html" and aliased with the responseType "html"
+ *
+ * The requestType property is optional and will be set as the `responseType` in the request message.
+ */
+function runContentTypeExpectations(expectations){
+  let reviver = {};
+  expectations.map((expectation)=>{
+    var headers = new Headers();
+    //use json as the default `responseType` in the request message
+    expectation.requestType = expectation.requestType||"json";
+    //set a content-type in the response header
+    if(expectation.contentType) headers.add('Content-Type', expectation.contentType);
+
+    jasmine.Ajax.withMock(() => {
+      var xhr = new XMLHttpRequest();
+      headers.configureXHR(xhr);
+      //check if content-type was correctly set in the xhr headers
+      expect(xhr.requestHeaders['Content-Type']).toBe(expectation.contentType);
+
+      let httpResponse = new HttpResponseMessage(null, xhr, expectation.requestType, reviver);
+
+      //expect mimetype to be converted to it's alias if it is defined in the `mimeTypes` list
+      if(mimeTypes[expectation.mimeType]) expect(httpResponse.responseType).toBe(expectation.type);
+      //expect original mimetype to be stored in `mimeType`
+      expect(httpResponse.mimeType).toBe(expectation.mimeType);
+    });
+  });
+}
