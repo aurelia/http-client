@@ -25,7 +25,7 @@ export class HttpResponseMessage {
     var contentType;
     if(this.headers && this.headers.headers) contentType = this.headers.headers["Content-Type"];
     if(contentType) {
-      this.mimeType = responseType = contentType.split(";")[0];
+      this.mimeType = responseType = contentType.split(";")[0].trim();
       if(mimeTypes.hasOwnProperty(this.mimeType)) responseType = mimeTypes[this.mimeType];
     }
     this.responseType = responseType;
