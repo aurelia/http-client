@@ -1,3 +1,4 @@
+import core from 'core-js';
 import {Headers} from './headers';
 import {RequestBuilder} from './request-builder';
 import {HttpRequestMessage,createHttpRequestMessageProcessor} from './http-request-message';
