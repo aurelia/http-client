@@ -1,5 +1,8 @@
-"use strict";
+'use strict';
 
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
 exports.timeoutTransformer = timeoutTransformer;
 exports.callbackParameterNameTransformer = callbackParameterNameTransformer;
 exports.credentialsTransformer = credentialsTransformer;
@@ -35,8 +38,8 @@ function progressTransformer(client, processor, message, xhr) {
 function responseTypeTransformer(client, processor, message, xhr) {
   var responseType = message.responseType;
 
-  if (responseType === "json") {
-    responseType = "text"; //IE does not support json
+  if (responseType === 'json') {
+    responseType = 'text';
   }
 
   xhr.responseType = responseType;
@@ -63,7 +66,7 @@ function contentTransformer(client, processor, message, xhr) {
     return;
   }
 
-  if (typeof message.content === "string") {
+  if (typeof message.content === 'string') {
     return;
   }
 
@@ -73,7 +76,3 @@ function contentTransformer(client, processor, message, xhr) {
 
   message.content = JSON.stringify(message.content, message.replacer);
 }
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});

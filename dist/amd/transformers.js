@@ -1,6 +1,9 @@
-define(["exports"], function (exports) {
-  "use strict";
+define(['exports'], function (exports) {
+  'use strict';
 
+  Object.defineProperty(exports, '__esModule', {
+    value: true
+  });
   exports.timeoutTransformer = timeoutTransformer;
   exports.callbackParameterNameTransformer = callbackParameterNameTransformer;
   exports.credentialsTransformer = credentialsTransformer;
@@ -36,8 +39,8 @@ define(["exports"], function (exports) {
   function responseTypeTransformer(client, processor, message, xhr) {
     var responseType = message.responseType;
 
-    if (responseType === "json") {
-      responseType = "text"; //IE does not support json
+    if (responseType === 'json') {
+      responseType = 'text';
     }
 
     xhr.responseType = responseType;
@@ -64,7 +67,7 @@ define(["exports"], function (exports) {
       return;
     }
 
-    if (typeof message.content === "string") {
+    if (typeof message.content === 'string') {
       return;
     }
 
@@ -74,8 +77,4 @@ define(["exports"], function (exports) {
 
     message.content = JSON.stringify(message.content, message.replacer);
   }
-
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
 });

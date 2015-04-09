@@ -1,17 +1,17 @@
 System.register([], function (_export) {
-  _export("timeoutTransformer", timeoutTransformer);
+  _export('timeoutTransformer', timeoutTransformer);
 
-  _export("callbackParameterNameTransformer", callbackParameterNameTransformer);
+  _export('callbackParameterNameTransformer', callbackParameterNameTransformer);
 
-  _export("credentialsTransformer", credentialsTransformer);
+  _export('credentialsTransformer', credentialsTransformer);
 
-  _export("progressTransformer", progressTransformer);
+  _export('progressTransformer', progressTransformer);
 
-  _export("responseTypeTransformer", responseTypeTransformer);
+  _export('responseTypeTransformer', responseTypeTransformer);
 
-  _export("headerTransformer", headerTransformer);
+  _export('headerTransformer', headerTransformer);
 
-  _export("contentTransformer", contentTransformer);
+  _export('contentTransformer', contentTransformer);
 
   function timeoutTransformer(client, processor, message, xhr) {
     if (message.timeout !== undefined) {
@@ -40,8 +40,8 @@ System.register([], function (_export) {
   function responseTypeTransformer(client, processor, message, xhr) {
     var responseType = message.responseType;
 
-    if (responseType === "json") {
-      responseType = "text"; //IE does not support json
+    if (responseType === 'json') {
+      responseType = 'text';
     }
 
     xhr.responseType = responseType;
@@ -68,7 +68,7 @@ System.register([], function (_export) {
       return;
     }
 
-    if (typeof message.content === "string") {
+    if (typeof message.content === 'string') {
       return;
     }
 
@@ -82,7 +82,7 @@ System.register([], function (_export) {
   return {
     setters: [],
     execute: function () {
-      "use strict";
+      'use strict';
     }
   };
 });

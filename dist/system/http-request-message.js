@@ -1,7 +1,7 @@
-System.register(["./headers", "./request-message-processor", "./transformers"], function (_export) {
+System.register(['./headers', './request-message-processor', './transformers'], function (_export) {
   var Headers, RequestMessageProcessor, timeoutTransformer, credentialsTransformer, progressTransformer, responseTypeTransformer, headerTransformer, contentTransformer, _classCallCheck, HttpRequestMessage;
 
-  _export("createHttpRequestMessageProcessor", createHttpRequestMessageProcessor);
+  _export('createHttpRequestMessageProcessor', createHttpRequestMessageProcessor);
 
   function createHttpRequestMessageProcessor() {
     return new RequestMessageProcessor(XMLHttpRequest, [timeoutTransformer, credentialsTransformer, progressTransformer, responseTypeTransformer, headerTransformer, contentTransformer]);
@@ -21,19 +21,21 @@ System.register(["./headers", "./request-message-processor", "./transformers"], 
       contentTransformer = _transformers.contentTransformer;
     }],
     execute: function () {
-      "use strict";
+      'use strict';
 
-      _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+      _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
 
-      HttpRequestMessage = _export("HttpRequestMessage", function HttpRequestMessage(method, uri, content, headers) {
+      HttpRequestMessage = function HttpRequestMessage(method, uri, content, headers) {
         _classCallCheck(this, HttpRequestMessage);
 
         this.method = method;
         this.uri = uri;
         this.content = content;
         this.headers = headers || new Headers();
-        this.responseType = "json"; //text, arraybuffer, blob, document
-      });
+        this.responseType = 'json';
+      };
+
+      _export('HttpRequestMessage', HttpRequestMessage);
     }
   };
 });

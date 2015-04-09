@@ -1,6 +1,6 @@
 {
   "name": "aurelia-http-client",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "description": "A simple, restful, message-based wrapper around XMLHttpRequest.",
   "keywords": [
     "aurelia",
@@ -25,8 +25,8 @@
       "lib": "dist/system"
     },
     "dependencies": {
-      "aurelia-path": "github:aurelia/path@^0.4.6",
-      "core-js": "npm:core-js@^0.4.1"
+      "aurelia-path": "github:aurelia/path@^0.5.0",
+      "core-js": "github:zloirock/core-js@^0.8.1"
     }
   },
   "devDependencies": {

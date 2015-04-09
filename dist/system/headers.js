@@ -1,16 +1,16 @@
 System.register([], function (_export) {
-  var _prototypeProperties, _classCallCheck, Headers;
+  var _classCallCheck, _createClass, Headers;
 
   return {
     setters: [],
     execute: function () {
-      "use strict";
+      'use strict';
 
-      _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
+      _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
 
-      _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+      _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-      Headers = _export("Headers", (function () {
+      Headers = (function () {
         function Headers() {
           var headers = arguments[0] === undefined ? {} : arguments[0];
 
@@ -19,78 +19,59 @@ System.register([], function (_export) {
           this.headers = headers;
         }
 
-        _prototypeProperties(Headers, {
-          parse: {
-
-            /**
-             * XmlHttpRequest's getAllResponseHeaders() method returns a string of response
-             * headers according to the format described here:
-             * http://www.w3.org/TR/XMLHttpRequest/#the-getallresponseheaders-method
-             * This method parses that string into a user-friendly key/value pair object.
-             */
-
-            value: function parse(headerStr) {
-              var headers = new Headers();
-              if (!headerStr) {
-                return headers;
-              }
-
-              var headerPairs = headerStr.split("\r\n");
-              for (var i = 0; i < headerPairs.length; i++) {
-                var headerPair = headerPairs[i];
-                // Can't use split() here because it does the wrong thing
-                // if the header value has the string ": " in it.
-                var index = headerPair.indexOf(": ");
-                if (index > 0) {
-                  var key = headerPair.substring(0, index);
-                  var val = headerPair.substring(index + 2);
-                  headers.add(key, val);
-                }
-              }
-
-              return headers;
-            },
-            writable: true,
-            configurable: true
+        _createClass(Headers, [{
+          key: 'add',
+          value: function add(key, value) {
+            this.headers[key] = value;
           }
         }, {
-          add: {
-            value: function add(key, value) {
-              this.headers[key] = value;
-            },
-            writable: true,
-            configurable: true
-          },
-          get: {
-            value: function get(key) {
-              return this.headers[key];
-            },
-            writable: true,
-            configurable: true
-          },
-          clear: {
-            value: function clear() {
-              this.headers = {};
-            },
-            writable: true,
-            configurable: true
-          },
-          configureXHR: {
-            value: function configureXHR(xhr) {
-              var headers = this.headers,
-                  key;
-
-              for (key in headers) {
-                xhr.setRequestHeader(key, headers[key]);
-              }
-            },
-            writable: true,
-            configurable: true
+          key: 'get',
+          value: function get(key) {
+            return this.headers[key];
           }
-        });
+        }, {
+          key: 'clear',
+          value: function clear() {
+            this.headers = {};
+          }
+        }, {
+          key: 'configureXHR',
+          value: function configureXHR(xhr) {
+            var headers = this.headers,
+                key;
+
+            for (key in headers) {
+              xhr.setRequestHeader(key, headers[key]);
+            }
+          }
+        }], [{
+          key: 'parse',
+          value: function parse(headerStr) {
+            var headers = new Headers();
+            if (!headerStr) {
+              return headers;
+            }
+
+            var headerPairs = headerStr.split('\r\n');
+            for (var i = 0; i < headerPairs.length; i++) {
+              var headerPair = headerPairs[i];
+
+              var index = headerPair.indexOf(': ');
+              if (index > 0) {
+                var key = headerPair.substring(0, index);
+                var val = headerPair.substring(index + 2);
+                headers.add(key, val);
+              }
+            }
+
+            return headers;
+          }
+        }]);
 
         return Headers;
-      })());
+      })();
+
+      _export('Headers', Headers);
     }
   };
 });

@@ -1,104 +1,93 @@
-"use strict";
+'use strict';
 
-var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
 
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
 exports.createJSONPRequestMessageProcessor = createJSONPRequestMessageProcessor;
 
-var Headers = require("./headers").Headers;
+var _Headers = require('./headers');
 
-var RequestMessageProcessor = require("./request-message-processor").RequestMessageProcessor;
+var _RequestMessageProcessor = require('./request-message-processor');
 
-var _transformers = require("./transformers");
+var _timeoutTransformer$callbackParameterNameTransformer = require('./transformers');
 
-var timeoutTransformer = _transformers.timeoutTransformer;
-var callbackParameterNameTransformer = _transformers.callbackParameterNameTransformer;
-
-var JSONPRequestMessage = exports.JSONPRequestMessage = function JSONPRequestMessage(uri, callbackParameterName) {
+var JSONPRequestMessage = function JSONPRequestMessage(uri, callbackParameterName) {
   _classCallCheck(this, JSONPRequestMessage);
 
-  this.method = "JSONP";
+  this.method = 'JSONP';
   this.uri = uri;
   this.content = undefined;
-  this.headers = new Headers();
-  this.responseType = "jsonp";
+  this.headers = new _Headers.Headers();
+  this.responseType = 'jsonp';
   this.callbackParameterName = callbackParameterName;
 };
+
+exports.JSONPRequestMessage = JSONPRequestMessage;
 
 var JSONPXHR = (function () {
   function JSONPXHR() {
     _classCallCheck(this, JSONPXHR);
   }
 
-  _prototypeProperties(JSONPXHR, null, {
-    open: {
-      value: function open(method, uri) {
-        this.method = method;
-        this.uri = uri;
-        this.callbackName = "jsonp_callback_" + Math.round(100000 * Math.random());
-      },
-      writable: true,
-      configurable: true
-    },
-    send: {
-      value: function send() {
-        var _this = this;
-
-        var uri = this.uri + (this.uri.indexOf("?") >= 0 ? "&" : "?") + this.callbackParameterName + "=" + this.callbackName;
-
-        window[this.callbackName] = function (data) {
-          delete window[_this.callbackName];
-          document.body.removeChild(script);
-
-          if (_this.status === undefined) {
-            _this.status = 200;
-            _this.statusText = "OK";
-            _this.response = data;
-            _this.onload(_this);
-          }
-        };
-
-        var script = document.createElement("script");
-        script.src = uri;
-        document.body.appendChild(script);
-
-        if (this.timeout !== undefined) {
-          setTimeout(function () {
-            if (_this.status === undefined) {
-              _this.status = 0;
-              _this.ontimeout(new Error("timeout"));
-            }
-          }, this.timeout);
-        }
-      },
-      writable: true,
-      configurable: true
-    },
-    abort: {
-      value: function abort() {
-        if (this.status === undefined) {
-          this.status = 0;
-          this.onabort(new Error("abort"));
-        }
-      },
-      writable: true,
-      configurable: true
-    },
-    setRequestHeader: {
-      value: function setRequestHeader() {},
-      writable: true,
-      configurable: true
+  _createClass(JSONPXHR, [{
+    key: 'open',
+    value: function open(method, uri) {
+      this.method = method;
+      this.uri = uri;
+      this.callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
     }
-  });
+  }, {
+    key: 'send',
+    value: function send() {
+      var _this = this;
+
+      var uri = this.uri + (this.uri.indexOf('?') >= 0 ? '&' : '?') + this.callbackParameterName + '=' + this.callbackName;
+
+      window[this.callbackName] = function (data) {
+        delete window[_this.callbackName];
+        document.body.removeChild(script);
+
+        if (_this.status === undefined) {
+          _this.status = 200;
+          _this.statusText = 'OK';
+          _this.response = data;
+          _this.onload(_this);
+        }
+      };
+
+      var script = document.createElement('script');
+      script.src = uri;
+      document.body.appendChild(script);
+
+      if (this.timeout !== undefined) {
+        setTimeout(function () {
+          if (_this.status === undefined) {
+            _this.status = 0;
+            _this.ontimeout(new Error('timeout'));
+          }
+        }, this.timeout);
+      }
+    }
+  }, {
+    key: 'abort',
+    value: function abort() {
+      if (this.status === undefined) {
+        this.status = 0;
+        this.onabort(new Error('abort'));
+      }
+    }
+  }, {
+    key: 'setRequestHeader',
+    value: function setRequestHeader() {}
+  }]);
 
   return JSONPXHR;
 })();
 
 function createJSONPRequestMessageProcessor() {
-  return new RequestMessageProcessor(JSONPXHR, [timeoutTransformer, callbackParameterNameTransformer]);
+  return new _RequestMessageProcessor.RequestMessageProcessor(JSONPXHR, [_timeoutTransformer$callbackParameterNameTransformer.timeoutTransformer, _timeoutTransformer$callbackParameterNameTransformer.callbackParameterNameTransformer]);
 }
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});

@@ -1,3 +1,16 @@
+## 0.7.0 (2015-04-09)
+
+
+#### Bug Fixes
+
+* **all:** update compiler and fix core-js references ([c0334447](http://github.com/aurelia/http-client/commit/c0334447b4a2f794b0428a54f5e43eebd663780c))
+
+
+#### Features
+
+* **http-client:** content-type detection ([c60b4727](http://github.com/aurelia/http-client/commit/c60b4727a56a0226cebe28ed91f183d2bfd5dc78))
+
+
 ### 0.6.1 (2015-03-27)
 
 
