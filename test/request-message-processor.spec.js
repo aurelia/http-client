@@ -39,8 +39,8 @@ describe("Request message processor", () => {
       message = {
         method: 'get',
         params: [],
-        baseUri: '',
-        uri: 'some/uri',
+        baseUrl: '',
+        url: 'some/url',
         content: {},
         responseType: "test",
         reviver: (obj) => obj
@@ -53,9 +53,9 @@ describe("Request message processor", () => {
       expect(reqProcessor.xhr).toEqual(jasmine.any(MockXhrType));
     });
 
-    it("should call xhr.open with the method, full uri and ajax set to true", () => {
+    it("should call xhr.open with the method, full url and ajax set to true", () => {
       reqProcessor.process(client, message);
-      expect(openSpy).toHaveBeenCalledWith(message.method, message.uri, true);
+      expect(openSpy).toHaveBeenCalledWith(message.method, message.url, true);
     });
 
     it("should call xhr.send with the message content", () => {
@@ -63,12 +63,12 @@ describe("Request message processor", () => {
       expect(sendSpy).toHaveBeenCalledWith(message.content);
     });
 
-    it("will combine the message baseUri and message uri and set it to the fullUri", () => {
-      message.baseUri = "/the/base";
-      message.uri = "and/the/path";
+    it("will combine the message baseUrl and message url and set it to the fullUrl", () => {
+      message.baseUrl = "/the/base";
+      message.url = "and/the/path";
 
       reqProcessor.process(client, message);
-      expect(message.fullUri).toBe("/the/base/and/the/path");
+      expect(message.fullUrl).toBe("/the/base/and/the/path");
     });
 
     it("should run through all the transformers", () => {

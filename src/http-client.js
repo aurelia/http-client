@@ -55,14 +55,14 @@ export class HttpClient {
    * Returns a new RequestBuilder for this HttpClient instance that can be used to build and send HTTP requests.
    *
    * @method createRequest
-   * @param uri The target URI.
+   * @param url The target URL.
    * @type RequestBuilder
    */
-  createRequest(uri){
+  createRequest(url){
     let builder = new RequestBuilder(this);
 
-    if(uri) {
-      builder.withUri(uri);
+    if(url) {
+      builder.withUrl(url);
     }
 
     return builder;
@@ -112,90 +112,90 @@ export class HttpClient {
    * Sends an HTTP DELETE request.
    *
    * @method delete
-   * @param {String} uri The target URI.
+   * @param {String} url The target URL.
    * @return {Promise} A cancellable promise object.
    */
-  delete(uri){
-    return this.createRequest(uri).asDelete().send();
+  delete(url){
+    return this.createRequest(url).asDelete().send();
   }
 
   /**
    * Sends an HTTP GET request.
    *
    * @method get
-   * @param {String} uri The target URI.
+   * @param {String} url The target URL.
    * @return {Promise} A cancellable promise object.
    */
-  get(uri){
-    return this.createRequest(uri).asGet().send();
+  get(url){
+    return this.createRequest(url).asGet().send();
   }
 
   /**
    * Sends an HTTP HEAD request.
    *
    * @method head
-   * @param {String} uri The target URI.
+   * @param {String} url The target URL.
    * @return {Promise} A cancellable promise object.
    */
-  head(uri){
-    return this.createRequest(uri).asHead().send();
+  head(url){
+    return this.createRequest(url).asHead().send();
   }
 
   /**
    * Sends a JSONP request.
    *
    * @method jsonp
-   * @param {String} uri The target URI.
+   * @param {String} url The target URL.
    * @return {Promise} A cancellable promise object.
    */
-  jsonp(uri, callbackParameterName='jsoncallback'){
-    return this.createRequest(uri).asJsonp(callbackParameterName).send();
+  jsonp(url, callbackParameterName='jsoncallback'){
+    return this.createRequest(url).asJsonp(callbackParameterName).send();
   }
 
   /**
    * Sends an HTTP OPTIONS request.
    *
    * @method options
-   * @param {String} uri The target URI.
+   * @param {String} url The target URL.
    * @return {Promise} A cancellable promise object.
    */
-  options(uri){
-    return this.createRequest(uri).asOptions().send();
+  options(url){
+    return this.createRequest(url).asOptions().send();
   }
 
   /**
    * Sends an HTTP PUT request.
    *
    * @method put
-   * @param {String} uri The target URI.
-   * @param {Object} uri The request payload.
+   * @param {String} url The target URL.
+   * @param {Object} url The request payload.
    * @return {Promise} A cancellable promise object.
    */
-  put(uri, content){
-    return this.createRequest(uri).asPut().withContent(content).send();
+  put(url, content){
+    return this.createRequest(url).asPut().withContent(content).send();
   }
 
   /**
    * Sends an HTTP PATCH request.
    *
    * @method patch
-   * @param {String} uri The target URI.
-   * @param {Object} uri The request payload.
+   * @param {String} url The target URL.
+   * @param {Object} url The request payload.
    * @return {Promise} A cancellable promise object.
    */
-  patch(uri, content){
-    return this.createRequest(uri).asPatch().withContent(content).send();
+  patch(url, content){
+    return this.createRequest(url).asPatch().withContent(content).send();
   }
 
   /**
    * Sends an HTTP POST request.
    *
    * @method post
-   * @param {String} uri The target URI.
-   * @param {Object} uri The request payload.
+   * @param {String} url The target URL.
+   * @param {Object} url The request payload.
    * @return {Promise} A cancellable promise object.
    */
-  post(uri, content){
-    return this.createRequest(uri).asPost().withContent(content).send();
+  post(url, content){
+    return this.createRequest(url).asPost().withContent(content).send();
   }
 }

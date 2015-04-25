@@ -4,7 +4,7 @@ import {Headers} from '../src/index';
 
 describe('http client', () => {
 
-  var baseUri = "http://example.com/";
+  var baseUrl = "http://example.com/";
 
   beforeEach(() => {
     jasmine.Ajax.install();
@@ -20,13 +20,13 @@ describe('http client', () => {
 
       it('should make expected request', () => {
         var client = new HttpClient()
-          .configure(x => x.withBaseUri(baseUri));
+          .configure(x => x.withBaseUrl(baseUrl));
 
         client.get('some/cool/path');
 
         var request = jasmine.Ajax.requests.mostRecent();
 
-        expect(request.url).toBe(`${baseUri}some/cool/path`);
+        expect(request.url).toBe(`${baseUrl}some/cool/path`);
         expect(request.method).toBe('GET');
         expect(request.data()).toEqual({});
       });
@@ -34,7 +34,7 @@ describe('http client', () => {
       it('should provide expected request headers', () => {
         var client = new HttpClient()
           .configure(x => {
-            x.withBaseUri(baseUri);
+            x.withBaseUrl(baseUrl);
             x.withHeader('Authorization', 'bearer 123');
           });
 
@@ -51,7 +51,7 @@ describe('http client', () => {
 
       it('should succeed on 200 response', (done) => {
         var client = new HttpClient()
-          .configure(x => x.withBaseUri(baseUri));
+          .configure(x => x.withBaseUrl(baseUrl));
 
         client.get('some/cool/path').then(response => {
           expect(response.isSuccess).toBe(true);
@@ -65,7 +65,7 @@ describe('http client', () => {
 
       it('should retrieve correct content', (done) => {
         var client = new HttpClient()
-          .configure(x => x.withBaseUri(baseUri));
+          .configure(x => x.withBaseUrl(baseUrl));
 
         client.get('some/cool/path').then(response => {
           expect(response.content.name).toBe('Martin');
@@ -79,7 +79,7 @@ describe('http client', () => {
 
       it('should not succeed on 500 response', (done) => {
         var client = new HttpClient()
-          .configure(x => x.withBaseUri(baseUri));
+          .configure(x => x.withBaseUrl(baseUrl));
 
         client.get('some/cool/path').catch(response => {
           expect(response.isSuccess).toBe(false);
@@ -104,7 +104,7 @@ describe('http client', () => {
         var content = { firstName: "John", lastName: "Doe" };
         var client = new HttpClient()
           .configure(x => {
-            x.withBaseUri(baseUri);
+            x.withBaseUrl(baseUrl);
             x.withHeader('Content-Type', 'application/json');
           });
 
@@ -112,7 +112,7 @@ describe('http client', () => {
 
         var request = jasmine.Ajax.requests.mostRecent();
 
-        expect(request.url).toBe(`${baseUri}some/cool/path`);
+        expect(request.url).toBe(`${baseUrl}some/cool/path`);
         expect(request.method).toBe('PUT');
         expect(request.data()).toEqual(content);
       });
@@ -121,7 +121,7 @@ describe('http client', () => {
         var content = { firstName: "John", lastName: "Doe" };
         var client = new HttpClient()
           .configure(x => {
-            x.withBaseUri(baseUri);
+            x.withBaseUrl(baseUrl);
             x.withHeader('Content-Type', 'application/json');
           });
 
@@ -140,7 +140,7 @@ describe('http client', () => {
       it('should provide expected request headers', () => {
         var client = new HttpClient()
           .configure(x => {
-            x.withBaseUri(baseUri);
+            x.withBaseUrl(baseUrl);
             x.withHeader('Authorization', 'bearer 123');
           });
 
@@ -157,7 +157,7 @@ describe('http client', () => {
 
       it('should succeed on 200 response', (done) => {
         var client = new HttpClient()
-          .configure(x => x.withBaseUri(baseUri));
+          .configure(x => x.withBaseUrl(baseUrl));
 
         client.get('some/cool/path').then(response => {
           expect(response.isSuccess).toBe(true);
@@ -171,7 +171,7 @@ describe('http client', () => {
 
       it('should retrieve correct content', (done) => {
         var client = new HttpClient()
-          .configure(x => x.withBaseUri(baseUri));
+          .configure(x => x.withBaseUrl(baseUrl));
 
         client.put('some/cool/path').then(response => {
           expect(response.content.name).toBe('Martin');
@@ -185,7 +185,7 @@ describe('http client', () => {
 
       it('should not succeed on 500 response', (done) => {
         var client = new HttpClient()
-          .configure(x => x.withBaseUri(baseUri));
+          .configure(x => x.withBaseUrl(baseUrl));
 
         client.put('some/cool/path').catch(response => {
           expect(response.isSuccess).toBe(false);
@@ -210,7 +210,7 @@ describe('http client', () => {
         var content = { firstName: "John", lastName: "Doe" };
         var client = new HttpClient()
           .configure(x => {
-            x.withBaseUri(baseUri);
+            x.withBaseUrl(baseUrl);
             x.withHeader('Content-Type', 'application/json');
           });
 
@@ -218,7 +218,7 @@ describe('http client', () => {
 
         var request = jasmine.Ajax.requests.mostRecent();
 
-        expect(request.url).toBe(`${baseUri}some/cool/path`);
+        expect(request.url).toBe(`${baseUrl}some/cool/path`);
         expect(request.method).toBe('PATCH');
         expect(request.data()).toEqual(content);
       });
@@ -227,7 +227,7 @@ describe('http client', () => {
         var content = { firstName: "John", lastName: "Doe" };
         var client = new HttpClient()
           .configure(x => {
-            x.withBaseUri(baseUri);
+            x.withBaseUrl(baseUrl);
             x.withHeader('Content-Type', 'application/json');
           });
 
@@ -246,7 +246,7 @@ describe('http client', () => {
       it('should provide expected request headers', () => {
         var client = new HttpClient()
           .configure(x => {
-            x.withBaseUri(baseUri);
+            x.withBaseUrl(baseUrl);
             x.withHeader('Authorization', 'bearer 123');
           });
 
@@ -263,7 +263,7 @@ describe('http client', () => {
 
       it('should succeed on 200 response', (done) => {
         var client = new HttpClient()
-          .configure(x => x.withBaseUri(baseUri));
+          .configure(x => x.withBaseUrl(baseUrl));
 
         client.put('some/cool/path').then(response => {
           expect(response.isSuccess).toBe(true);
@@ -277,7 +277,7 @@ describe('http client', () => {
 
       it('should retrieve correct content', (done) => {
         var client = new HttpClient()
-          .configure(x => x.withBaseUri(baseUri));
+          .configure(x => x.withBaseUrl(baseUrl));
 
         client.patch('some/cool/path').then(response => {
           expect(response.content.name).toBe('Martin');
@@ -291,7 +291,7 @@ describe('http client', () => {
 
       it('should not succeed on 500 response', (done) => {
         var client = new HttpClient()
-          .configure(x => x.withBaseUri(baseUri));
+          .configure(x => x.withBaseUrl(baseUrl));
 
         client.patch('some/cool/path').catch(response => {
           expect(response.isSuccess).toBe(false);
@@ -316,7 +316,7 @@ describe('http client', () => {
         var content = { firstName: "John", lastName: "Doe" };
         var client = new HttpClient()
           .configure(x => {
-            x.withBaseUri(baseUri);
+            x.withBaseUrl(baseUrl);
             x.withHeader('Content-Type', 'application/json');
           });
 
@@ -324,7 +324,7 @@ describe('http client', () => {
 
         var request = jasmine.Ajax.requests.mostRecent();
 
-        expect(request.url).toBe(`${baseUri}some/cool/path`);
+        expect(request.url).toBe(`${baseUrl}some/cool/path`);
         expect(request.method).toBe('POST');
         expect(request.data()).toEqual(content);
       });
@@ -333,7 +333,7 @@ describe('http client', () => {
         var content = { firstName: "John", lastName: "Doe" };
         var client = new HttpClient()
           .configure(x => {
-            x.withBaseUri(baseUri);
+            x.withBaseUrl(baseUrl);
             x.withHeader('Content-Type', 'application/json');
           });
 
@@ -352,7 +352,7 @@ describe('http client', () => {
       it('should provide expected request headers', () => {
         var client = new HttpClient()
           .configure(x => {
-            x.withBaseUri(baseUri);
+            x.withBaseUrl(baseUrl);
             x.withHeader('Authorization', 'bearer 123');
           });
 
@@ -369,7 +369,7 @@ describe('http client', () => {
 
       it('should succeed on 201 response', (done) => {
         var client = new HttpClient()
-          .configure(x => x.withBaseUri(baseUri));
+          .configure(x => x.withBaseUrl(baseUrl));
 
         client.post('some/cool/path').then(response => {
           expect(response.isSuccess).toBe(true);
@@ -383,7 +383,7 @@ describe('http client', () => {
 
       it('should retrieve correct content', (done) => {
         var client = new HttpClient()
-          .configure(x => x.withBaseUri(baseUri));
+          .configure(x => x.withBaseUrl(baseUrl));
 
         client.post('some/cool/path').then(response => {
           expect(response.content.name).toBe('Martin');
@@ -397,7 +397,7 @@ describe('http client', () => {
 
       it('should not succeed on 500 response', (done) => {
         var client = new HttpClient()
-          .configure(x => x.withBaseUri(baseUri));
+          .configure(x => x.withBaseUrl(baseUrl));
 
         client.post('some/cool/path').catch(response => {
           expect(response.isSuccess).toBe(false);
@@ -419,13 +419,13 @@ describe('http client', () => {
 
       it('should make expected request', () => {
         var client = new HttpClient()
-          .configure(x => x.withBaseUri(baseUri));
+          .configure(x => x.withBaseUrl(baseUrl));
 
         client.delete('some/cool/path');
 
         var request = jasmine.Ajax.requests.mostRecent();
 
-        expect(request.url).toBe(`${baseUri}some/cool/path`);
+        expect(request.url).toBe(`${baseUrl}some/cool/path`);
         expect(request.method).toBe('DELETE');
         expect(request.data()).toEqual({});
       });
@@ -433,7 +433,7 @@ describe('http client', () => {
       it('should provide expected request headers', () => {
         var client = new HttpClient()
           .configure(x => {
-            x.withBaseUri(baseUri);
+            x.withBaseUrl(baseUrl);
             x.withHeader('Authorization', 'bearer 123');
           });
 
@@ -450,7 +450,7 @@ describe('http client', () => {
 
       it('should succeed on 200 response', (done) => {
         var client = new HttpClient()
-          .configure(x => x.withBaseUri(baseUri));
+          .configure(x => x.withBaseUrl(baseUrl));
 
         client.delete('some/cool/path').then(response => {
           expect(response.isSuccess).toBe(true);
@@ -464,7 +464,7 @@ describe('http client', () => {
 
       it('should not succeed on 500 response', (done) => {
         var client = new HttpClient()
-          .configure(x => x.withBaseUri(baseUri));
+          .configure(x => x.withBaseUrl(baseUrl));
 
         client.delete('some/cool/path').catch(response => {
           expect(response.isSuccess).toBe(false);

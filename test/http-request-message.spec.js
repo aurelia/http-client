@@ -12,20 +12,20 @@ import {
 
 describe("http-request-message", () => {
 
-  it("should have a constructor that takes in the method, uri, content and headers", () => {
-    let method = {}, uri = {}, content = {}, headers = {};
-    let httpRequestMessage = new HttpRequestMessage(method, uri, content, headers);
+  it("should have a constructor that takes in the method, url, content and headers", () => {
+    let method = {}, url = {}, content = {}, headers = {};
+    let httpRequestMessage = new HttpRequestMessage(method, url, content, headers);
 
     expect(httpRequestMessage.method).toBe(method);
-    expect(httpRequestMessage.uri).toBe(uri);
+    expect(httpRequestMessage.url).toBe(url);
     expect(httpRequestMessage.content).toBe(content);
     expect(httpRequestMessage.headers).toBe(headers);
     expect(httpRequestMessage.responseType).toBe('json');
   });
 
   it("have a constructor should default the headers if not provided", () => {
-    let method = {}, uri = {}, content = {};
-    let httpRequestMessage = new HttpRequestMessage(method, uri, content);
+    let method = {}, url = {}, content = {};
+    let httpRequestMessage = new HttpRequestMessage(method, url, content);
     expect(httpRequestMessage.headers).toEqual(jasmine.any(Headers));
   });
 

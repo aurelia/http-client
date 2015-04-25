@@ -2,16 +2,16 @@ import core from 'core-js';
 import {HttpResponseMessage} from './http-response-message';
 import {join, buildQueryString} from 'aurelia-path';
 
-function buildFullUri(message){
-  var uri = join(message.baseUri, message.uri),
+function buildFullUrl(message){
+  var url = join(message.baseUrl, message.url),
       qs;
 
   if(message.params){
     qs = buildQueryString(message.params);
-    uri = qs ? `${uri}?${qs}` : uri;
+    url = qs ? `${url}?${qs}` : url;
   }
 
-  message.fullUri = uri;
+  message.fullUrl = url;
 }
 
 export class RequestMessageProcessor {
@@ -33,8 +33,8 @@ export class RequestMessageProcessor {
           transformers = this.transformers,
           i, ii;
 
-      buildFullUri(message);
-      xhr.open(message.method, message.fullUri, true);
+      buildFullUrl(message);
+      xhr.open(message.method, message.fullUrl, true);
 
       for(i = 0, ii = transformers.length; i < ii; ++i){
         transformers[i](client, this, message, xhr);

@@ -6,9 +6,9 @@ import {
 } from './transformers';
 
 export class JSONPRequestMessage {
-  constructor(uri, callbackParameterName){
+  constructor(url, callbackParameterName){
     this.method = 'JSONP';
-    this.uri = uri;
+    this.url = url;
     this.content = undefined;
     this.headers = new Headers();
     this.responseType = 'jsonp';
@@ -17,14 +17,14 @@ export class JSONPRequestMessage {
 }
 
 class JSONPXHR {
-  open(method, uri){
+  open(method, url){
     this.method = method;
-    this.uri = uri;
+    this.url = url;
     this.callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
   }
 
   send(){
-    var uri = this.uri + (this.uri.indexOf('?') >= 0 ? '&' : '?') + this.callbackParameterName + '=' + this.callbackName;
+    var url = this.url + (this.url.indexOf('?') >= 0 ? '&' : '?') + this.callbackParameterName + '=' + this.callbackName;
 
     window[this.callbackName] = (data) => {
       delete window[this.callbackName];
@@ -39,7 +39,7 @@ class JSONPXHR {
     };
 
     var script = document.createElement('script');
-    script.src = uri;
+    script.src = url;
     document.body.appendChild(script);
 
     if(this.timeout !== undefined){

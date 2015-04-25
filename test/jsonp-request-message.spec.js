@@ -5,10 +5,10 @@ import { timeoutTransformer, callbackParameterNameTransformer } from '../src/tra
 
 describe("JSONPRequestMessage", () => {
   it("should have a constructor that correctly sets the methods and response type", () => {
-    let uri = {}, callbackName = {};
-    let jsonpRequest = new JSONPRequestMessage(uri, callbackName);
+    let url = {}, callbackName = {};
+    let jsonpRequest = new JSONPRequestMessage(url, callbackName);
     expect(jsonpRequest.method).toBe('JSONP');
-    expect(jsonpRequest.uri).toBe(uri);
+    expect(jsonpRequest.url).toBe(url);
     expect(jsonpRequest.content).toBeUndefined();
     expect(jsonpRequest.headers).toEqual(jasmine.any(Headers));
     expect(jsonpRequest.responseType).toBe('jsonp');
