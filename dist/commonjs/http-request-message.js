@@ -2,9 +2,7 @@
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
 
-Object.defineProperty(exports, '__esModule', {
-  value: true
-});
+exports.__esModule = true;
 exports.createHttpRequestMessageProcessor = createHttpRequestMessageProcessor;
 
 var _Headers = require('./headers');
@@ -13,11 +11,11 @@ var _RequestMessageProcessor = require('./request-message-processor');
 
 var _timeoutTransformer$credentialsTransformer$progressTransformer$responseTypeTransformer$headerTransformer$contentTransformer = require('./transformers');
 
-var HttpRequestMessage = function HttpRequestMessage(method, uri, content, headers) {
+var HttpRequestMessage = function HttpRequestMessage(method, url, content, headers) {
   _classCallCheck(this, HttpRequestMessage);
 
   this.method = method;
-  this.uri = uri;
+  this.url = url;
   this.content = content;
   this.headers = headers || new _Headers.Headers();
   this.responseType = 'json';

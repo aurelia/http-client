@@ -10,9 +10,9 @@ import {
 } from './transformers';
 
 export class HttpRequestMessage {
-  constructor(method, uri, content, headers){
+  constructor(method, url, content, headers){
     this.method = method;
-    this.uri = uri;
+    this.url = url;
     this.content = content;
     this.headers = headers || new Headers();
     this.responseType = 'json'; //text, arraybuffer, blob, document

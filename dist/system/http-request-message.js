@@ -25,11 +25,11 @@ System.register(['./headers', './request-message-processor', './transformers'], 
 
       _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
 
-      HttpRequestMessage = function HttpRequestMessage(method, uri, content, headers) {
+      HttpRequestMessage = function HttpRequestMessage(method, url, content, headers) {
         _classCallCheck(this, HttpRequestMessage);
 
         this.method = method;
-        this.uri = uri;
+        this.url = url;
         this.content = content;
         this.headers = headers || new Headers();
         this.responseType = 'json';

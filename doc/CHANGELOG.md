@@ -1,3 +1,13 @@
+## 0.8.0 (2015-04-30)
+
+
+#### Breaking Changes
+
+* This is a breaking API change to HttpRequestBuilder and HttpRequestMessage. To update, replace uses of `withUri`, `withBaseUri`, and `uri` with `withUrl`, `withBaseUrl`, and `url`, as appropriate.
+
+ ([150a2f72](http://github.com/aurelia/http-client/commit/150a2f721166516d50699ea5da8a074a5792a238))
+
+
 ## 0.7.0 (2015-04-09)
 
 

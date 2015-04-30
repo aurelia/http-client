@@ -3,16 +3,14 @@ define(['exports', './headers', './request-message-processor', './transformers']
 
   var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
 
-  Object.defineProperty(exports, '__esModule', {
-    value: true
-  });
+  exports.__esModule = true;
   exports.createHttpRequestMessageProcessor = createHttpRequestMessageProcessor;
 
-  var HttpRequestMessage = function HttpRequestMessage(method, uri, content, headers) {
+  var HttpRequestMessage = function HttpRequestMessage(method, url, content, headers) {
     _classCallCheck(this, HttpRequestMessage);
 
     this.method = method;
-    this.uri = uri;
+    this.url = url;
     this.content = content;
     this.headers = headers || new _headers.Headers();
     this.responseType = 'json';
