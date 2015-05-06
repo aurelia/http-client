@@ -1,15 +1,15 @@
 'use strict';
 
-var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
-
 exports.__esModule = true;
 exports.createJSONPRequestMessageProcessor = createJSONPRequestMessageProcessor;
 
-var _Headers = require('./headers');
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-var _RequestMessageProcessor = require('./request-message-processor');
+var _headers = require('./headers');
 
-var _timeoutTransformer$callbackParameterNameTransformer = require('./transformers');
+var _requestMessageProcessor = require('./request-message-processor');
+
+var _transformers = require('./transformers');
 
 var JSONPRequestMessage = function JSONPRequestMessage(url, callbackParameterName) {
   _classCallCheck(this, JSONPRequestMessage);
@@ -17,7 +17,7 @@ var JSONPRequestMessage = function JSONPRequestMessage(url, callbackParameterNam
   this.method = 'JSONP';
   this.url = url;
   this.content = undefined;
-  this.headers = new _Headers.Headers();
+  this.headers = new _headers.Headers();
   this.responseType = 'jsonp';
   this.callbackParameterName = callbackParameterName;
 };
@@ -79,5 +79,5 @@ var JSONPXHR = (function () {
 })();
 
 function createJSONPRequestMessageProcessor() {
-  return new _RequestMessageProcessor.RequestMessageProcessor(JSONPXHR, [_timeoutTransformer$callbackParameterNameTransformer.timeoutTransformer, _timeoutTransformer$callbackParameterNameTransformer.callbackParameterNameTransformer]);
+  return new _requestMessageProcessor.RequestMessageProcessor(JSONPXHR, [_transformers.timeoutTransformer, _transformers.callbackParameterNameTransformer]);
 }

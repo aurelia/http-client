@@ -1,25 +1,25 @@
 'use strict';
 
-var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
-
-var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
-
 exports.__esModule = true;
 
-var _core = require('core-js');
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _core2 = _interopRequireDefault(_core);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-var _HttpResponseMessage = require('./http-response-message');
+var _coreJs = require('core-js');
 
-var _join$buildQueryString = require('aurelia-path');
+var _coreJs2 = _interopRequireDefault(_coreJs);
+
+var _httpResponseMessage = require('./http-response-message');
+
+var _aureliaPath = require('aurelia-path');
 
 function buildFullUrl(message) {
-  var url = _join$buildQueryString.join(message.baseUrl, message.url),
+  var url = _aureliaPath.join(message.baseUrl, message.url),
       qs;
 
   if (message.params) {
-    qs = _join$buildQueryString.buildQueryString(message.params);
+    qs = _aureliaPath.buildQueryString(message.params);
     url = qs ? '' + url + '?' + qs : url;
   }
 
@@ -57,7 +57,7 @@ var RequestMessageProcessor = (function () {
       }
 
       xhr.onload = function (e) {
-        var response = new _HttpResponseMessage.HttpResponseMessage(message, xhr, message.responseType, message.reviver);
+        var response = new _httpResponseMessage.HttpResponseMessage(message, xhr, message.responseType, message.reviver);
         if (response.isSuccess) {
           resolve(response);
         } else {
@@ -66,7 +66,7 @@ var RequestMessageProcessor = (function () {
       };
 
       xhr.ontimeout = function (e) {
-        reject(new _HttpResponseMessage.HttpResponseMessage(message, {
+        reject(new _httpResponseMessage.HttpResponseMessage(message, {
           response: e,
           status: xhr.status,
           statusText: xhr.statusText
@@ -74,7 +74,7 @@ var RequestMessageProcessor = (function () {
       };
 
       xhr.onerror = function (e) {
-        reject(new _HttpResponseMessage.HttpResponseMessage(message, {
+        reject(new _httpResponseMessage.HttpResponseMessage(message, {
           response: e,
           status: xhr.status,
           statusText: xhr.statusText
@@ -82,7 +82,7 @@ var RequestMessageProcessor = (function () {
       };
 
       xhr.onabort = function (e) {
-        reject(new _HttpResponseMessage.HttpResponseMessage(message, {
+        reject(new _httpResponseMessage.HttpResponseMessage(message, {
           response: e,
           status: xhr.status,
           statusText: xhr.statusText

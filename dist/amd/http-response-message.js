@@ -1,11 +1,11 @@
 define(["exports", "./headers"], function (exports, _headers) {
   "use strict";
 
-  var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+  exports.__esModule = true;
 
   var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-  exports.__esModule = true;
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
   var HttpResponseMessage = (function () {
     function HttpResponseMessage(requestMessage, xhr, responseType, reviver) {
@@ -13,7 +13,7 @@ define(["exports", "./headers"], function (exports, _headers) {
 
       this.requestMessage = requestMessage;
       this.statusCode = xhr.status;
-      this.response = xhr.response;
+      this.response = xhr.response || xhr.responseText;
       this.isSuccess = xhr.status >= 200 && xhr.status < 400;
       this.statusText = xhr.statusText;
       this.reviver = reviver;

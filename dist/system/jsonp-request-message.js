@@ -1,7 +1,9 @@
 System.register(['./headers', './request-message-processor', './transformers'], function (_export) {
-  var Headers, RequestMessageProcessor, timeoutTransformer, callbackParameterNameTransformer, _classCallCheck, JSONPRequestMessage, JSONPXHR;
+  var Headers, RequestMessageProcessor, timeoutTransformer, callbackParameterNameTransformer, JSONPRequestMessage, JSONPXHR;
 
   _export('createJSONPRequestMessageProcessor', createJSONPRequestMessageProcessor);
+
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
   function createJSONPRequestMessageProcessor() {
     return new RequestMessageProcessor(JSONPXHR, [timeoutTransformer, callbackParameterNameTransformer]);
@@ -18,8 +20,6 @@ System.register(['./headers', './request-message-processor', './transformers'], 
     }],
     execute: function () {
       'use strict';
-
-      _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
 
       JSONPRequestMessage = function JSONPRequestMessage(url, callbackParameterName) {
         _classCallCheck(this, JSONPRequestMessage);

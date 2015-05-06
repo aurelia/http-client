@@ -2,27 +2,27 @@
 
 exports.__esModule = true;
 
-var _HttpClient = require('./http-client');
+var _httpClient = require('./http-client');
 
-exports.HttpClient = _HttpClient.HttpClient;
+exports.HttpClient = _httpClient.HttpClient;
 
-var _HttpRequestMessage = require('./http-request-message');
+var _httpRequestMessage = require('./http-request-message');
 
-exports.HttpRequestMessage = _HttpRequestMessage.HttpRequestMessage;
+exports.HttpRequestMessage = _httpRequestMessage.HttpRequestMessage;
 
-var _HttpResponseMessage$mimeTypes = require('./http-response-message');
+var _httpResponseMessage = require('./http-response-message');
 
-exports.HttpResponseMessage = _HttpResponseMessage$mimeTypes.HttpResponseMessage;
-exports.mimeTypes = _HttpResponseMessage$mimeTypes.mimeTypes;
+exports.HttpResponseMessage = _httpResponseMessage.HttpResponseMessage;
+exports.mimeTypes = _httpResponseMessage.mimeTypes;
 
-var _JSONPRequestMessage = require('./jsonp-request-message');
+var _jsonpRequestMessage = require('./jsonp-request-message');
 
-exports.JSONPRequestMessage = _JSONPRequestMessage.JSONPRequestMessage;
+exports.JSONPRequestMessage = _jsonpRequestMessage.JSONPRequestMessage;
 
-var _Headers = require('./headers');
+var _headers = require('./headers');
 
-exports.Headers = _Headers.Headers;
+exports.Headers = _headers.Headers;
 
-var _RequestBuilder = require('./request-builder');
+var _requestBuilder = require('./request-builder');
 
-exports.RequestBuilder = _RequestBuilder.RequestBuilder;
+exports.RequestBuilder = _requestBuilder.RequestBuilder;
