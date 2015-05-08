@@ -1,15 +1,15 @@
 'use strict';
 
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
+
 exports.__esModule = true;
 exports.createHttpRequestMessageProcessor = createHttpRequestMessageProcessor;
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+var _Headers = require('./headers');
 
-var _headers = require('./headers');
+var _RequestMessageProcessor = require('./request-message-processor');
 
-var _requestMessageProcessor = require('./request-message-processor');
-
-var _transformers = require('./transformers');
+var _timeoutTransformer$credentialsTransformer$progressTransformer$responseTypeTransformer$headerTransformer$contentTransformer = require('./transformers');
 
 var HttpRequestMessage = function HttpRequestMessage(method, url, content, headers) {
   _classCallCheck(this, HttpRequestMessage);
@@ -17,12 +17,12 @@ var HttpRequestMessage = function HttpRequestMessage(method, url, content, heade
   this.method = method;
   this.url = url;
   this.content = content;
-  this.headers = headers || new _headers.Headers();
+  this.headers = headers || new _Headers.Headers();
   this.responseType = 'json';
 };
 
 exports.HttpRequestMessage = HttpRequestMessage;
 
 function createHttpRequestMessageProcessor() {
-  return new _requestMessageProcessor.RequestMessageProcessor(XMLHttpRequest, [_transformers.timeoutTransformer, _transformers.credentialsTransformer, _transformers.progressTransformer, _transformers.responseTypeTransformer, _transformers.headerTransformer, _transformers.contentTransformer]);
+  return new _RequestMessageProcessor.RequestMessageProcessor(XMLHttpRequest, [_timeoutTransformer$credentialsTransformer$progressTransformer$responseTypeTransformer$headerTransformer$contentTransformer.timeoutTransformer, _timeoutTransformer$credentialsTransformer$progressTransformer$responseTypeTransformer$headerTransformer$contentTransformer.credentialsTransformer, _timeoutTransformer$credentialsTransformer$progressTransformer$responseTypeTransformer$headerTransformer$contentTransformer.progressTransformer, _timeoutTransformer$credentialsTransformer$progressTransformer$responseTypeTransformer$headerTransformer$contentTransformer.responseTypeTransformer, _timeoutTransformer$credentialsTransformer$progressTransformer$responseTypeTransformer$headerTransformer$contentTransformer.headerTransformer, _timeoutTransformer$credentialsTransformer$progressTransformer$responseTypeTransformer$headerTransformer$contentTransformer.contentTransformer]);
 }

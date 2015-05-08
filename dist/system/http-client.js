@@ -1,7 +1,5 @@
 System.register(['core-js', './headers', './request-builder', './http-request-message', './jsonp-request-message'], function (_export) {
-  var core, Headers, RequestBuilder, HttpRequestMessage, createHttpRequestMessageProcessor, JSONPRequestMessage, createJSONPRequestMessageProcessor, HttpClient;
-
-  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+  var core, Headers, RequestBuilder, HttpRequestMessage, createHttpRequestMessageProcessor, JSONPRequestMessage, createJSONPRequestMessageProcessor, _classCallCheck, HttpClient;
 
   function trackRequestStart(client, processor) {
     client.pendingRequests.push(processor);
@@ -38,6 +36,8 @@ System.register(['core-js', './headers', './request-builder', './http-request-me
     }],
     execute: function () {
       'use strict';
+
+      _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
 
       HttpClient = (function () {
         function HttpClient() {

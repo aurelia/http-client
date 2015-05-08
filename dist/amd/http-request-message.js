@@ -1,10 +1,10 @@
 define(['exports', './headers', './request-message-processor', './transformers'], function (exports, _headers, _requestMessageProcessor, _transformers) {
   'use strict';
 
+  var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
+
   exports.__esModule = true;
   exports.createHttpRequestMessageProcessor = createHttpRequestMessageProcessor;
-
-  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
   var HttpRequestMessage = function HttpRequestMessage(method, url, content, headers) {
     _classCallCheck(this, HttpRequestMessage);

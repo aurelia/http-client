@@ -1,7 +1,5 @@
 System.register(['core-js', './http-response-message', 'aurelia-path'], function (_export) {
-  var core, HttpResponseMessage, join, buildQueryString, RequestMessageProcessor;
-
-  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+  var core, HttpResponseMessage, join, buildQueryString, _classCallCheck, RequestMessageProcessor;
 
   function buildFullUrl(message) {
     var url = join(message.baseUrl, message.url),
@@ -26,6 +24,8 @@ System.register(['core-js', './http-response-message', 'aurelia-path'], function
     }],
     execute: function () {
       'use strict';
+
+      _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
 
       RequestMessageProcessor = (function () {
         function RequestMessageProcessor(xhrType, transformers) {

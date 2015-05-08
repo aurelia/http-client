@@ -1,9 +1,9 @@
 define(['exports', 'aurelia-path', './http-request-message', './jsonp-request-message'], function (exports, _aureliaPath, _httpRequestMessage, _jsonpRequestMessage) {
   'use strict';
 
-  exports.__esModule = true;
+  var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
 
-  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+  exports.__esModule = true;
 
   var RequestBuilder = (function () {
     function RequestBuilder(client) {

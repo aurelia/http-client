@@ -1,7 +1,5 @@
 System.register(['aurelia-path', './http-request-message', './jsonp-request-message'], function (_export) {
-  var join, HttpRequestMessage, JSONPRequestMessage, RequestBuilder;
-
-  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+  var join, HttpRequestMessage, JSONPRequestMessage, _classCallCheck, RequestBuilder;
 
   return {
     setters: [function (_aureliaPath) {
@@ -13,6 +11,8 @@ System.register(['aurelia-path', './http-request-message', './jsonp-request-mess
     }],
     execute: function () {
       'use strict';
+
+      _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
 
       RequestBuilder = (function () {
         function RequestBuilder(client) {
