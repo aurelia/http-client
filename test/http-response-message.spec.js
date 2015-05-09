@@ -105,7 +105,7 @@ describe("HttpResponseMessage", () => {
     });
 
     it("will return null if response is null", () => {
-      let httpResponse = new HttpResponseMessage(null, {response: null});
+      let httpResponse = new HttpResponseMessage(null, {response: null,responseText:null});
       expect(httpResponse.content).toBeNull();
     });
 
