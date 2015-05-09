@@ -1,3 +1,10 @@
+### 0.8.1 (2015-05-09)
+
+#### Bug Fixes
+
+* **http-response-message**: fix issue with IE9 not supporting the response property  ([6a2acfe4](http://github.com/aurelia/http-client/commit/6a2acfe44a96ba49557d70b37920f34224980784
+
+
 ## 0.8.0 (2015-04-30)
 
 
@@ -196,4 +203,3 @@
 #### Bug Fixes
 
 * **package:** add es6-shim polyfill ([bd25426f](http://github.com/aurelia/http-client/commit/bd25426f85c98ee6ad0f24abcd6d666e71c43106))
-
