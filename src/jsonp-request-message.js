@@ -24,11 +24,24 @@ class JSONPXHR {
   }
 
   send(){
-    var url = this.url + (this.url.indexOf('?') >= 0 ? '&' : '?') + this.callbackParameterName + '=' + this.callbackName;
+    let url = this.url + (this.url.indexOf('?') >= 0 ? '&' : '?') + encodeURIComponent(this.callbackParameterName) + '=' + this.callbackName;
+    let script = document.createElement('script');
 
-    window[this.callbackName] = (data) => {
+    script.src = url;
+    script.onerror = (e) => {
+      cleanUp();
+
+      this.status = 0;
+      this.onerror(new Error('error'))
+    };
+
+    let cleanUp = () => {
       delete window[this.callbackName];
       document.body.removeChild(script);
+    };
+
+    window[this.callbackName] = (data) => {
+      cleanUp();
 
       if(this.status === undefined){
         this.status = 200;
@@ -38,8 +51,6 @@ class JSONPXHR {
       }
     };
 
-    var script = document.createElement('script');
-    script.src = url;
     document.body.appendChild(script);
 
     if(this.timeout !== undefined){
