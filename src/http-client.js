@@ -34,7 +34,24 @@ export class HttpClient {
     this.requestProcessorFactories.set(HttpRequestMessage, createHttpRequestMessageProcessor);
     this.requestProcessorFactories.set(JSONPRequestMessage, createJSONPRequestMessageProcessor);
     this.pendingRequests = [];
+    this.interceptors = [];
     this.isRequesting = false;
+  }
+
+  /**
+   * Add new interceptor
+   *
+   * NOTE: Interceptors are stored in reverse order. Inner interceptors before outer interceptors.
+   * This reversal is needed so that we can build up the interception chain around the
+   * server request.
+   *
+   * @method addInterceptor
+   * @param interceptor A interceptor class with 4 possible methods: "request", "requestError", "response", "responseError"
+   * @chainable
+   */
+  addInterceptor(interceptor) {
+    this.interceptors.unshift(interceptor);
+    return this;
   }
 
   /**
@@ -78,7 +95,7 @@ export class HttpClient {
    */
   send(message, transformers){
     var createProcessor = this.requestProcessorFactories.get(message.constructor),
-        processor, promise, i, ii;
+        processor, promise, i, ii, processRequest;
 
     if(!createProcessor){
       throw new Error(`No request message processor factory for ${message.constructor}.`);
@@ -93,13 +110,36 @@ export class HttpClient {
       transformers[i](this, processor, message);
     }
 
-    promise = processor.process(this, message).then(response => {
-      trackRequestEnd(this, processor);
-      return response;
-    }).catch(response => {
-      trackRequestEnd(this, processor);
-      throw response;
-    });
+    processRequest = (message) => {
+      return processor.process(this, message).then(response => {
+        trackRequestEnd(this, processor);
+        return response;
+      }).catch(response => {
+        trackRequestEnd(this, processor);
+        throw response;
+      });
+    };
+
+    var chain = [ processRequest, undefined ];
+    // Apply interceptors
+    for (let interceptor of this.interceptors) {
+      if (interceptor.request || interceptor.requestError) {
+        chain.unshift(interceptor.requestError ? interceptor.requestError.bind(interceptor) : undefined);
+        chain.unshift(interceptor.request ? interceptor.request.bind(interceptor) : undefined);
+      }
+
+      if (interceptor.response || interceptor.responseError) {
+        chain.push(interceptor.response ? interceptor.response.bind(interceptor) : undefined);
+        chain.push(interceptor.responseError ? interceptor.responseError.bind(interceptor) : undefined);
+      }
+    }
+
+    promise = Promise.resolve(message);
+    while (chain.length) {
+      let thenFn = chain.shift();
+      let rejectFn = chain.shift();
+      promise = promise.then(thenFn, rejectFn);
+    }
 
     promise.abort = promise.cancel = function() {
       processor.abort();
