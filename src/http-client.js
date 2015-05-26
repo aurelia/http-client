@@ -41,15 +41,14 @@ export class HttpClient {
   /**
    * Add new interceptor
    *
-   * NOTE: Interceptors are stored in reverse order. Inner interceptors before outer interceptors.
-   * This reversal is needed so that we can build up the interception chain around the
-   * server request.
-   *
    * @method addInterceptor
-   * @param interceptor A interceptor class with 4 possible methods: "request", "requestError", "response", "responseError"
+   * @param interceptor An interceptor class with 4 possible methods: "request", "requestError", "response", "responseError"
    * @chainable
    */
   addInterceptor(interceptor) {
+    // NOTE: Interceptors are stored in reverse order. Inner interceptors before outer interceptors.
+    // This reversal is needed so that we can build up the interception chain around the
+    // server request.
     this.interceptors.unshift(interceptor);
     return this;
   }
@@ -106,12 +105,8 @@ export class HttpClient {
 
     transformers = transformers || this.requestTransformers;
 
-    for(i = 0, ii = transformers.length; i < ii; ++i){
-      transformers[i](this, processor, message);
-    }
-
     processRequest = (message) => {
-      return processor.process(this, message).then(response => {
+      return processor.process(message).then(response => {
         trackRequestEnd(this, processor);
         return response;
       }).catch(response => {
@@ -120,25 +115,40 @@ export class HttpClient {
       });
     };
 
-    var chain = [ processRequest, undefined ];
+    // [ onFullfilled, onReject ] pairs
+    var chain = [[ processRequest, undefined ]];
     // Apply interceptors
-    for (let interceptor of this.interceptors) {
+    this.interceptors.forEach(function(interceptor) {
       if (interceptor.request || interceptor.requestError) {
-        chain.unshift(interceptor.requestError ? interceptor.requestError.bind(interceptor) : undefined);
-        chain.unshift(interceptor.request ? interceptor.request.bind(interceptor) : undefined);
+        chain.unshift([
+          interceptor.request ? interceptor.request.bind(interceptor) : undefined,
+          interceptor.requestError ? interceptor.requestError.bind(interceptor) : undefined
+        ]);
       }
 
       if (interceptor.response || interceptor.responseError) {
-        chain.push(interceptor.response ? interceptor.response.bind(interceptor) : undefined);
-        chain.push(interceptor.responseError ? interceptor.responseError.bind(interceptor) : undefined);
+        chain.push([
+          interceptor.response ? interceptor.response.bind(interceptor) : undefined,
+          interceptor.responseError ? interceptor.responseError.bind(interceptor) : undefined
+        ]);
       }
-    }
+    });
 
-    promise = Promise.resolve(message);
+    promise = new Promise((resolve, reject) => {
+      // First apply transformers passed to the client.send()
+      for(i = 0, ii = transformers.length; i < ii; ++i){
+        transformers[i](this, processor, message);
+      }
+
+      // Now create XHR and also apply transformers from processor
+      processor.createXHR(this, message);
+
+      // Resolve with transformed message
+      resolve(message);
+    });
+
     while (chain.length) {
-      let thenFn = chain.shift();
-      let rejectFn = chain.shift();
-      promise = promise.then(thenFn, rejectFn);
+      promise = promise.then(...chain.shift());
     }
 
     promise.abort = promise.cancel = function() {

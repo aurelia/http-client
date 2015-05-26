@@ -49,17 +49,18 @@ describe("Request message processor", () => {
     });
 
     it("should create a new instance of the XHRType", () => {
-      reqProcessor.process(client, message);
+      reqProcessor.createXHR(client, message);
       expect(reqProcessor.xhr).toEqual(jasmine.any(MockXhrType));
     });
 
     it("should call xhr.open with the method, full url and ajax set to true", () => {
-      reqProcessor.process(client, message);
+      reqProcessor.createXHR(client, message);
       expect(openSpy).toHaveBeenCalledWith(message.method, message.url, true);
     });
 
     it("should call xhr.send with the message content", () => {
-      reqProcessor.process(client, message);
+      reqProcessor.createXHR(client, message);
+      reqProcessor.process(message);
       expect(sendSpy).toHaveBeenCalledWith(message.content);
     });
 
@@ -67,7 +68,7 @@ describe("Request message processor", () => {
       message.baseUrl = "/the/base";
       message.url = "and/the/path";
 
-      reqProcessor.process(client, message);
+      reqProcessor.createXHR(client, message);
       expect(message.fullUrl).toBe("/the/base/and/the/path");
     });
 
@@ -75,7 +76,7 @@ describe("Request message processor", () => {
       let transformSpy = jasmine.createSpy("transformSpy");
       reqProcessor.transformers.push(transformSpy);
       reqProcessor.transformers.push(transformSpy);
-      reqProcessor.process(client, message);
+      reqProcessor.createXHR(client, message);
 
       expect(transformSpy).toHaveBeenCalledWith(client, reqProcessor, message, reqProcessor.xhr);
       expect(transformSpy.calls.count()).toBe(2);
@@ -86,7 +87,8 @@ describe("Request message processor", () => {
     it("will resolve if the onload response is successful", (done) => {
       let responseObj = {};
 
-      reqProcessor.process(client, message)
+      reqProcessor.createXHR(client, message);
+      reqProcessor.process(message)
         .then((response) => {
           expect(response).toEqual(jasmine.any(HttpResponseMessage));
           expect(response.requestMessage).toBe(message);
@@ -109,7 +111,8 @@ describe("Request message processor", () => {
     it("will reject if the onload response has failed", (done) => {
       let responseObj = {};
 
-      reqProcessor.process(client, message)
+      reqProcessor.createXHR(client, message);
+      reqProcessor.process(message)
         .then((response) => expect(false).toBeTruthy("This should have failed"))
         .catch((response) => {
           expect(response).toEqual(jasmine.any(HttpResponseMessage));
@@ -131,7 +134,8 @@ describe("Request message processor", () => {
 
     it("will reject if the ontimeout was called", (done) => {
       let errorResponse = {};
-      reqProcessor.process(client, message)
+      reqProcessor.createXHR(client, message);
+      reqProcessor.process(message)
         .then((response) => expect(false).toBeTruthy("This should have failed"))
         .catch((response) => {
           expect(response).toEqual(jasmine.any(HttpResponseMessage));
@@ -147,7 +151,8 @@ describe("Request message processor", () => {
 
     it("will reject if the onerror was called", (done) => {
       let errorResponse = {};
-      reqProcessor.process(client, message)
+      reqProcessor.createXHR(client, message);
+      reqProcessor.process(message)
         .then((response) => expect(false).toBeTruthy("This should have failed"))
         .catch((response) => {
           expect(response).toEqual(jasmine.any(HttpResponseMessage));
@@ -163,7 +168,8 @@ describe("Request message processor", () => {
 
     it("will reject if the onabort was called", (done) => {
       let errorResponse = {};
-      reqProcessor.process(client, message)
+      reqProcessor.createXHR(client, message);
+      reqProcessor.process(message)
         .then((response) => expect(false).toBeTruthy("This should have failed"))
         .catch((response) => {
           expect(response).toEqual(jasmine.any(HttpResponseMessage));

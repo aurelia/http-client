@@ -534,7 +534,7 @@ describe('http client', () => {
       jasmine.clock().uninstall();
     });
 
-    xit('should reject when aborted', (done) => {
+    it('should reject when aborted', (done) => {
       // TODO: Enable and fix this test when
       // https://github.com/jasmine/jasmine-ajax/issues/111
       // will be fixed
@@ -548,7 +548,6 @@ describe('http client', () => {
         done();
       });
 
-      // This have to be called in the nextTick because when we reach this code, XHR isn't sent yet
       promise.abort();
     });
 
@@ -657,7 +656,7 @@ describe('http client', () => {
           expect(response.isSuccess).toBe(true);
           expect(interceptor.called).toBe(true);
           done();
-        })
+        });
     });
 
     it('should intercept response message', (done) => {
@@ -683,7 +682,7 @@ describe('http client', () => {
           expect(response.isSuccess).toBe(true);
           expect(interceptor.called).toBe(true);
           done();
-        })
+        });
     });
 
     it('should intercept request errors', (done) => {
@@ -719,7 +718,7 @@ describe('http client', () => {
           expect(error.message).toBe('error');
           expect(interceptor.called).toBe(true);
           done();
-        })
+        });
     });
 
     it('should intercept response errors', (done) => {
@@ -752,7 +751,85 @@ describe('http client', () => {
           expect(response.isSuccess).toBe(false);
           expect(interceptor.called).toBe(true);
           done();
-        })
+        });
+    });
+
+    it('`request` and `respones` should be called in the right order', (done) => {
+      class TimerInterceptor {
+        constructor() {
+          this.calledTimes = {};
+        }
+
+        request(message) {
+          this.calledTimes.request = new Date();
+          // Simulate some delay, so that we can compare times
+          return new Promise((resolve, reject) => {
+            setTimeout(() => {
+              resolve(message);
+            }, 10);
+          });
+        }
+
+        response(message) {
+          this.calledTimes.response = new Date();
+          // Simulate some delay, so that we can compare times
+          return new Promise((resolve, reject) => {
+            setTimeout(() => {
+              resolve(message);
+            }, 10);
+          });
+        }
+      }
+
+      var outerInterceptor = new TimerInterceptor();
+      var innerInterceptor = new TimerInterceptor();
+
+      var client = new HttpClient()
+        .configure(x => x.withBaseUrl(baseUrl))
+        .addInterceptor(outerInterceptor)
+        .addInterceptor(innerInterceptor);
+
+      // Test order of `request` and `response`
+      client.get('some/cool/path')
+        .then((response) => {
+          expect(innerInterceptor.calledTimes.request.getTime()).toBeGreaterThan(outerInterceptor.calledTimes.request.getTime());
+          expect(innerInterceptor.calledTimes.response.getTime()).toBeLessThan(outerInterceptor.calledTimes.response.getTime());
+          done();
+        });
+    });
+
+    it('should be applied after all transformers', (done) => {
+      class RequestInterceptor {
+        constructor() {
+          this.called = false;
+        }
+
+        request(message) {
+          this.called = true;
+
+          var request = jasmine.Ajax.requests.mostRecent();
+
+          expect(message.method).toBe('GET'); // asGet() transformer
+          expect(message.baseUrl).toBe(baseUrl); // withBaseUrl() transformer
+          expect(request.timeout).toBe(300); // timeoutTransformer
+          return message;
+        }
+      }
+
+      var interceptor = new RequestInterceptor();
+
+      var client = new HttpClient()
+        .configure(x => x.withBaseUrl(baseUrl))
+        .addInterceptor(interceptor);
+
+      client.createRequest('some/cool/path')
+        .asGet()
+        .withTimeout(300)
+        .send()
+        .then((response) => {
+          expect(interceptor.called).toBe(true);
+          done();
+        });
     });
 
   });
