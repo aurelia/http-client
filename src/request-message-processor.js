@@ -23,7 +23,7 @@ export class RequestMessageProcessor {
 
   abort(){
     // The logic here is if the xhr object is not set then there is nothing to abort so the intent was carried out
-    // Also test if the XHR has
+    // Also test if the XHR is UNSENT - if not, it will be aborted in the process() phase
     if(this.xhr && this.xhr.readyState !== XMLHttpRequest.UNSENT){
       this.xhr.abort();
     }
