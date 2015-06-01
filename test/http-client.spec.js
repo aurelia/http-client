@@ -188,7 +188,7 @@ describe('http client', () => {
         client.put('some/cool/path').then(response => {
           expect(response.content.name).toBe('Martin');
           done();
-        });
+        }).catch((err) => console.log(err.stack));
       });
 
       it('should not succeed on 500 response', (done) => {
@@ -506,13 +506,15 @@ describe('http client', () => {
       var client = new HttpClient()
         .configure(x => x.withBaseUrl(baseUrl));
 
+      jasmine.Ajax
+        .stubRequest('http://example.com/some/cool/path')
+        .andError();
+
       client.send(new HttpRequestMessage('GET', 'some/cool/path')).catch(response => {
         expect(response instanceof HttpResponseMessage).toBe(true);
         expect(response.responseType).toBe('error');
         done();
       });
-
-      jasmine.Ajax.requests.mostRecent().responseError();
 
     });
 
@@ -524,14 +526,17 @@ describe('http client', () => {
       var client = new HttpClient()
         .configure(x => x.withBaseUrl(baseUrl));
 
+      jasmine.Ajax
+        .stubRequest('http://example.com/some/cool/path')
+        .andTimeout();
+
       client.send(new HttpRequestMessage('GET', 'some/cool/path')).catch(response => {
         expect(response instanceof HttpResponseMessage).toBe(true);
         expect(response.responseType).toBe('timeout');
+        jasmine.clock().uninstall();
         done();
       });
 
-      jasmine.Ajax.requests.mostRecent().responseTimeout();
-      jasmine.clock().uninstall();
     });
 
     it('should reject when aborted', (done) => {
@@ -648,8 +653,10 @@ describe('http client', () => {
       var interceptor = new RequestInterceptor();
 
       var client = new HttpClient()
-        .configure(x => x.withBaseUrl(baseUrl))
-        .addInterceptor(interceptor);
+        .configure(x => {
+          x.withBaseUrl(baseUrl);
+          x.withInterceptor(interceptor);
+        });
 
       client.get('some/cool/path')
         .then((response) => {
@@ -674,8 +681,10 @@ describe('http client', () => {
       var interceptor = new ResponseInterceptor();
 
       var client = new HttpClient()
-        .configure(x => x.withBaseUrl(baseUrl))
-        .addInterceptor(interceptor);
+        .configure(x => {
+          x.withBaseUrl(baseUrl);
+          x.withInterceptor(interceptor);
+        });
 
       client.get('some/cool/path')
         .then((response) => {
@@ -709,9 +718,11 @@ describe('http client', () => {
       var interceptor = new RequestErrorInterceptor();
 
       var client = new HttpClient()
-        .configure(x => x.withBaseUrl(baseUrl))
-        .addInterceptor(new RequestErrorInvokerInterceptor()) // Simulate requestError
-        .addInterceptor(interceptor);
+        .configure(x => {
+          x.withBaseUrl(baseUrl);
+          x.withInterceptor(new RequestErrorInvokerInterceptor()); // Simulate requestError
+          x.withInterceptor(interceptor);
+        });
 
       client.get('some/cool/path')
         .catch((error) => {
@@ -743,8 +754,10 @@ describe('http client', () => {
       var interceptor = new ResponseErrorInterceptor();
 
       var client = new HttpClient()
-        .configure(x => x.withBaseUrl(baseUrl))
-        .addInterceptor(interceptor);
+        .configure(x => {
+          x.withBaseUrl(baseUrl);
+          x.withInterceptor(interceptor);
+        });
 
       client.get('some/cool/path')
         .catch((response) => {
@@ -785,9 +798,11 @@ describe('http client', () => {
       var innerInterceptor = new TimerInterceptor();
 
       var client = new HttpClient()
-        .configure(x => x.withBaseUrl(baseUrl))
-        .addInterceptor(outerInterceptor)
-        .addInterceptor(innerInterceptor);
+        .configure(x => {
+          x.withBaseUrl(baseUrl);
+          x.withInterceptor(outerInterceptor);
+          x.withInterceptor(innerInterceptor);
+        });
 
       // Test order of `request` and `response`
       client.get('some/cool/path')
@@ -819,8 +834,10 @@ describe('http client', () => {
       var interceptor = new RequestInterceptor();
 
       var client = new HttpClient()
-        .configure(x => x.withBaseUrl(baseUrl))
-        .addInterceptor(interceptor);
+        .configure(x => {
+          x.withBaseUrl(baseUrl);
+          x.withInterceptor(interceptor);
+        });
 
       client.createRequest('some/cool/path')
         .asGet()

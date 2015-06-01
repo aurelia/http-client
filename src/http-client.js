@@ -34,23 +34,7 @@ export class HttpClient {
     this.requestProcessorFactories.set(HttpRequestMessage, createHttpRequestMessageProcessor);
     this.requestProcessorFactories.set(JSONPRequestMessage, createJSONPRequestMessageProcessor);
     this.pendingRequests = [];
-    this.interceptors = [];
     this.isRequesting = false;
-  }
-
-  /**
-   * Add new interceptor
-   *
-   * @method addInterceptor
-   * @param interceptor An interceptor class with 4 possible methods: "request", "requestError", "response", "responseError"
-   * @chainable
-   */
-  addInterceptor(interceptor) {
-    // NOTE: Interceptors are stored in reverse order. Inner interceptors before outer interceptors.
-    // This reversal is needed so that we can build up the interception chain around the
-    // server request.
-    this.interceptors.unshift(interceptor);
-    return this;
   }
 
   /**
@@ -105,51 +89,22 @@ export class HttpClient {
 
     transformers = transformers || this.requestTransformers;
 
-    processRequest = (message) => {
-      return processor.process(message).then(response => {
-        trackRequestEnd(this, processor);
-        return response;
-      }).catch(response => {
-        trackRequestEnd(this, processor);
-        throw response;
+    promise = Promise.resolve(message)
+      .then((message) => {
+        // First apply transformers passed to the client.send()
+        for (i = 0, ii = transformers.length; i < ii; ++i) {
+          transformers[i](this, processor, message);
+        }
+
+        return processor.process(this, message).then(response => {
+          trackRequestEnd(this, processor);
+          return response;
+        }).catch(response => {
+          trackRequestEnd(this, processor);
+          throw response;
+        });
+
       });
-    };
-
-    // [ onFullfilled, onReject ] pairs
-    var chain = [[ processRequest, undefined ]];
-    // Apply interceptors
-    this.interceptors.forEach(function(interceptor) {
-      if (interceptor.request || interceptor.requestError) {
-        chain.unshift([
-          interceptor.request ? interceptor.request.bind(interceptor) : undefined,
-          interceptor.requestError ? interceptor.requestError.bind(interceptor) : undefined
-        ]);
-      }
-
-      if (interceptor.response || interceptor.responseError) {
-        chain.push([
-          interceptor.response ? interceptor.response.bind(interceptor) : undefined,
-          interceptor.responseError ? interceptor.responseError.bind(interceptor) : undefined
-        ]);
-      }
-    });
-
-    promise = new Promise((resolve, reject) => {
-      // First apply transformers passed to the client.send()
-      for(i = 0, ii = transformers.length; i < ii; ++i){
-        transformers[i](this, processor, message);
-      }
-
-      // Now create XHR and also apply transformers from processor
-      processor.createXHR(this, message);
-
-      // Resolve with transformed message
-      resolve(message);
-    });
-
-    while (chain.length) {
-      promise = promise.then(...chain.shift());
-    }
 
     promise.abort = promise.cancel = function() {
       processor.abort();
