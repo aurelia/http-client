@@ -162,3 +162,13 @@ RequestBuilder.addHelper('withCallbackParameterName', function(callbackParameter
     message.callbackParameterName = callbackParameterName;
   };
 });
+
+RequestBuilder.addHelper('withInterceptor', function(interceptor) {
+  return function(client, processor, message) {
+    // NOTE: Interceptors are stored in reverse order. Inner interceptors before outer interceptors.
+    // This reversal is needed so that we can build up the interception chain around the
+    // server request.
+    message.interceptors = message.interceptors || [];
+    message.interceptors.unshift(interceptor);
+  };
+});

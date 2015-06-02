@@ -59,8 +59,9 @@ describe("Request message processor", () => {
     });
 
     it("should call xhr.send with the message content", () => {
-      reqProcessor.process(client, message);
-      expect(sendSpy).toHaveBeenCalledWith(message.content);
+      reqProcessor.process(client, message).then(() => {
+        expect(sendSpy).toHaveBeenCalledWith(message.content);
+      });
     });
 
     it("will combine the message baseUrl and message url and set it to the fullUrl", () => {
