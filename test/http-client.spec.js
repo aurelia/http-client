@@ -10,7 +10,11 @@ describe('http client', () => {
     jasmine.Ajax.install();
 
     jasmine.Ajax
-      .stubRequest('http://example.com/some/cool/path')
+      .stubRequest(`${baseUrl}some/cool/path`)
+      .andReturn({ status: 200 });
+
+    jasmine.Ajax
+      .stubRequest(`${baseUrl}some/cool/path?q=search&foo=bar`)
       .andReturn({ status: 200 });
   });
 
@@ -36,6 +40,21 @@ describe('http client', () => {
           done();
         });
 
+      });
+
+      it('should make expected request with params', (done) => {
+        var client = new HttpClient()
+          .configure(x => x.withBaseUrl(baseUrl));
+
+        client.get('some/cool/path', { q: 'search', foo: 'bar' }).then(() => {
+          var request = jasmine.Ajax.requests.mostRecent();
+
+          expect(request.url).toBe(`${baseUrl}some/cool/path?q=search&foo=bar`);
+          expect(request.method).toBe('GET');
+          expect(request.data()).toEqual({});
+
+          done();
+        });
       });
 
       it('should provide expected request headers', (done) => {
@@ -441,6 +460,21 @@ describe('http client', () => {
           var request = jasmine.Ajax.requests.mostRecent();
 
           expect(request.url).toBe(`${baseUrl}some/cool/path`);
+          expect(request.method).toBe('DELETE');
+          expect(request.data()).toEqual({});
+          done();
+        });
+
+      });
+
+      it('should make expected request with params', (done) => {
+        var client = new HttpClient()
+          .configure(x => x.withBaseUrl(baseUrl));
+
+        client.delete('some/cool/path', { q: 'search', foo: 'bar' }).then(() => {
+          var request = jasmine.Ajax.requests.mostRecent();
+
+          expect(request.url).toBe(`${baseUrl}some/cool/path?q=search&foo=bar`);
           expect(request.method).toBe('DELETE');
           expect(request.data()).toEqual({});
           done();

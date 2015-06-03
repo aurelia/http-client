@@ -118,10 +118,11 @@ export class HttpClient {
    *
    * @method delete
    * @param {String} url The target URL.
+   * @param {object|undefined} params Optional request params
    * @return {Promise} A cancellable promise object.
    */
-  delete(url){
-    return this.createRequest(url).asDelete().send();
+  delete(url, params){
+    return this.createRequest(url).asDelete().withParams(params).send();
   }
 
   /**
@@ -129,10 +130,11 @@ export class HttpClient {
    *
    * @method get
    * @param {String} url The target URL.
+   * @param {object|undefined} params Optional request params
    * @return {Promise} A cancellable promise object.
    */
-  get(url){
-    return this.createRequest(url).asGet().send();
+  get(url, params){
+    return this.createRequest(url).asGet().withParams(params).send();
   }
 
   /**
@@ -140,10 +142,11 @@ export class HttpClient {
    *
    * @method head
    * @param {String} url The target URL.
+   * @param {object|undefined} params Optional request params
    * @return {Promise} A cancellable promise object.
    */
-  head(url){
-    return this.createRequest(url).asHead().send();
+  head(url, params){
+    return this.createRequest(url).asHead().withParams(params).send();
   }
 
   /**
@@ -162,10 +165,11 @@ export class HttpClient {
    *
    * @method options
    * @param {String} url The target URL.
+   * @param {object|undefined} params Optional request params
    * @return {Promise} A cancellable promise object.
    */
-  options(url){
-    return this.createRequest(url).asOptions().send();
+  options(url, params){
+    return this.createRequest(url).asOptions().withParams(params).send();
   }
 
   /**
