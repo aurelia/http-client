@@ -1,4 +1,5 @@
 import * as Transforms from '../src/transformers';
+import {Headers} from '../src/headers';
 
 describe('transformers', () => {
 
@@ -44,5 +45,24 @@ describe('transformers', () => {
     expect(xhr.upload.onprogress).toBe(progressCallback);
   });
 
+  it("contentTransformer should set the Content-Type header to application/json when it serializes the content to JSON", () => {
+    let message = {headers: new Headers()};
 
+    Transforms.contentTransformer(null, null, message, {});
+    expect(message.headers.get("Content-Type")).toBeUndefined();
+
+    message.content = "test";
+    Transforms.contentTransformer(null, null, message, {});
+    expect(message.headers.get("Content-Type")).toBeUndefined();
+
+    message.content = {test:"content"};
+    message.headers.add("Content-Type", "text/test");
+    Transforms.contentTransformer(null, null, message, {});
+    expect(message.headers.get("Content-Type")).toBe("text/test");
+
+    message.headers.clear();
+    message.content = {test:"content"};
+    Transforms.contentTransformer(null, null, message, {});
+    expect(message.headers.get("Content-Type")).toBe("application/json");
+  });
 });
