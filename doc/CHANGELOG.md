@@ -1,3 +1,11 @@
+### 0.9.1 (2015-06-08)
+
+
+#### Features
+
+* **http-client:** automatically set the content type for JSON content ([c2768802](http://github.com/aurelia/http-client/commit/c276880205597ddaa76d3d644e10866b0cd1fd26), closes [#39](http://github.com/aurelia/http-client/issues/39))
+
+
 ## 0.9.0 (2015-06-08)
 
 

@@ -79,6 +79,10 @@ System.register([], function (_export) {
     }
 
     message.content = JSON.stringify(message.content, message.replacer);
+
+    if (message.headers.get('Content-Type') === undefined) {
+      message.headers.add('Content-Type', 'application/json');
+    }
   }
 
   return {

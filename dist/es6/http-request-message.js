@@ -25,7 +25,7 @@ export function createHttpRequestMessageProcessor(){
     credentialsTransformer,
     progressTransformer,
     responseTypeTransformer,
-    headerTransformer,
-    contentTransformer
+    contentTransformer,
+    headerTransformer
   ]);
 }
