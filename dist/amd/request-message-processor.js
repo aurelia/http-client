@@ -1,20 +1,20 @@
 define(['exports', 'core-js', './http-response-message', 'aurelia-path'], function (exports, _coreJs, _httpResponseMessage, _aureliaPath) {
   'use strict';
 
-  var _interopRequire = function (obj) { return obj && obj.__esModule ? obj['default'] : obj; };
-
-  var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
-
   exports.__esModule = true;
 
-  var _core = _interopRequire(_coreJs);
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+  var _core = _interopRequireDefault(_coreJs);
 
   function buildFullUrl(message) {
-    var url = _aureliaPath.join(message.baseUrl, message.url),
+    var url = (0, _aureliaPath.join)(message.baseUrl, message.url),
         qs;
 
     if (message.params) {
-      qs = _aureliaPath.buildQueryString(message.params);
+      qs = (0, _aureliaPath.buildQueryString)(message.params);
       url = qs ? '' + url + '?' + qs : url;
     }
 
@@ -27,18 +27,20 @@ define(['exports', 'core-js', './http-response-message', 'aurelia-path'], functi
 
       this.XHRType = xhrType;
       this.transformers = transformers;
+      this.isAborted = false;
     }
 
     RequestMessageProcessor.prototype.abort = function abort() {
-      if (this.xhr) {
+      if (this.xhr && this.xhr.readyState !== XMLHttpRequest.UNSENT) {
         this.xhr.abort();
       }
+      this.isAborted = true;
     };
 
     RequestMessageProcessor.prototype.process = function process(client, message) {
       var _this = this;
 
-      return new Promise(function (resolve, reject) {
+      var promise = new Promise(function (resolve, reject) {
         var xhr = _this.xhr = new _this.XHRType(),
             transformers = _this.transformers,
             i,
@@ -83,8 +85,39 @@ define(['exports', 'core-js', './http-response-message', 'aurelia-path'], functi
             statusText: xhr.statusText
           }, 'abort'));
         };
+      });
 
-        xhr.send(message.content);
+      return Promise.resolve(message).then(function (message) {
+        var processRequest = function processRequest() {
+          if (_this.isAborted) {
+            _this.xhr.abort();
+          } else {
+            _this.xhr.send(message.content);
+          }
+
+          return promise;
+        };
+
+        var chain = [[processRequest, undefined]];
+
+        var interceptors = message.interceptors || [];
+        interceptors.forEach(function (interceptor) {
+          if (interceptor.request || interceptor.requestError) {
+            chain.unshift([interceptor.request ? interceptor.request.bind(interceptor) : undefined, interceptor.requestError ? interceptor.requestError.bind(interceptor) : undefined]);
+          }
+
+          if (interceptor.response || interceptor.responseError) {
+            chain.push([interceptor.response ? interceptor.response.bind(interceptor) : undefined, interceptor.responseError ? interceptor.responseError.bind(interceptor) : undefined]);
+          }
+        });
+
+        var interceptorsPromise = Promise.resolve(message);
+
+        while (chain.length) {
+          interceptorsPromise = interceptorsPromise.then.apply(interceptorsPromise, chain.shift());
+        }
+
+        return interceptorsPromise;
       });
     };
 

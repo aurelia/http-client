@@ -1,3 +1,15 @@
+## 0.9.0 (2015-06-08)
+
+
+#### Features
+
+* **interceptors:**
+  * moved interceptors from client to message ([206d05d7](http://github.com/aurelia/http-client/commit/206d05d7a64b196a46daa14452ca3e017214cc0a))
+  * apply all transformers before interceptors ([ee4561c3](http://github.com/aurelia/http-client/commit/ee4561c37b2a6101123aecb4c1ad8490ee05ba59))
+  * added support for interceptors ([8ed41762](http://github.com/aurelia/http-client/commit/8ed4176276e604c2334bc4b2d3471ecb8ebfda0f))
+* **jsonp:** fail JSONP requests on script load errors ([fc98ecc5](http://github.com/aurelia/http-client/commit/fc98ecc5fcb00c16140b1524ba0a5ba16bb702e7))
+
+
 ### 0.8.1 (2015-05-09)
 
 #### Bug Fixes

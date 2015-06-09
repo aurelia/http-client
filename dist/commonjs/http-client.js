@@ -1,22 +1,22 @@
 'use strict';
 
-var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
-
-var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
-
 exports.__esModule = true;
 
-var _core = require('core-js');
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _core2 = _interopRequireDefault(_core);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-var _Headers = require('./headers');
+var _coreJs = require('core-js');
 
-var _RequestBuilder = require('./request-builder');
+var _coreJs2 = _interopRequireDefault(_coreJs);
 
-var _HttpRequestMessage$createHttpRequestMessageProcessor = require('./http-request-message');
+var _headers = require('./headers');
 
-var _JSONPRequestMessage$createJSONPRequestMessageProcessor = require('./jsonp-request-message');
+var _requestBuilder = require('./request-builder');
+
+var _httpRequestMessage = require('./http-request-message');
+
+var _jsonpRequestMessage = require('./jsonp-request-message');
 
 function trackRequestStart(client, processor) {
   client.pendingRequests.push(processor);
@@ -43,21 +43,21 @@ var HttpClient = (function () {
 
     this.requestTransformers = [];
     this.requestProcessorFactories = new Map();
-    this.requestProcessorFactories.set(_HttpRequestMessage$createHttpRequestMessageProcessor.HttpRequestMessage, _HttpRequestMessage$createHttpRequestMessageProcessor.createHttpRequestMessageProcessor);
-    this.requestProcessorFactories.set(_JSONPRequestMessage$createJSONPRequestMessageProcessor.JSONPRequestMessage, _JSONPRequestMessage$createJSONPRequestMessageProcessor.createJSONPRequestMessageProcessor);
+    this.requestProcessorFactories.set(_httpRequestMessage.HttpRequestMessage, _httpRequestMessage.createHttpRequestMessageProcessor);
+    this.requestProcessorFactories.set(_jsonpRequestMessage.JSONPRequestMessage, _jsonpRequestMessage.createJSONPRequestMessageProcessor);
     this.pendingRequests = [];
     this.isRequesting = false;
   }
 
   HttpClient.prototype.configure = function configure(fn) {
-    var builder = new _RequestBuilder.RequestBuilder(this);
+    var builder = new _requestBuilder.RequestBuilder(this);
     fn(builder);
     this.requestTransformers = builder.transformers;
     return this;
   };
 
   HttpClient.prototype.createRequest = function createRequest(url) {
-    var builder = new _RequestBuilder.RequestBuilder(this);
+    var builder = new _requestBuilder.RequestBuilder(this);
 
     if (url) {
       builder.withUrl(url);
@@ -73,7 +73,8 @@ var HttpClient = (function () {
         processor,
         promise,
         i,
-        ii;
+        ii,
+        processRequest;
 
     if (!createProcessor) {
       throw new Error('No request message processor factory for ' + message.constructor + '.');
@@ -84,16 +85,18 @@ var HttpClient = (function () {
 
     transformers = transformers || this.requestTransformers;
 
-    for (i = 0, ii = transformers.length; i < ii; ++i) {
-      transformers[i](this, processor, message);
-    }
+    promise = Promise.resolve(message).then(function (message) {
+      for (i = 0, ii = transformers.length; i < ii; ++i) {
+        transformers[i](_this, processor, message);
+      }
 
-    promise = processor.process(this, message).then(function (response) {
-      trackRequestEnd(_this, processor);
-      return response;
-    })['catch'](function (response) {
-      trackRequestEnd(_this, processor);
-      throw response;
+      return processor.process(_this, message).then(function (response) {
+        trackRequestEnd(_this, processor);
+        return response;
+      })['catch'](function (response) {
+        trackRequestEnd(_this, processor);
+        throw response;
+      });
     });
 
     promise.abort = promise.cancel = function () {

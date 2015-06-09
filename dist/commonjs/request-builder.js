@@ -1,14 +1,14 @@
 'use strict';
 
-var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
-
 exports.__esModule = true;
 
-var _join = require('aurelia-path');
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-var _HttpRequestMessage = require('./http-request-message');
+var _aureliaPath = require('aurelia-path');
 
-var _JSONPRequestMessage = require('./jsonp-request-message');
+var _httpRequestMessage = require('./http-request-message');
+
+var _jsonpRequestMessage = require('./jsonp-request-message');
 
 var RequestBuilder = (function () {
   function RequestBuilder(client) {
@@ -27,7 +27,7 @@ var RequestBuilder = (function () {
   };
 
   RequestBuilder.prototype.send = function send() {
-    var message = this.useJsonp ? new _JSONPRequestMessage.JSONPRequestMessage() : new _HttpRequestMessage.HttpRequestMessage();
+    var message = this.useJsonp ? new _jsonpRequestMessage.JSONPRequestMessage() : new _httpRequestMessage.HttpRequestMessage();
     return this.client.send(message, this.transformers);
   };
 
@@ -154,5 +154,12 @@ RequestBuilder.addHelper('withProgressCallback', function (progressCallback) {
 RequestBuilder.addHelper('withCallbackParameterName', function (callbackParameterName) {
   return function (client, processor, message) {
     message.callbackParameterName = callbackParameterName;
+  };
+});
+
+RequestBuilder.addHelper('withInterceptor', function (interceptor) {
+  return function (client, processor, message) {
+    message.interceptors = message.interceptors || [];
+    message.interceptors.unshift(interceptor);
   };
 });

@@ -1,5 +1,9 @@
 System.register(['aurelia-path', './http-request-message', './jsonp-request-message'], function (_export) {
-  var join, HttpRequestMessage, JSONPRequestMessage, _classCallCheck, RequestBuilder;
+  'use strict';
+
+  var join, HttpRequestMessage, JSONPRequestMessage, RequestBuilder;
+
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
   return {
     setters: [function (_aureliaPath) {
@@ -10,10 +14,6 @@ System.register(['aurelia-path', './http-request-message', './jsonp-request-mess
       JSONPRequestMessage = _jsonpRequestMessage.JSONPRequestMessage;
     }],
     execute: function () {
-      'use strict';
-
-      _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
-
       RequestBuilder = (function () {
         function RequestBuilder(client) {
           _classCallCheck(this, RequestBuilder);
@@ -158,6 +158,13 @@ System.register(['aurelia-path', './http-request-message', './jsonp-request-mess
       RequestBuilder.addHelper('withCallbackParameterName', function (callbackParameterName) {
         return function (client, processor, message) {
           message.callbackParameterName = callbackParameterName;
+        };
+      });
+
+      RequestBuilder.addHelper('withInterceptor', function (interceptor) {
+        return function (client, processor, message) {
+          message.interceptors = message.interceptors || [];
+          message.interceptors.unshift(interceptor);
         };
       });
     }

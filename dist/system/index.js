@@ -1,4 +1,6 @@
 System.register(['./http-client', './http-request-message', './http-response-message', './jsonp-request-message', './headers', './request-builder'], function (_export) {
+  'use strict';
+
   return {
     setters: [function (_httpClient) {
       _export('HttpClient', _httpClient.HttpClient);
@@ -15,8 +17,6 @@ System.register(['./http-client', './http-request-message', './http-response-mes
     }, function (_requestBuilder) {
       _export('RequestBuilder', _requestBuilder.RequestBuilder);
     }],
-    execute: function () {
-      'use strict';
-    }
+    execute: function () {}
   };
 });

@@ -78,7 +78,7 @@ export class HttpClient {
    */
   send(message, transformers){
     var createProcessor = this.requestProcessorFactories.get(message.constructor),
-        processor, promise, i, ii;
+        processor, promise, i, ii, processRequest;
 
     if(!createProcessor){
       throw new Error(`No request message processor factory for ${message.constructor}.`);
@@ -89,17 +89,22 @@ export class HttpClient {
 
     transformers = transformers || this.requestTransformers;
 
-    for(i = 0, ii = transformers.length; i < ii; ++i){
-      transformers[i](this, processor, message);
-    }
+    promise = Promise.resolve(message)
+      .then((message) => {
+        // First apply transformers passed to the client.send()
+        for (i = 0, ii = transformers.length; i < ii; ++i) {
+          transformers[i](this, processor, message);
+        }
 
-    promise = processor.process(this, message).then(response => {
-      trackRequestEnd(this, processor);
-      return response;
-    }).catch(response => {
-      trackRequestEnd(this, processor);
-      throw response;
-    });
+        return processor.process(this, message).then(response => {
+          trackRequestEnd(this, processor);
+          return response;
+        }).catch(response => {
+          trackRequestEnd(this, processor);
+          throw response;
+        });
+
+      });
 
     promise.abort = promise.cancel = function() {
       processor.abort();

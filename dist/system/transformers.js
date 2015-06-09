@@ -1,4 +1,6 @@
 System.register([], function (_export) {
+  'use strict';
+
   _export('timeoutTransformer', timeoutTransformer);
 
   _export('callbackParameterNameTransformer', callbackParameterNameTransformer);
@@ -81,8 +83,6 @@ System.register([], function (_export) {
 
   return {
     setters: [],
-    execute: function () {
-      'use strict';
-    }
+    execute: function () {}
   };
 });

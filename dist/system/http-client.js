@@ -1,5 +1,9 @@
 System.register(['core-js', './headers', './request-builder', './http-request-message', './jsonp-request-message'], function (_export) {
-  var core, Headers, RequestBuilder, HttpRequestMessage, createHttpRequestMessageProcessor, JSONPRequestMessage, createJSONPRequestMessageProcessor, _classCallCheck, HttpClient;
+  'use strict';
+
+  var core, Headers, RequestBuilder, HttpRequestMessage, createHttpRequestMessageProcessor, JSONPRequestMessage, createJSONPRequestMessageProcessor, HttpClient;
+
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
   function trackRequestStart(client, processor) {
     client.pendingRequests.push(processor);
@@ -35,10 +39,6 @@ System.register(['core-js', './headers', './request-builder', './http-request-me
       createJSONPRequestMessageProcessor = _jsonpRequestMessage.createJSONPRequestMessageProcessor;
     }],
     execute: function () {
-      'use strict';
-
-      _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
-
       HttpClient = (function () {
         function HttpClient() {
           _classCallCheck(this, HttpClient);
@@ -75,7 +75,8 @@ System.register(['core-js', './headers', './request-builder', './http-request-me
               processor,
               promise,
               i,
-              ii;
+              ii,
+              processRequest;
 
           if (!createProcessor) {
             throw new Error('No request message processor factory for ' + message.constructor + '.');
@@ -86,16 +87,18 @@ System.register(['core-js', './headers', './request-builder', './http-request-me
 
           transformers = transformers || this.requestTransformers;
 
-          for (i = 0, ii = transformers.length; i < ii; ++i) {
-            transformers[i](this, processor, message);
-          }
+          promise = Promise.resolve(message).then(function (message) {
+            for (i = 0, ii = transformers.length; i < ii; ++i) {
+              transformers[i](_this, processor, message);
+            }
 
-          promise = processor.process(this, message).then(function (response) {
-            trackRequestEnd(_this, processor);
-            return response;
-          })['catch'](function (response) {
-            trackRequestEnd(_this, processor);
-            throw response;
+            return processor.process(_this, message).then(function (response) {
+              trackRequestEnd(_this, processor);
+              return response;
+            })['catch'](function (response) {
+              trackRequestEnd(_this, processor);
+              throw response;
+            });
           });
 
           promise.abort = promise.cancel = function () {

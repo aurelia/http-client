@@ -1,15 +1,15 @@
 'use strict';
 
-var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
-
 exports.__esModule = true;
 exports.createJSONPRequestMessageProcessor = createJSONPRequestMessageProcessor;
 
-var _Headers = require('./headers');
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-var _RequestMessageProcessor = require('./request-message-processor');
+var _headers = require('./headers');
 
-var _timeoutTransformer$callbackParameterNameTransformer = require('./transformers');
+var _requestMessageProcessor = require('./request-message-processor');
+
+var _transformers = require('./transformers');
 
 var JSONPRequestMessage = function JSONPRequestMessage(url, callbackParameterName) {
   _classCallCheck(this, JSONPRequestMessage);
@@ -17,7 +17,7 @@ var JSONPRequestMessage = function JSONPRequestMessage(url, callbackParameterNam
   this.method = 'JSONP';
   this.url = url;
   this.content = undefined;
-  this.headers = new _Headers.Headers();
+  this.headers = new _headers.Headers();
   this.responseType = 'jsonp';
   this.callbackParameterName = callbackParameterName;
 };
@@ -38,11 +38,24 @@ var JSONPXHR = (function () {
   JSONPXHR.prototype.send = function send() {
     var _this = this;
 
-    var url = this.url + (this.url.indexOf('?') >= 0 ? '&' : '?') + this.callbackParameterName + '=' + this.callbackName;
+    var url = this.url + (this.url.indexOf('?') >= 0 ? '&' : '?') + encodeURIComponent(this.callbackParameterName) + '=' + this.callbackName;
+    var script = document.createElement('script');
 
-    window[this.callbackName] = function (data) {
+    script.src = url;
+    script.onerror = function (e) {
+      cleanUp();
+
+      _this.status = 0;
+      _this.onerror(new Error('error'));
+    };
+
+    var cleanUp = function cleanUp() {
       delete window[_this.callbackName];
       document.body.removeChild(script);
+    };
+
+    window[this.callbackName] = function (data) {
+      cleanUp();
 
       if (_this.status === undefined) {
         _this.status = 200;
@@ -52,8 +65,6 @@ var JSONPXHR = (function () {
       }
     };
 
-    var script = document.createElement('script');
-    script.src = url;
     document.body.appendChild(script);
 
     if (this.timeout !== undefined) {
@@ -79,5 +90,5 @@ var JSONPXHR = (function () {
 })();
 
 function createJSONPRequestMessageProcessor() {
-  return new _RequestMessageProcessor.RequestMessageProcessor(JSONPXHR, [_timeoutTransformer$callbackParameterNameTransformer.timeoutTransformer, _timeoutTransformer$callbackParameterNameTransformer.callbackParameterNameTransformer]);
+  return new _requestMessageProcessor.RequestMessageProcessor(JSONPXHR, [_transformers.timeoutTransformer, _transformers.callbackParameterNameTransformer]);
 }

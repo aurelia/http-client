@@ -1,7 +1,11 @@
 System.register(['./headers', './request-message-processor', './transformers'], function (_export) {
-  var Headers, RequestMessageProcessor, timeoutTransformer, credentialsTransformer, progressTransformer, responseTypeTransformer, headerTransformer, contentTransformer, _classCallCheck, HttpRequestMessage;
+  'use strict';
+
+  var Headers, RequestMessageProcessor, timeoutTransformer, credentialsTransformer, progressTransformer, responseTypeTransformer, headerTransformer, contentTransformer, HttpRequestMessage;
 
   _export('createHttpRequestMessageProcessor', createHttpRequestMessageProcessor);
+
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
   function createHttpRequestMessageProcessor() {
     return new RequestMessageProcessor(XMLHttpRequest, [timeoutTransformer, credentialsTransformer, progressTransformer, responseTypeTransformer, headerTransformer, contentTransformer]);
@@ -21,10 +25,6 @@ System.register(['./headers', './request-message-processor', './transformers'], 
       contentTransformer = _transformers.contentTransformer;
     }],
     execute: function () {
-      'use strict';
-
-      _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
-
       HttpRequestMessage = function HttpRequestMessage(method, url, content, headers) {
         _classCallCheck(this, HttpRequestMessage);
 

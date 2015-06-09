@@ -1,7 +1,11 @@
 System.register(['./headers', './request-message-processor', './transformers'], function (_export) {
-  var Headers, RequestMessageProcessor, timeoutTransformer, callbackParameterNameTransformer, _classCallCheck, JSONPRequestMessage, JSONPXHR;
+  'use strict';
+
+  var Headers, RequestMessageProcessor, timeoutTransformer, callbackParameterNameTransformer, JSONPRequestMessage, JSONPXHR;
 
   _export('createJSONPRequestMessageProcessor', createJSONPRequestMessageProcessor);
+
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
   function createJSONPRequestMessageProcessor() {
     return new RequestMessageProcessor(JSONPXHR, [timeoutTransformer, callbackParameterNameTransformer]);
@@ -17,10 +21,6 @@ System.register(['./headers', './request-message-processor', './transformers'], 
       callbackParameterNameTransformer = _transformers.callbackParameterNameTransformer;
     }],
     execute: function () {
-      'use strict';
-
-      _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
-
       JSONPRequestMessage = function JSONPRequestMessage(url, callbackParameterName) {
         _classCallCheck(this, JSONPRequestMessage);
 
@@ -48,11 +48,24 @@ System.register(['./headers', './request-message-processor', './transformers'], 
         JSONPXHR.prototype.send = function send() {
           var _this = this;
 
-          var url = this.url + (this.url.indexOf('?') >= 0 ? '&' : '?') + this.callbackParameterName + '=' + this.callbackName;
+          var url = this.url + (this.url.indexOf('?') >= 0 ? '&' : '?') + encodeURIComponent(this.callbackParameterName) + '=' + this.callbackName;
+          var script = document.createElement('script');
 
-          window[this.callbackName] = function (data) {
+          script.src = url;
+          script.onerror = function (e) {
+            cleanUp();
+
+            _this.status = 0;
+            _this.onerror(new Error('error'));
+          };
+
+          var cleanUp = function cleanUp() {
             delete window[_this.callbackName];
             document.body.removeChild(script);
+          };
+
+          window[this.callbackName] = function (data) {
+            cleanUp();
 
             if (_this.status === undefined) {
               _this.status = 200;
@@ -62,8 +75,6 @@ System.register(['./headers', './request-message-processor', './transformers'], 
             }
           };
 
-          var script = document.createElement('script');
-          script.src = url;
           document.body.appendChild(script);
 
           if (this.timeout !== undefined) {

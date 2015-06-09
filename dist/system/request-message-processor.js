@@ -1,5 +1,9 @@
 System.register(['core-js', './http-response-message', 'aurelia-path'], function (_export) {
-  var core, HttpResponseMessage, join, buildQueryString, _classCallCheck, RequestMessageProcessor;
+  'use strict';
+
+  var core, HttpResponseMessage, join, buildQueryString, RequestMessageProcessor;
+
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
   function buildFullUrl(message) {
     var url = join(message.baseUrl, message.url),
@@ -23,28 +27,26 @@ System.register(['core-js', './http-response-message', 'aurelia-path'], function
       buildQueryString = _aureliaPath.buildQueryString;
     }],
     execute: function () {
-      'use strict';
-
-      _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
-
       RequestMessageProcessor = (function () {
         function RequestMessageProcessor(xhrType, transformers) {
           _classCallCheck(this, RequestMessageProcessor);
 
           this.XHRType = xhrType;
           this.transformers = transformers;
+          this.isAborted = false;
         }
 
         RequestMessageProcessor.prototype.abort = function abort() {
-          if (this.xhr) {
+          if (this.xhr && this.xhr.readyState !== XMLHttpRequest.UNSENT) {
             this.xhr.abort();
           }
+          this.isAborted = true;
         };
 
         RequestMessageProcessor.prototype.process = function process(client, message) {
           var _this = this;
 
-          return new Promise(function (resolve, reject) {
+          var promise = new Promise(function (resolve, reject) {
             var xhr = _this.xhr = new _this.XHRType(),
                 transformers = _this.transformers,
                 i,
@@ -89,8 +91,39 @@ System.register(['core-js', './http-response-message', 'aurelia-path'], function
                 statusText: xhr.statusText
               }, 'abort'));
             };
+          });
 
-            xhr.send(message.content);
+          return Promise.resolve(message).then(function (message) {
+            var processRequest = function processRequest() {
+              if (_this.isAborted) {
+                _this.xhr.abort();
+              } else {
+                _this.xhr.send(message.content);
+              }
+
+              return promise;
+            };
+
+            var chain = [[processRequest, undefined]];
+
+            var interceptors = message.interceptors || [];
+            interceptors.forEach(function (interceptor) {
+              if (interceptor.request || interceptor.requestError) {
+                chain.unshift([interceptor.request ? interceptor.request.bind(interceptor) : undefined, interceptor.requestError ? interceptor.requestError.bind(interceptor) : undefined]);
+              }
+
+              if (interceptor.response || interceptor.responseError) {
+                chain.push([interceptor.response ? interceptor.response.bind(interceptor) : undefined, interceptor.responseError ? interceptor.responseError.bind(interceptor) : undefined]);
+              }
+            });
+
+            var interceptorsPromise = Promise.resolve(message);
+
+            while (chain.length) {
+              interceptorsPromise = interceptorsPromise.then.apply(interceptorsPromise, chain.shift());
+            }
+
+            return interceptorsPromise;
           });
         };
 
