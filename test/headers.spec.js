@@ -1,4 +1,4 @@
-import {Headers} from '../src/index';
+import {Headers} from '../src/headers';
 
 describe('headers', () => {
 

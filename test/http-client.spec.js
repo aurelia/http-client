@@ -1,6 +1,7 @@
-import {HttpClient} from '../src/index';
-import {HttpRequestMessage, HttpResponseMessage} from '../src/index';
-import {Headers} from '../src/index';
+import {HttpClient} from '../src/http-client';
+import {HttpRequestMessage} from '../src/http-request-message';
+import {HttpResponseMessage} from '../src/http-response-message';
+import {Headers} from '../src/headers';
 
 describe('http client', () => {
 
