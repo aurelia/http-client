@@ -113,7 +113,7 @@ var HttpResponseMessage = (function () {
 
   _createClass(HttpResponseMessage, [{
     key: 'content',
-    get: function () {
+    get: function get() {
       try {
         if (this._content !== undefined) {
           return this._content;
@@ -171,12 +171,12 @@ var mimeTypes = {
 
 exports.mimeTypes = mimeTypes;
 function buildFullUrl(message) {
-  var url = (0, _aureliaPath.join)(message.baseUrl, message.url),
+  var url = _aureliaPath.join(message.baseUrl, message.url),
       qs;
 
   if (message.params) {
-    qs = (0, _aureliaPath.buildQueryString)(message.params);
-    url = qs ? '' + url + '?' + qs : url;
+    qs = _aureliaPath.buildQueryString(message.params);
+    url = qs ? url + '?' + qs : url;
   }
 
   message.fullUrl = url;

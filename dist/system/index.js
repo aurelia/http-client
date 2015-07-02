@@ -31,7 +31,7 @@ System.register(['core-js', 'aurelia-path'], function (_export) {
 
     if (message.params) {
       qs = buildQueryString(message.params);
-      url = qs ? '' + url + '?' + qs : url;
+      url = qs ? url + '?' + qs : url;
     }
 
     message.fullUrl = url;
@@ -231,7 +231,7 @@ System.register(['core-js', 'aurelia-path'], function (_export) {
 
         _createClass(HttpResponseMessage, [{
           key: 'content',
-          get: function () {
+          get: function get() {
             try {
               if (this._content !== undefined) {
                 return this._content;
