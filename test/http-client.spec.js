@@ -500,10 +500,7 @@ describe('http client', () => {
 
   describe('send', () => {
 
-    xit('should reject on onerror', (done) => {
-      // TODO: Enable and fix this test when
-      // https://github.com/jasmine/jasmine-ajax/issues/111
-      // will be fixed
+    it('should reject on onerror', (done) => {
       var client = new HttpClient()
         .configure(x => x.withBaseUrl(baseUrl));
 
@@ -519,10 +516,7 @@ describe('http client', () => {
 
     });
 
-    xit('should reject on ontimeout', (done) => {
-      // TODO: Enable and fix this test when
-      // https://github.com/jasmine/jasmine-ajax/issues/111
-      // will be fixed
+    it('should reject on ontimeout', (done) => {
       jasmine.clock().install();
       var client = new HttpClient()
         .configure(x => x.withBaseUrl(baseUrl));
