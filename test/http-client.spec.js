@@ -634,18 +634,13 @@ describe('http client', () => {
 
     it('should intercept request messages', (done) => {
       class RequestInterceptor {
-
-        constructor() {
-          this.called = false;
-        }
-
         request(message) {
-          this.called = true;
           return message;
         }
       }
 
       var interceptor = new RequestInterceptor();
+      spyOn(interceptor, 'request').and.callThrough();
 
       var client = new HttpClient()
         .configure(x => {
@@ -656,24 +651,20 @@ describe('http client', () => {
       client.get('some/cool/path')
         .then((response) => {
           expect(response.isSuccess).toBe(true);
-          expect(interceptor.called).toBe(true);
+          expect(interceptor.request).toHaveBeenCalled();
           done();
         });
     });
 
     it('should intercept response message', (done) => {
       class ResponseInterceptor {
-        constructor() {
-          this.called = false;
-        }
-
         response(message) {
-          this.called = true;
           return message;
         }
       }
 
       var interceptor = new ResponseInterceptor();
+      spyOn(interceptor, 'response').and.callThrough();
 
       var client = new HttpClient()
         .configure(x => {
@@ -684,7 +675,7 @@ describe('http client', () => {
       client.get('some/cool/path')
         .then((response) => {
           expect(response.isSuccess).toBe(true);
-          expect(interceptor.called).toBe(true);
+          expect(interceptor.response).toHaveBeenCalled();
           done();
         });
     });
@@ -697,13 +688,7 @@ describe('http client', () => {
       }
 
       class RequestErrorInterceptor {
-
-        constructor() {
-          this.called = false;
-        }
-
         requestError(error) {
-          this.called = true;
           // Re-throw
           throw error;
         }
@@ -711,6 +696,7 @@ describe('http client', () => {
       }
 
       var interceptor = new RequestErrorInterceptor();
+      spyOn(interceptor, 'requestError').and.callThrough();
 
       var client = new HttpClient()
         .configure(x => {
@@ -722,7 +708,7 @@ describe('http client', () => {
       client.get('some/cool/path')
         .catch((error) => {
           expect(error.message).toBe('error');
-          expect(interceptor.called).toBe(true);
+          expect(interceptor.requestError).toHaveBeenCalled();
           done();
         });
     });
@@ -733,20 +719,13 @@ describe('http client', () => {
         .andReturn({ status: 500 });
 
       class ResponseErrorInterceptor {
-
-        constructor() {
-          this.called = false;
-        }
-
         responseError(response) {
-          this.called = true;
-          // Re-throw
           throw response;
         }
-
       }
 
       var interceptor = new ResponseErrorInterceptor();
+      spyOn(interceptor, 'responseError').and.callThrough();
 
       var client = new HttpClient()
         .configure(x => {
@@ -757,7 +736,7 @@ describe('http client', () => {
       client.get('some/cool/path')
         .catch((response) => {
           expect(response.isSuccess).toBe(false);
-          expect(interceptor.called).toBe(true);
+          expect(interceptor.responseError).toHaveBeenCalled();
           done();
         });
     });
@@ -810,13 +789,7 @@ describe('http client', () => {
 
     it('should be applied after all transformers', (done) => {
       class RequestInterceptor {
-        constructor() {
-          this.called = false;
-        }
-
         request(message) {
-          this.called = true;
-
           var request = jasmine.Ajax.requests.mostRecent();
 
           expect(message.method).toBe('GET'); // asGet() transformer
@@ -827,6 +800,7 @@ describe('http client', () => {
       }
 
       var interceptor = new RequestInterceptor();
+      spyOn(interceptor, 'request').and.callThrough();
 
       var client = new HttpClient()
         .configure(x => {
@@ -839,7 +813,7 @@ describe('http client', () => {
         .withTimeout(300)
         .send()
         .then((response) => {
-          expect(interceptor.called).toBe(true);
+          expect(interceptor.request).toHaveBeenCalled();
           done();
         });
     });
