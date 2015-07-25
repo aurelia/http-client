@@ -1,5 +1,6 @@
 import {RequestMessageProcessor} from '../src/request-message-processor';
 import {HttpResponseMessage} from '../src/http-response-message';
+import {RequestMessage} from '../src/request-message';
 
 describe("Request message processor", () => {
   it("constructor() correctly setup the xhrType and the transformers", () => {
@@ -36,15 +37,9 @@ describe("Request message processor", () => {
     beforeEach(() => {
       transformers = [];
       reqProcessor = new RequestMessageProcessor(MockXhrType, transformers);
-      message = {
-        method: 'get',
-        params: [],
-        baseUrl: '',
-        url: 'some/url',
-        content: {},
-        responseType: "test",
-        reviver: (obj) => obj
-      };
+      message = new RequestMessage('get', 'some', {});
+      message.baseUrl = '';
+      message.responseType = "test";
       client = {};
     });
 
@@ -63,15 +58,7 @@ describe("Request message processor", () => {
         expect(sendSpy).toHaveBeenCalledWith(message.content);
       });
     });
-
-    it("will combine the message baseUrl and message url and set it to the fullUrl", () => {
-      message.baseUrl = "/the/base";
-      message.url = "and/the/path";
-
-      reqProcessor.process(client, message);
-      expect(message.fullUrl).toBe("/the/base/and/the/path");
-    });
-
+    
     it("should run through all the transformers", () => {
       let transformSpy = jasmine.createSpy("transformSpy");
       reqProcessor.transformers.push(transformSpy);

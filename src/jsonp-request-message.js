@@ -1,16 +1,13 @@
-import {Headers} from './headers';
+import {RequestMessage} from './request-message';
 import {RequestMessageProcessor} from './request-message-processor';
 import {
   timeoutTransformer,
   callbackParameterNameTransformer
 } from './transformers';
 
-export class JSONPRequestMessage {
+export class JSONPRequestMessage extends RequestMessage {
   constructor(url, callbackParameterName){
-    this.method = 'JSONP';
-    this.url = url;
-    this.content = undefined;
-    this.headers = new Headers();
+    super('JSONP', url);
     this.responseType = 'jsonp';
     this.callbackParameterName = callbackParameterName;
   }

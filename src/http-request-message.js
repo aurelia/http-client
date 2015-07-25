@@ -1,4 +1,4 @@
-import {Headers} from './headers';
+import {RequestMessage} from './request-message';
 import {RequestMessageProcessor} from './request-message-processor';
 import {
   timeoutTransformer,
@@ -9,12 +9,9 @@ import {
   contentTransformer
 } from './transformers';
 
-export class HttpRequestMessage {
+export class HttpRequestMessage extends RequestMessage {
   constructor(method, url, content, headers){
-    this.method = method;
-    this.url = url;
-    this.content = content;
-    this.headers = headers || new Headers();
+    super(method, url, content, headers);
     this.responseType = 'json'; //text, arraybuffer, blob, document
   }
 }

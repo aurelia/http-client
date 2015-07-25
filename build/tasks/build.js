@@ -20,6 +20,7 @@ gulp.task('build-index', function(){
     'jsonp-request-message.js',
     'http-request-message.js',
     'request-builder.js',
+    'request-message.js',
     'http-client.js'
     ].map(function(file){
       return paths.root + file;
