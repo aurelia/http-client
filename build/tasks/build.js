@@ -16,7 +16,7 @@ gulp.task('build-index', function(){
     'headers.js',
     'http-response-message.js',
     'request-message-processor.js',
-    'transformers.js',
+    'xhr-transformers.js',
     'jsonp-request-message.js',
     'http-request-message.js',
     'request-builder.js',

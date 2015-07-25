@@ -3,7 +3,7 @@ import {RequestMessageProcessor} from './request-message-processor';
 import {
   timeoutTransformer,
   callbackParameterNameTransformer
-} from './transformers';
+} from './xhr-transformers';
 
 export class JSONPRequestMessage extends RequestMessage {
   constructor(url, callbackParameterName){

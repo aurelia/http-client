@@ -3,9 +3,9 @@ import {HttpResponseMessage} from './http-response-message';
 import {join, buildQueryString} from 'aurelia-path';
 
 export class RequestMessageProcessor {
-  constructor(xhrType, transformers){
+  constructor(xhrType, xhrTransformers){
     this.XHRType = xhrType;
-    this.transformers = transformers;
+    this.xhrTransformers = xhrTransformers;
     this.isAborted = false;
   }
 
@@ -21,13 +21,13 @@ export class RequestMessageProcessor {
   process(client, message) {
     var promise = new Promise((resolve, reject) => {
       var xhr = this.xhr = new this.XHRType(),
-        transformers = this.transformers,
+        xhrTransformers = this.xhrTransformers,
         i, ii;
 
       xhr.open(message.method, message.buildFullUrl(), true);
 
-      for (i = 0, ii = transformers.length; i < ii; ++i) {
-        transformers[i](client, this, message, xhr);
+      for (i = 0, ii = xhrTransformers.length; i < ii; ++i) {
+        xhrTransformers[i](client, this, message, xhr);
       }
 
       xhr.onload = (e) => {

@@ -3,13 +3,13 @@ import {HttpResponseMessage} from '../src/http-response-message';
 import {RequestMessage} from '../src/request-message';
 
 describe("Request message processor", () => {
-  it("constructor() correctly setup the xhrType and the transformers", () => {
+  it("constructor() correctly setup the xhrType and the xhrTransformers", () => {
     var xhrType = {};
-    var transformers = {};
-    var processor = new RequestMessageProcessor(xhrType, transformers);
+    var xhrTransformers = {};
+    var processor = new RequestMessageProcessor(xhrType, xhrTransformers);
 
     expect(processor.XHRType).toBe(xhrType);
-    expect(processor.transformers).toBe(transformers);
+    expect(processor.xhrTransformers).toBe(xhrTransformers);
   });
 
   it("abort() tell the request to abort", () => {
@@ -25,7 +25,7 @@ describe("Request message processor", () => {
   });
 
   describe("process()", () => {
-    let openSpy, sendSpy, transformers, reqProcessor, message, client;
+    let openSpy, sendSpy, xhrTransformers, reqProcessor, message, client;
 
     class MockXhrType {
       constructor() {
@@ -35,8 +35,8 @@ describe("Request message processor", () => {
     }
 
     beforeEach(() => {
-      transformers = [];
-      reqProcessor = new RequestMessageProcessor(MockXhrType, transformers);
+      xhrTransformers = [];
+      reqProcessor = new RequestMessageProcessor(MockXhrType, xhrTransformers);
       message = new RequestMessage('get', 'some', {});
       message.baseUrl = '';
       message.responseType = "test";
@@ -58,11 +58,11 @@ describe("Request message processor", () => {
         expect(sendSpy).toHaveBeenCalledWith(message.content);
       });
     });
-    
-    it("should run through all the transformers", () => {
+
+    it("should run through all the xhr transformers", () => {
       let transformSpy = jasmine.createSpy("transformSpy");
-      reqProcessor.transformers.push(transformSpy);
-      reqProcessor.transformers.push(transformSpy);
+      reqProcessor.xhrTransformers.push(transformSpy);
+      reqProcessor.xhrTransformers.push(transformSpy);
       reqProcessor.process(client, message);
 
       expect(transformSpy).toHaveBeenCalledWith(client, reqProcessor, message, reqProcessor.xhr);

@@ -7,7 +7,7 @@ import {
   responseTypeTransformer,
   headerTransformer,
   contentTransformer
-} from './transformers';
+} from './xhr-transformers';
 
 export class HttpRequestMessage extends RequestMessage {
   constructor(method, url, content, headers){

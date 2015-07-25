@@ -8,7 +8,7 @@ import {
   responseTypeTransformer,
   headerTransformer,
   contentTransformer
-  } from '../src/transformers';
+  } from '../src/xhr-transformers';
 
 describe("http-request-message", () => {
 
@@ -30,17 +30,17 @@ describe("http-request-message", () => {
   });
 
   describe("createHttpRequestMessageProcessor",() => {
-    it("should create a RequestMessageProcessor with an XMLHttpRequest and the correct transformers", () => {
+    it("should create a RequestMessageProcessor with an XMLHttpRequest and the correct xhrTransformers", () => {
       let httpProcessor = createHttpRequestMessageProcessor();
 
       expect(httpProcessor).toEqual(jasmine.any(RequestMessageProcessor));
       expect(httpProcessor.XHRType).toBe(XMLHttpRequest);
-      expect(httpProcessor.transformers).toContain(timeoutTransformer);
-      expect(httpProcessor.transformers).toContain(credentialsTransformer);
-      expect(httpProcessor.transformers).toContain(progressTransformer);
-      expect(httpProcessor.transformers).toContain(responseTypeTransformer);
-      expect(httpProcessor.transformers).toContain(headerTransformer);
-      expect(httpProcessor.transformers).toContain(contentTransformer);
+      expect(httpProcessor.xhrTransformers).toContain(timeoutTransformer);
+      expect(httpProcessor.xhrTransformers).toContain(credentialsTransformer);
+      expect(httpProcessor.xhrTransformers).toContain(progressTransformer);
+      expect(httpProcessor.xhrTransformers).toContain(responseTypeTransformer);
+      expect(httpProcessor.xhrTransformers).toContain(headerTransformer);
+      expect(httpProcessor.xhrTransformers).toContain(contentTransformer);
     });
   });
 
