@@ -32,13 +32,20 @@ describe("Request message processor", () => {
         this.open = openSpy = jasmine.createSpy("open");
         this.send = sendSpy = jasmine.createSpy("send");
       }
+
+      fakeResponse(status = 200, statusText, response) {
+        this.status = status;
+        this.statusText = statusText;
+        this.response = response;
+        this.onload();
+      }
     }
+
 
     beforeEach(() => {
       xhrTransformers = [];
       reqProcessor = new RequestMessageProcessor(MockXhrType, xhrTransformers);
       message = new RequestMessage('get', 'some', {});
-      message.baseUrl = '';
       message.responseType = "test";
       client = {};
     });
@@ -48,27 +55,35 @@ describe("Request message processor", () => {
       expect(reqProcessor.xhr).toEqual(jasmine.any(MockXhrType));
     });
 
-    it("should call xhr.open with the method, full url and ajax set to true", () => {
-      reqProcessor.process(client, message);
-      expect(openSpy).toHaveBeenCalledWith(message.method, message.url, true);
+    // promise only resolves 
+    it("should call xhr.open with the method, full url and ajax set to true", (done) => {
+      reqProcessor.process(client, message).then(() => {
+        expect(openSpy).toHaveBeenCalledWith(message.method, message.url, true);
+        done();
+      });
+      reqProcessor.xhr.fakeResponse();
     });
 
-    it("should call xhr.send with the message content", () => {
+    it("should call xhr.send with the message content", (done) => {
       reqProcessor.process(client, message).then(() => {
         expect(sendSpy).toHaveBeenCalledWith(message.content);
+        done();
       });
+      reqProcessor.xhr.fakeResponse();
     });
 
-    it("should run through all the xhr transformers", () => {
+    it("should run through all the xhr transformers", (done) => {
       let transformSpy = jasmine.createSpy("transformSpy");
       reqProcessor.xhrTransformers.push(transformSpy);
       reqProcessor.xhrTransformers.push(transformSpy);
-      reqProcessor.process(client, message);
-
-      expect(transformSpy).toHaveBeenCalledWith(client, reqProcessor, message, reqProcessor.xhr);
-      expect(transformSpy.calls.count()).toBe(2);
+      reqProcessor.process(client, message).then(() => {
+        expect(transformSpy).toHaveBeenCalledWith(client, reqProcessor, message,  reqProcessor.xhr);
+        expect(transformSpy.calls.count()).toBe(2);
+        done();
+      });
+      reqProcessor.xhr.fakeResponse();
     });
-
+    
     //The next couple of functions are breaking the idea of a unit test and treading
     //into integration tests but spying on the constructor of HttpResponseMessage isn't possible
     it("will resolve if the onload response is successful", (done) => {
@@ -87,11 +102,7 @@ describe("Request message processor", () => {
         .catch(() => expect(false).toBeTruthy("Should have failed"))
         .then(done);
 
-      let xhr = reqProcessor.xhr;
-      xhr.status = 200;
-      xhr.statusText = "status test";
-      xhr.response = responseObj;
-      xhr.onload();
+      reqProcessor.xhr.fakeResponse(200, "status test", responseObj)
     });
 
     it("will reject if the onload response has failed", (done) => {
@@ -110,11 +121,7 @@ describe("Request message processor", () => {
         })
         .then(done);
 
-      let xhr = reqProcessor.xhr;
-      xhr.status = 401;
-      xhr.statusText = "status test";
-      xhr.response = responseObj;
-      xhr.onload();
+      reqProcessor.xhr.fakeResponse(401, "status test", responseObj);
     });
 
     it("will reject if the ontimeout was called", (done) => {
@@ -164,6 +171,26 @@ describe("Request message processor", () => {
       let xhr = reqProcessor.xhr;
       xhr.status = 200;
       xhr.onabort(errorResponse);
+    });
+
+    it('applies xhr transformers after calling request interceptors', (done) => {
+      class RequestInterceptor {
+        request(message) {
+          return message;
+        }
+      }
+
+      var interceptor = new RequestInterceptor();
+      spyOn(interceptor, 'request').and.callThrough();
+
+      function mockTransformer() {
+        expect(interceptor.request).toHaveBeenCalled();
+      }
+
+      message.interceptors = [interceptor]
+      reqProcessor.xhrTransformers.push(mockTransformer);
+      reqProcessor.process(client, message).then((response) => { done() } );
+      reqProcessor.xhr.fakeResponse();
     });
   });
 });

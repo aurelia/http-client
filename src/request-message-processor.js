@@ -2,6 +2,13 @@ import core from 'core-js';
 import {HttpResponseMessage} from './http-response-message';
 import {join, buildQueryString} from 'aurelia-path';
 
+function applyXhrTransformers(xhrTransformers, client, processor, message, xhr) {
+  var i, ii;
+  for (i = 0, ii = xhrTransformers.length; i < ii; ++i) {
+      xhrTransformers[i](client, processor, message, xhr);
+  }
+}
+
 export class RequestMessageProcessor {
   constructor(xhrType, xhrTransformers){
     this.XHRType = xhrType;
@@ -20,15 +27,7 @@ export class RequestMessageProcessor {
 
   process(client, message) {
     var promise = new Promise((resolve, reject) => {
-      var xhr = this.xhr = new this.XHRType(),
-        xhrTransformers = this.xhrTransformers,
-        i, ii;
-
-      xhr.open(message.method, message.buildFullUrl(), true);
-
-      for (i = 0, ii = xhrTransformers.length; i < ii; ++i) {
-        xhrTransformers[i](client, this, message, xhr);
-      }
+      var xhr = this.xhr = new this.XHRType();
 
       xhr.onload = (e) => {
         var response = new HttpResponseMessage(message, xhr, message.responseType, message.reviver);
@@ -72,6 +71,8 @@ export class RequestMessageProcessor {
             // before XHR is actually sent we abort() instead send()
             this.xhr.abort();
           } else {
+            this.xhr.open(message.method, message.buildFullUrl(), true);
+            applyXhrTransformers(this.xhrTransformers, client, this, message, this.xhr);
             this.xhr.send(message.content);
           }
 

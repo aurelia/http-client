@@ -535,20 +535,17 @@ describe('http client', () => {
     });
 
     it('should reject when aborted', (done) => {
-      // TODO: Enable and fix this test when
-      // https://github.com/jasmine/jasmine-ajax/issues/111
-      // will be fixed
       var client = new HttpClient()
-        .configure(x => x.withBaseUrl(baseUrl));
+        .configure(x => x.withBaseUrl(baseUrl)); 
 
       var promise = client.send(new HttpRequestMessage('GET', 'some/cool/path'));
-      promise.catch((response, reason) => {
+      promise.catch((response) => {
         expect(response instanceof HttpResponseMessage).toBe(true);
         expect(response.responseType).toBe('abort');
         done();
       });
-
       promise.abort();
+
     });
 
     it('can parse request headers', (done) => {
@@ -787,20 +784,45 @@ describe('http client', () => {
         });
     });
 
-    it('should be applied after all transformers', (done) => {
+    it('should be possible to modify a header in a request interceptor', (done) => {
       class RequestInterceptor {
         request(message) {
+          message.headers.add('aheader', 'anothervalue');
+          return message;
+        }
+      }
+
+      var requestInterceptor = new RequestInterceptor();
+      var client = new HttpClient()
+        .configure(x => {
+          x.withInterceptor(requestInterceptor);
+          x.withBaseUrl(baseUrl);
+        });
+
+      client.createRequest('some/cool/path')
+        .asGet()
+        .send()
+        .then((response) => {
+          var request = jasmine.Ajax.requests.mostRecent();
+          expect(request.requestHeaders['aheader']).toBe('anothervalue')
+          done();
+        });
+    });
+
+    it('should apply xhr transformers before response interceptors are called', (done) => {
+      class ResponseInterceptor {
+        response(message) {
           var request = jasmine.Ajax.requests.mostRecent();
 
-          expect(message.method).toBe('GET'); // asGet() transformer
-          expect(message.baseUrl).toBe(baseUrl); // withBaseUrl() transformer
+          expect(message.requestMessage.method).toBe('GET'); // asGet() transformer
+          expect(message.requestMessage.baseUrl).toBe(baseUrl); // withBaseUrl() transformer
           expect(request.timeout).toBe(300); // timeoutTransformer
           return message;
         }
       }
 
-      var interceptor = new RequestInterceptor();
-      spyOn(interceptor, 'request').and.callThrough();
+      var interceptor = new ResponseInterceptor();
+      spyOn(interceptor, 'response').and.callThrough();
 
       var client = new HttpClient()
         .configure(x => {
@@ -813,7 +835,7 @@ describe('http client', () => {
         .withTimeout(300)
         .send()
         .then((response) => {
-          expect(interceptor.request).toHaveBeenCalled();
+          expect(interceptor.response).toHaveBeenCalled();
           done();
         });
     });
