@@ -143,22 +143,17 @@ export var mimeTypes = {
   "text/plain": "txt"
 };
 
-function buildFullUrl(message){
-  var url = join(message.baseUrl, message.url),
-      qs;
-
-  if(message.params){
-    qs = buildQueryString(message.params);
-    url = qs ? `${url}?${qs}` : url;
+function applyXhrTransformers(xhrTransformers, client, processor, message, xhr) {
+  var i, ii;
+  for (i = 0, ii = xhrTransformers.length; i < ii; ++i) {
+      xhrTransformers[i](client, processor, message, xhr);
   }
-
-  message.fullUrl = url;
 }
 
 export class RequestMessageProcessor {
-  constructor(xhrType, transformers){
+  constructor(xhrType, xhrTransformers){
     this.XHRType = xhrType;
-    this.transformers = transformers;
+    this.xhrTransformers = xhrTransformers;
     this.isAborted = false;
   }
 
@@ -173,16 +168,7 @@ export class RequestMessageProcessor {
 
   process(client, message) {
     var promise = new Promise((resolve, reject) => {
-      var xhr = this.xhr = new this.XHRType(),
-        transformers = this.transformers,
-        i, ii;
-
-      buildFullUrl(message);
-      xhr.open(message.method, message.fullUrl, true);
-
-      for (i = 0, ii = transformers.length; i < ii; ++i) {
-        transformers[i](client, this, message, xhr);
-      }
+      var xhr = this.xhr = new this.XHRType();
 
       xhr.onload = (e) => {
         var response = new HttpResponseMessage(message, xhr, message.responseType, message.reviver);
@@ -226,6 +212,8 @@ export class RequestMessageProcessor {
             // before XHR is actually sent we abort() instead send()
             this.xhr.abort();
           } else {
+            this.xhr.open(message.method, message.buildFullUrl(), true);
+            applyXhrTransformers(this.xhrTransformers, client, this, message, this.xhr);
             this.xhr.send(message.content);
           }
 
@@ -333,12 +321,9 @@ export function contentTransformer(client, processor, message, xhr){
   }
 }
 
-export class JSONPRequestMessage {
+export class JSONPRequestMessage extends RequestMessage {
   constructor(url, callbackParameterName){
-    this.method = 'JSONP';
-    this.url = url;
-    this.content = undefined;
-    this.headers = new Headers();
+    super('JSONP', url);
     this.responseType = 'jsonp';
     this.callbackParameterName = callbackParameterName;
   }
@@ -408,12 +393,9 @@ export function createJSONPRequestMessageProcessor(){
   ]);
 }
 
-export class HttpRequestMessage {
+export class HttpRequestMessage extends RequestMessage {
   constructor(method, url, content, headers){
-    this.method = method;
-    this.url = url;
-    this.content = content;
-    this.headers = headers || new Headers();
+    super(method, url, content, headers);
     this.responseType = 'json'; //text, arraybuffer, blob, document
   }
 }
@@ -599,6 +581,27 @@ RequestBuilder.addHelper('withInterceptor', function(interceptor) {
     message.interceptors.unshift(interceptor);
   };
 });
+
+export class RequestMessage {
+  constructor(method, url, content, headers) {
+    this.method = method;
+    this.url = url;
+    this.content = content;
+    this.headers = headers || new Headers();
+    this.baseUrl = '';
+  }
+
+  buildFullUrl() {
+    var url = join(this.baseUrl, this.url);
+
+    if(this.params){
+      var qs = buildQueryString(this.params);
+      url = qs ? `${url}?${qs}` : url;
+    }
+
+    return url;
+  }
+}
 
 function trackRequestStart(client, processor){
   client.pendingRequests.push(processor);

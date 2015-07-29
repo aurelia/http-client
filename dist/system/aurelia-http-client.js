@@ -1,7 +1,7 @@
 System.register(['core-js', 'aurelia-path'], function (_export) {
   'use strict';
 
-  var core, join, buildQueryString, Headers, HttpResponseMessage, mimeTypes, RequestMessageProcessor, JSONPRequestMessage, JSONPXHR, HttpRequestMessage, RequestBuilder, HttpClient;
+  var core, join, buildQueryString, Headers, HttpResponseMessage, mimeTypes, RequestMessageProcessor, JSONPRequestMessage, JSONPXHR, HttpRequestMessage, RequestBuilder, RequestMessage, HttpClient;
 
   var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
@@ -23,18 +23,15 @@ System.register(['core-js', 'aurelia-path'], function (_export) {
 
   _export('createHttpRequestMessageProcessor', createHttpRequestMessageProcessor);
 
+  function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-  function buildFullUrl(message) {
-    var url = join(message.baseUrl, message.url),
-        qs;
-
-    if (message.params) {
-      qs = buildQueryString(message.params);
-      url = qs ? url + '?' + qs : url;
+  function applyXhrTransformers(xhrTransformers, client, processor, message, xhr) {
+    var i, ii;
+    for (i = 0, ii = xhrTransformers.length; i < ii; ++i) {
+      xhrTransformers[i](client, processor, message, xhr);
     }
-
-    message.fullUrl = url;
   }
 
   function timeoutTransformer(client, processor, message, xhr) {
@@ -291,11 +288,11 @@ System.register(['core-js', 'aurelia-path'], function (_export) {
       _export('mimeTypes', mimeTypes);
 
       RequestMessageProcessor = (function () {
-        function RequestMessageProcessor(xhrType, transformers) {
+        function RequestMessageProcessor(xhrType, xhrTransformers) {
           _classCallCheck(this, RequestMessageProcessor);
 
           this.XHRType = xhrType;
-          this.transformers = transformers;
+          this.xhrTransformers = xhrTransformers;
           this.isAborted = false;
         }
 
@@ -310,17 +307,7 @@ System.register(['core-js', 'aurelia-path'], function (_export) {
           var _this = this;
 
           var promise = new Promise(function (resolve, reject) {
-            var xhr = _this.xhr = new _this.XHRType(),
-                transformers = _this.transformers,
-                i,
-                ii;
-
-            buildFullUrl(message);
-            xhr.open(message.method, message.fullUrl, true);
-
-            for (i = 0, ii = transformers.length; i < ii; ++i) {
-              transformers[i](client, _this, message, xhr);
-            }
+            var xhr = _this.xhr = new _this.XHRType();
 
             xhr.onload = function (e) {
               var response = new HttpResponseMessage(message, xhr, message.responseType, message.reviver);
@@ -361,6 +348,8 @@ System.register(['core-js', 'aurelia-path'], function (_export) {
               if (_this.isAborted) {
                 _this.xhr.abort();
               } else {
+                _this.xhr.open(message.method, message.buildFullUrl(), true);
+                applyXhrTransformers(_this.xhrTransformers, client, _this, message, _this.xhr);
                 _this.xhr.send(message.content);
               }
 
@@ -395,16 +384,19 @@ System.register(['core-js', 'aurelia-path'], function (_export) {
 
       _export('RequestMessageProcessor', RequestMessageProcessor);
 
-      JSONPRequestMessage = function JSONPRequestMessage(url, callbackParameterName) {
-        _classCallCheck(this, JSONPRequestMessage);
+      JSONPRequestMessage = (function (_RequestMessage) {
+        function JSONPRequestMessage(url, callbackParameterName) {
+          _classCallCheck(this, JSONPRequestMessage);
 
-        this.method = 'JSONP';
-        this.url = url;
-        this.content = undefined;
-        this.headers = new Headers();
-        this.responseType = 'jsonp';
-        this.callbackParameterName = callbackParameterName;
-      };
+          _RequestMessage.call(this, 'JSONP', url);
+          this.responseType = 'jsonp';
+          this.callbackParameterName = callbackParameterName;
+        }
+
+        _inherits(JSONPRequestMessage, _RequestMessage);
+
+        return JSONPRequestMessage;
+      })(RequestMessage);
 
       _export('JSONPRequestMessage', JSONPRequestMessage);
 
@@ -473,15 +465,18 @@ System.register(['core-js', 'aurelia-path'], function (_export) {
         return JSONPXHR;
       })();
 
-      HttpRequestMessage = function HttpRequestMessage(method, url, content, headers) {
-        _classCallCheck(this, HttpRequestMessage);
+      HttpRequestMessage = (function (_RequestMessage2) {
+        function HttpRequestMessage(method, url, content, headers) {
+          _classCallCheck(this, HttpRequestMessage);
 
-        this.method = method;
-        this.url = url;
-        this.content = content;
-        this.headers = headers || new Headers();
-        this.responseType = 'json';
-      };
+          _RequestMessage2.call(this, method, url, content, headers);
+          this.responseType = 'json';
+        }
+
+        _inherits(HttpRequestMessage, _RequestMessage2);
+
+        return HttpRequestMessage;
+      })(RequestMessage);
 
       _export('HttpRequestMessage', HttpRequestMessage);
 
@@ -638,6 +633,34 @@ System.register(['core-js', 'aurelia-path'], function (_export) {
           message.interceptors.unshift(interceptor);
         };
       });
+
+      RequestMessage = (function () {
+        function RequestMessage(method, url, content, headers) {
+          _classCallCheck(this, RequestMessage);
+
+          this.method = method;
+          this.url = url;
+          this.content = content;
+          this.headers = headers || new Headers();
+          this.baseUrl = '';
+        }
+
+        RequestMessage.prototype.buildFullUrl = function buildFullUrl() {
+          var url = join(this.baseUrl, this.url);
+
+          if (this.params) {
+            var qs = buildQueryString(this.params);
+            url = qs ? url + '?' + qs : url;
+          }
+
+          return url;
+        };
+
+        return RequestMessage;
+      })();
+
+      _export('RequestMessage', RequestMessage);
+
       HttpClient = (function () {
         function HttpClient() {
           _classCallCheck(this, HttpClient);
