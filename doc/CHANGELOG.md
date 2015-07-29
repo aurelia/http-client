@@ -1,3 +1,11 @@
+### 0.10.1 (2015-07-29)
+
+
+#### Bug Fixes
+
+* **processor:** modify processor to apply xhr transformers after running request interceptors ([8b515859](http://github.com/aurelia/http-client/commit/8b51585984190b8d9e625469a87c814b8b80dd49), closes [#60](http://github.com/aurelia/http-client/issues/60))
+
+
 ## 0.10.0 (2015-07-01)
 
 
