@@ -16,13 +16,13 @@ gulp.task('build-index', function(){
   var importsToAdd = [];
   var files = [
     'headers.js',
+    'request-message.js',
     'http-response-message.js',
     'request-message-processor.js',
     'xhr-transformers.js',
     'jsonp-request-message.js',
     'http-request-message.js',
     'request-builder.js',
-    'request-message.js',
     'http-client.js'
     ].map(function(file){
       return paths.root + file;
