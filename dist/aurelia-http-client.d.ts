@@ -16,6 +16,10 @@ declare module 'aurelia-http-client' {
        */
     static parse(headerStr: any): any;
   }
+  export class RequestMessage {
+    constructor(method: any, url: any, content: any, headers: any);
+    buildFullUrl(): any;
+  }
   
   /*jshint -W093 */
   export class HttpResponseMessage {
@@ -82,10 +86,6 @@ declare module 'aurelia-http-client' {
        * @return {Promise} A cancellable promise object.
        */
     send(): any;
-  }
-  export class RequestMessage {
-    constructor(method: any, url: any, content: any, headers: any);
-    buildFullUrl(): any;
   }
   
   /**

@@ -1,7 +1,7 @@
 System.register(['core-js', 'aurelia-path'], function (_export) {
   'use strict';
 
-  var core, join, buildQueryString, Headers, HttpResponseMessage, mimeTypes, RequestMessageProcessor, JSONPRequestMessage, JSONPXHR, HttpRequestMessage, RequestBuilder, RequestMessage, HttpClient;
+  var core, join, buildQueryString, Headers, RequestMessage, HttpResponseMessage, mimeTypes, RequestMessageProcessor, JSONPRequestMessage, JSONPXHR, HttpRequestMessage, RequestBuilder, HttpClient;
 
   var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
@@ -194,6 +194,33 @@ System.register(['core-js', 'aurelia-path'], function (_export) {
       })();
 
       _export('Headers', Headers);
+
+      RequestMessage = (function () {
+        function RequestMessage(method, url, content, headers) {
+          _classCallCheck(this, RequestMessage);
+
+          this.method = method;
+          this.url = url;
+          this.content = content;
+          this.headers = headers || new Headers();
+          this.baseUrl = '';
+        }
+
+        RequestMessage.prototype.buildFullUrl = function buildFullUrl() {
+          var url = join(this.baseUrl, this.url);
+
+          if (this.params) {
+            var qs = buildQueryString(this.params);
+            url = qs ? url + '?' + qs : url;
+          }
+
+          return url;
+        };
+
+        return RequestMessage;
+      })();
+
+      _export('RequestMessage', RequestMessage);
 
       HttpResponseMessage = (function () {
         function HttpResponseMessage(requestMessage, xhr, responseType, reviver) {
@@ -633,34 +660,6 @@ System.register(['core-js', 'aurelia-path'], function (_export) {
           message.interceptors.unshift(interceptor);
         };
       });
-
-      RequestMessage = (function () {
-        function RequestMessage(method, url, content, headers) {
-          _classCallCheck(this, RequestMessage);
-
-          this.method = method;
-          this.url = url;
-          this.content = content;
-          this.headers = headers || new Headers();
-          this.baseUrl = '';
-        }
-
-        RequestMessage.prototype.buildFullUrl = function buildFullUrl() {
-          var url = join(this.baseUrl, this.url);
-
-          if (this.params) {
-            var qs = buildQueryString(this.params);
-            url = qs ? url + '?' + qs : url;
-          }
-
-          return url;
-        };
-
-        return RequestMessage;
-      })();
-
-      _export('RequestMessage', RequestMessage);
-
       HttpClient = (function () {
         function HttpClient() {
           _classCallCheck(this, HttpClient);

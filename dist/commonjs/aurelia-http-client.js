@@ -82,6 +82,33 @@ var Headers = (function () {
 
 exports.Headers = Headers;
 
+var RequestMessage = (function () {
+  function RequestMessage(method, url, content, headers) {
+    _classCallCheck(this, RequestMessage);
+
+    this.method = method;
+    this.url = url;
+    this.content = content;
+    this.headers = headers || new Headers();
+    this.baseUrl = '';
+  }
+
+  RequestMessage.prototype.buildFullUrl = function buildFullUrl() {
+    var url = _aureliaPath.join(this.baseUrl, this.url);
+
+    if (this.params) {
+      var qs = _aureliaPath.buildQueryString(this.params);
+      url = qs ? url + '?' + qs : url;
+    }
+
+    return url;
+  };
+
+  return RequestMessage;
+})();
+
+exports.RequestMessage = RequestMessage;
+
 var HttpResponseMessage = (function () {
   function HttpResponseMessage(requestMessage, xhr, responseType, reviver) {
     _classCallCheck(this, HttpResponseMessage);
@@ -603,33 +630,6 @@ RequestBuilder.addHelper('withInterceptor', function (interceptor) {
     message.interceptors.unshift(interceptor);
   };
 });
-
-var RequestMessage = (function () {
-  function RequestMessage(method, url, content, headers) {
-    _classCallCheck(this, RequestMessage);
-
-    this.method = method;
-    this.url = url;
-    this.content = content;
-    this.headers = headers || new Headers();
-    this.baseUrl = '';
-  }
-
-  RequestMessage.prototype.buildFullUrl = function buildFullUrl() {
-    var url = _aureliaPath.join(this.baseUrl, this.url);
-
-    if (this.params) {
-      var qs = _aureliaPath.buildQueryString(this.params);
-      url = qs ? url + '?' + qs : url;
-    }
-
-    return url;
-  };
-
-  return RequestMessage;
-})();
-
-exports.RequestMessage = RequestMessage;
 
 function trackRequestStart(client, processor) {
   client.pendingRequests.push(processor);

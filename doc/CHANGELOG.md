@@ -1,3 +1,11 @@
+### 0.10.2 (2015-07-29)
+
+
+#### Bug Fixes
+
+* **build:** correct order of files for concat ([5a6418de](http://github.com/aurelia/http-client/commit/5a6418de752733167dca716bb5aefac682286de4))
+
+
 ### 0.10.1 (2015-07-29)
 
 

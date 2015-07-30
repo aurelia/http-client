@@ -55,6 +55,27 @@ export class Headers {
   }
 }
 
+export class RequestMessage {
+  constructor(method, url, content, headers) {
+    this.method = method;
+    this.url = url;
+    this.content = content;
+    this.headers = headers || new Headers();
+    this.baseUrl = '';
+  }
+
+  buildFullUrl() {
+    var url = join(this.baseUrl, this.url);
+
+    if(this.params){
+      var qs = buildQueryString(this.params);
+      url = qs ? `${url}?${qs}` : url;
+    }
+
+    return url;
+  }
+}
+
 /*jshint -W093 */
 export class HttpResponseMessage {
   constructor(requestMessage, xhr, responseType, reviver){
@@ -581,27 +602,6 @@ RequestBuilder.addHelper('withInterceptor', function(interceptor) {
     message.interceptors.unshift(interceptor);
   };
 });
-
-export class RequestMessage {
-  constructor(method, url, content, headers) {
-    this.method = method;
-    this.url = url;
-    this.content = content;
-    this.headers = headers || new Headers();
-    this.baseUrl = '';
-  }
-
-  buildFullUrl() {
-    var url = join(this.baseUrl, this.url);
-
-    if(this.params){
-      var qs = buildQueryString(this.params);
-      url = qs ? `${url}?${qs}` : url;
-    }
-
-    return url;
-  }
-}
 
 function trackRequestStart(client, processor){
   client.pendingRequests.push(processor);
