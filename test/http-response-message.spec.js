@@ -116,63 +116,87 @@ describe('http response message', () => {
   });
   
   describe('content', () => {
-    it('will return _content if defined', () => {
-      let httpResponse = new HttpResponseMessage(null, mockXhr());
-      let _content = httpResponse._content = {};
-
-      expect(httpResponse.content).toBe(_content);
+    var xhr;
+    beforeEach(() => {
+      xhr = mockXhr({
+        status: 200,
+      });
     });
 
-    it('will return undefined if response is undefined', () => {
-      let httpResponse = new HttpResponseMessage(null, mockXhr());
-      expect(httpResponse.content).toBeUndefined();
+    it('return the xhr\'s response', () => {
+      xhr.response = {};
+      var responseMessage = new HttpResponseMessage(null, xhr);
+      expect(responseMessage.content).toBe(xhr.response);
     });
 
-    it('will return null if response is null', () => {
-      let httpResponse = new HttpResponseMessage(null, mockXhr({response: null, responseText:null}));
-      expect(httpResponse.content).toBeNull();
+    it('returns undefined when response is undefined', () => {
+      xhr.response = undefined;
+      xhr.responseText = undefined;
+      var responseMessage = new HttpResponseMessage(null, xhr);
+      expect(responseMessage.content).toBeUndefined();
     });
 
-    it('will JSON.parse if the response type is json', () => {
-      let response = {}, reviver = {}, content = {};
-      let parseSpy = spyOn(JSON, 'parse').and.returnValue(content);
-      let httpResponse = new HttpResponseMessage(null, {response: response}, 'json', reviver);
-
-      expect(httpResponse.content).toBe(content);
-      expect(parseSpy).toHaveBeenCalledWith(response, reviver);
+    it('returns null when response is null', () => {
+      xhr.response = null;
+      xhr.responseText = null;
+      var responseMessage = new HttpResponseMessage(null, xhr);
+      expect(responseMessage.content).toBeNull();
     });
 
-    it('will call the reviver if the response type is not json and the reviver is defined', () => {
-      let response = {};
-      let reviverSpy = jasmine.createSpy('reviver').and.returnValue(response);
-      let httpResponse = new HttpResponseMessage(null, {response: response}, 'notJson', reviverSpy);
+    describe('when the response type is json', () => {
+      it('calls JSON.parse with response and reviver', () => {
+        xhr.response = {};
+        var reviver = {}, content = {};
+        var parseSpy = spyOn(JSON, 'parse').and.returnValue(content);
+        var responseMessage = new HttpResponseMessage(null, xhr, 'json', reviver);
 
-      expect(httpResponse.content).toBe(response);
-      expect(reviverSpy).toHaveBeenCalledWith(response);
+        expect(responseMessage.content).toBe(content);
+        expect(parseSpy).toHaveBeenCalledWith(xhr.response, reviver);
+      });
     });
 
-    it('will return the response if the reviver is not set and the response type is not json', () => {
-      let response = {};
-      let httpResponse = new HttpResponseMessage(null, {response: response}, 'notJson');
+    describe('when the response type is not json', () => {
+      describe('and reviver is set', () => {
+        it('calls reviver and returns what it returns', () => {
+          xhr.response = {};
+          var reviverSpy = jasmine.createSpy('reviver').and.returnValue(xhr.response);
+          var responseMessage = new HttpResponseMessage(null, xhr, 'notJson', reviverSpy);
 
-      expect(httpResponse.content).toBe(response);
+          expect(responseMessage.content).toBe(xhr.response);
+          expect(reviverSpy).toHaveBeenCalledWith(xhr.response);
+        });
+      });
+
+      describe('and reviver is not set', () => {
+        it('returns xhrs\'s response', () => {
+          xhr.response = {};
+          var responseMessage = new HttpResponseMessage(null, xhr, 'notJson');
+
+          expect(responseMessage.content).toBe(xhr.response);
+        });
+      });
     });
 
-    it('will catch expections on content if the response was not successful', () => {
-      let reviverSpy = jasmine.createSpy('reviver').and.throwError();
-      let httpResponse = new HttpResponseMessage(null, {status : 404, response : {}}, 'notJson', reviverSpy);
+    describe('when an expection is caught', () => {    
+      it('is handled if the response is unsuccessful', () => {
+        xhr.status = 404;
+        xhr.response = {};
+        var reviverSpy = jasmine.createSpy('reviver').and.throwError();
+        var responseMessage = new HttpResponseMessage(null, xhr, 'notJson', reviverSpy);
 
-      expect(httpResponse.content).toBeNull();
-      expect(reviverSpy).toHaveBeenCalled();
-    });
+        expect(responseMessage.content).toBeNull();
+        expect(reviverSpy).toHaveBeenCalled();
+      });
 
-    it('will throw on content if the response was successful', () => {
-      let reviverSpy = jasmine.createSpy('reviver').and.throwError();
-      let httpResponse = new HttpResponseMessage(null, {status : 200, response : {}}, 'notJson', reviverSpy);
+      it('is re-thrown if the response is successful', () => {
+        xhr.response = {};
+        var reviverSpy = jasmine.createSpy('reviver').and.throwError();
+        var responseMessage = new HttpResponseMessage(null, xhr, 'notJson', reviverSpy);
 
-      expect(() => httpResponse.content).toThrow();
-      expect(reviverSpy).toHaveBeenCalled();
-    });
+        expect(() => responseMessage.content).toThrow();
+        expect(reviverSpy).toHaveBeenCalled();
+      });
+    })
   });
 });
 
@@ -200,8 +224,7 @@ describe('http response message', () => {
  */
 function runContentTypeExpectations(expectations){
   expectations.map((expectation)=>{
-    // use json as the default `responseType` in the request message
-    expectation.requestType = expectation.requestType || 'json';
+    expectation.requestType = expectation.responseType || 'json';
 
     // set a content-type in the response header
     var responseHeaders = expectation.contentType ? "Content-Type: " + expectation.contentType : "herpes";
@@ -209,7 +232,7 @@ function runContentTypeExpectations(expectations){
       getAllResponseHeaders: () => { return responseHeaders; }
     });
 
-    var responseMessage = new HttpResponseMessage(null, xhr, expectation.requestType);
+    var responseMessage = new HttpResponseMessage(null, xhr, expectation.responseType);
 
     if(mimeTypes[expectation.mimeType]) {
       expect(responseMessage.responseType).toBe(expectation.type);

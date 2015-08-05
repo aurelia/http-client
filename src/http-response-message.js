@@ -51,9 +51,9 @@ export class HttpResponseMessage {
     }catch(e){
       if(this.isSuccess){
         throw e;
+      } else {
+        return this._content = null;
       }
-
-      return this._content = null;
     }
   }
 }
