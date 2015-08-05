@@ -4,31 +4,29 @@ import {Headers} from './headers';
 export class HttpResponseMessage {
   constructor(requestMessage, xhr, responseType, reviver){
     this.requestMessage = requestMessage;
-    this.statusCode = xhr.status;
     this.response = xhr.response || xhr.responseText;
-    this.isSuccess = xhr.status >= 200 && xhr.status < 400;
+    this.statusCode = xhr.status;
     this.statusText = xhr.statusText;
     this.reviver = reviver;
-    this.mimeType = null;
+    
+    this.isSuccess = this.statusCode >= 200 && this.statusCode < 400;
 
-    if(xhr.getAllResponseHeaders){
-      try{
-        this.headers = Headers.parse(xhr.getAllResponseHeaders());
-      }catch(err){
-        //if this fails it means the xhr was a mock object so the `requestHeaders` property should be used
-        if(xhr.requestHeaders) this.headers = { headers:xhr.requestHeaders };
-      }
-    }else {
+    if(xhr.getAllResponseHeaders) {
+      this.headers = Headers.parse(xhr.getAllResponseHeaders());
+    } else {
+      // this is a hack designed to make mocking xhr objects easier
+      // it should be removed as soon as possible
       this.headers = new Headers();
     }
 
-    var contentType;
-    if(this.headers && this.headers.headers) contentType = this.headers.headers["Content-Type"];
+    var contentType = this.headers.get("Content-Type");
     if(contentType) {
-      this.mimeType = responseType = contentType.split(";")[0].trim();
-      if(mimeTypes.hasOwnProperty(this.mimeType)) responseType = mimeTypes[this.mimeType];
+      this.mimeType = contentType.split(";")[0].trim();
+      this.responseType = mimeTypes.hasOwnProperty(this.mimeType) ? mimeTypes[this.mimeType] : this.mimeType;
+    } else {
+      this.mimeType = null;
+      this.responseType = responseType;
     }
-    this.responseType = responseType;
   }
 
   get content(){
