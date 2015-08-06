@@ -1,4 +1,4 @@
-import core from 'core-js';
+import * as core from 'core-js';
 import {HttpResponseMessage} from './http-response-message';
 import {join, buildQueryString} from 'aurelia-path';
 
