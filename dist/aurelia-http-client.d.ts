@@ -22,10 +22,51 @@ declare module 'aurelia-http-client' {
   }
   
   /*jshint -W093 */
-  export class HttpResponseMessage {
-    constructor(requestMessage: any, xhr: any, responseType: any, reviver: any);
-    content(): any;
-  }
+    /**
+     * A class representing the response from HttpClient (wrapped in a Promise.)
+     *
+     * @class HttpResponseMessage
+     * @constructor
+    */
+    export class HttpResponseMessage {
+        constructor(requestMessage: any, xhr: any, responseType: any, reviver: any);
+        /**
+            * Returns the raw content sent from the server.
+            */
+        response: any;
+        /**
+            * The MIME Type of the Response from the Content-Type header.
+            */
+        responseType: String;
+        /**
+            * Formats the raw response content based on the responseType and returns it.
+            */
+        content: any;
+        /**
+            * Returns a Headers object with the parsed header data.
+            */
+        headers: Headers;
+        /**
+            * The server's response status code.
+            */
+        statusCode: Number;
+        /**
+            * The server's textual status message.
+            */
+        statusText: String;
+        /**
+            * Indicates whether or not the status code falls within the success range.
+            */
+        isSuccess: Boolean;
+        /**
+            * A function used to transform the raw response content.
+            */
+        reviver: Function;
+        /**
+            *A reference to the original request message.
+            */
+        requestMessage: any; 
+    }
   
   /**
    * MimeTypes mapped to responseTypes
