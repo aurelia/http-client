@@ -3,19 +3,19 @@ export class Headers {
     this.headers = headers;
   }
 
-  add(key, value){
+  add(key : string, value){
     this.headers[key] = value;
   }
 
-  get(key){
+  get(key : string){
     return this.headers[key];
   }
 
-  clear(){
+  clear() : void {
     this.headers = {};
   }
 
-  configureXHR(xhr){
+  configureXHR(xhr) : void {
     var headers = this.headers, key;
 
     for(key in headers){
@@ -29,7 +29,7 @@ export class Headers {
    * http://www.w3.org/TR/XMLHttpRequest/#the-getallresponseheaders-method
    * This method parses that string into a user-friendly key/value pair object.
    */
-  static parse(headerStr){
+  static parse(headerStr) : Headers{
     var headers = new Headers();
     if (!headerStr) {
       return headers;

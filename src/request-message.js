@@ -2,7 +2,7 @@ import {join, buildQueryString} from 'aurelia-path';
 import {Headers} from './headers';
 
 export class RequestMessage {
-  constructor(method, url, content, headers?: Headers) {
+  constructor(method : string, url : string, content, headers?: Headers) {
     this.method = method;
     this.url = url;
     this.content = content;
@@ -10,7 +10,7 @@ export class RequestMessage {
     this.baseUrl = '';
   }
 
-  buildFullUrl() {
+  buildFullUrl() : string {
     var url = join(this.baseUrl, this.url);
 
     if(this.params){
