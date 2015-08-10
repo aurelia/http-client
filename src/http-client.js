@@ -3,7 +3,7 @@ import {Headers} from './headers';
 import {RequestBuilder} from './request-builder';
 import {HttpRequestMessage,createHttpRequestMessageProcessor} from './http-request-message';
 import {JSONPRequestMessage,createJSONPRequestMessageProcessor} from './jsonp-request-message';
-import { RequestMessageProcessor } from './request-message-processor';
+import {RequestMessageProcessor} from './request-message-processor';
 
 function trackRequestStart(client : HttpClient, processor : RequestMessageProcessor){
   client.pendingRequests.push(processor);

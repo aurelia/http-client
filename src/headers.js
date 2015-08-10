@@ -3,7 +3,7 @@ export class Headers {
     this.headers = headers;
   }
 
-  add(key : string, value){
+  add(key : string, value : string){
     this.headers[key] = value;
   }
 
