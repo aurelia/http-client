@@ -16,7 +16,7 @@ export class HttpRequestMessage extends RequestMessage {
   }
 }
 
-export function createHttpRequestMessageProcessor() : RequestMessageProcessor{
+export function createHttpRequestMessageProcessor() : RequestMessageProcessor {
   return new RequestMessageProcessor(XMLHttpRequest, [
     timeoutTransformer,
     credentialsTransformer,

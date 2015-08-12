@@ -3,11 +3,11 @@ export class Headers {
     this.headers = headers;
   }
 
-  add(key : string, value : string){
+  add(key : string, value : string) : void {
     this.headers[key] = value;
   }
 
-  get(key : string) : string{
+  get(key : string) : string {
     return this.headers[key];
   }
 
@@ -29,7 +29,7 @@ export class Headers {
    * http://www.w3.org/TR/XMLHttpRequest/#the-getallresponseheaders-method
    * This method parses that string into a user-friendly key/value pair object.
    */
-  static parse(headerStr) : Headers{
+  static parse(headerStr) : Headers {
     var headers = new Headers();
     if (!headerStr) {
       return headers;
