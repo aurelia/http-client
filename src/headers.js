@@ -7,7 +7,7 @@ export class Headers {
     this.headers[key] = value;
   }
 
-  get(key : string){
+  get(key : string) : string{
     return this.headers[key];
   }
 
