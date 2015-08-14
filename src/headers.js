@@ -1,5 +1,5 @@
 export class Headers {
-  constructor(headers?:Object={}){
+  constructor(headers? : Object = {}){
     this.headers = headers;
   }
 
@@ -15,7 +15,7 @@ export class Headers {
     this.headers = {};
   }
 
-  configureXHR(xhr) : void {
+  configureXHR(xhr : XHR) : void {
     var headers = this.headers, key;
 
     for(key in headers){

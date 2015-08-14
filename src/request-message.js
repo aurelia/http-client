@@ -2,7 +2,7 @@ import {join, buildQueryString} from 'aurelia-path';
 import {Headers} from './headers';
 
 export class RequestMessage {
-  constructor(method : string, url : string, content, headers?: Headers) {
+  constructor(method : string, url : string, content : any, headers?: Headers) {
     this.method = method;
     this.url = url;
     this.content = content;

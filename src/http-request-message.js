@@ -10,7 +10,7 @@ import {
 } from './xhr-transformers';
 
 export class HttpRequestMessage extends RequestMessage {
-  constructor(method : string, url : string, content, headers?: Headers){
+  constructor(method : string, url : string, content, headers?: Headers) {
     super(method, url, content, headers);
     this.responseType = 'json'; //text, arraybuffer, blob, document
   }

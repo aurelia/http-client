@@ -6,7 +6,7 @@ import {
 } from './xhr-transformers';
 
 export class JSONPRequestMessage extends RequestMessage {
-  constructor(url : string, callbackParameterName : string){
+  constructor(url : string, callbackParameterName : string) {
     super('JSONP', url);
     this.responseType = 'jsonp';
     this.callbackParameterName = callbackParameterName;
@@ -14,13 +14,13 @@ export class JSONPRequestMessage extends RequestMessage {
 }
 
 class JSONPXHR {
-  open(method, url){
+  open(method : string, url : string) : void {
     this.method = method;
     this.url = url;
     this.callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
   }
 
-  send(){
+  send() : void {
     let url = this.url + (this.url.indexOf('?') >= 0 ? '&' : '?') + encodeURIComponent(this.callbackParameterName) + '=' + this.callbackName;
     let script = document.createElement('script');
 
@@ -60,7 +60,7 @@ class JSONPXHR {
     }
   }
 
-  abort(){
+  abort() : void {
     if(this.status === undefined){
       this.status = 0;
       this.onabort(new Error('abort'));

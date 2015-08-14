@@ -10,14 +10,36 @@ function applyXhrTransformers(xhrTransformers, client, processor, message, xhr) 
   }
 }
 
+interface XHRConstructor {
+	//new():XHR;
+}
+
+interface XHR {
+  status : number;
+  statusText : string;
+  response : any;
+  responseText : string;
+  onload : Function;
+  ontimeout : Function;
+  onerror : Function;
+  onabort : Function;
+  abort() : void;
+  //open(method : string, url : string, isAsync : boolean) : void;
+  send(content? : any) : void;
+}
+
+interface XHRTransformer {
+  (client : HttpClient, processor : RequestMessageProcessor, message : RequestMessage, xhr : XHR) : void;
+}
+
 export class RequestMessageProcessor {
-  constructor(xhrType, xhrTransformers){
+  constructor(xhrType : XHRConstructor, xhrTransformers : XHRTransformer[]){
     this.XHRType = xhrType;
     this.xhrTransformers = xhrTransformers;
     this.isAborted = false;
   }
 
-  abort():void{
+  abort() : void{
     // The logic here is if the xhr object is not set then there is nothing to abort so the intent was carried out
     // Also test if the XHR is UNSENT - if not, it will be aborted in the process() phase
     if(this.xhr && this.xhr.readyState !== XMLHttpRequest.UNSENT){

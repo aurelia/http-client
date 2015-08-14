@@ -2,6 +2,10 @@ import {join} from 'aurelia-path';
 import {HttpRequestMessage} from './http-request-message';
 import {JSONPRequestMessage} from './jsonp-request-message';
 
+interface RequestTransformer {
+	(client : HttpClient, processor : RequestMessageProcessor, message : RequestMessage) : void;
+}
+
 /**
  * A builder class allowing fluent composition of HTTP requests.
  *
@@ -9,7 +13,7 @@ import {JSONPRequestMessage} from './jsonp-request-message';
  * @constructor
  */
 export class RequestBuilder {
-  constructor(client){
+  constructor(client : HttpClient){
     this.client = client;
     this.transformers = client.requestTransformers.slice(0);
     this.useJsonp = false;
@@ -23,7 +27,7 @@ export class RequestBuilder {
    * @param {Function} fn The helper function.
    * @chainable
    */
-  static addHelper(name : string, fn : Function){
+  static addHelper(name : string, fn : () => RequestTransformer) : void {
     RequestBuilder.prototype[name] = function(){
       this.transformers.push(fn.apply(this, arguments));
       return this;

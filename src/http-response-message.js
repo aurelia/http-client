@@ -3,7 +3,7 @@ import {Headers} from './headers';
 import {RequestMessage} from './request-message';
 
 export class HttpResponseMessage {
-  constructor(requestMessage : RequestMessage, xhr, responseType, reviver : Function){
+  constructor(requestMessage : RequestMessage, xhr : XHR, responseType : string, reviver : Function){
     this.requestMessage = requestMessage;
     this.statusCode = xhr.status;
     this.response = xhr.response || xhr.responseText;
