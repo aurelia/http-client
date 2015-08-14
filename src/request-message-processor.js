@@ -1,4 +1,5 @@
 import * as core from 'core-js';
+import {RequestMessage} from './request-message';
 import {HttpResponseMessage} from './http-response-message';
 import {join, buildQueryString} from 'aurelia-path';
 
@@ -16,7 +17,7 @@ export class RequestMessageProcessor {
     this.isAborted = false;
   }
 
-  abort(){
+  abort():void{
     // The logic here is if the xhr object is not set then there is nothing to abort so the intent was carried out
     // Also test if the XHR is UNSENT - if not, it will be aborted in the process() phase
     if(this.xhr && this.xhr.readyState !== XMLHttpRequest.UNSENT){
@@ -25,7 +26,7 @@ export class RequestMessageProcessor {
     this.isAborted = true;
   }
 
-  process(client, message) {
+  process(client, message : RequestMessage) : Promise<any> {
     var promise = new Promise((resolve, reject) => {
       var xhr = this.xhr = new this.XHRType();
 

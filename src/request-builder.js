@@ -23,7 +23,7 @@ export class RequestBuilder {
    * @param {Function} fn The helper function.
    * @chainable
    */
-  static addHelper(name, fn){
+  static addHelper(name : string, fn : Function){
     RequestBuilder.prototype[name] = function(){
       this.transformers.push(fn.apply(this, arguments));
       return this;
@@ -36,7 +36,7 @@ export class RequestBuilder {
    * @method send
    * @return {Promise} A cancellable promise object.
    */
-  send(){
+  send() : Promise<any> {
     let message = this.useJsonp ? new JSONPRequestMessage() : new HttpRequestMessage();
     return this.client.send(message, this.transformers);
   }

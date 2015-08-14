@@ -1,5 +1,6 @@
 import * as core from 'core-js';
 import {Headers} from './headers';
+import {RequestMessage} from './request-message';
 import {RequestBuilder} from './request-builder';
 import {HttpRequestMessage,createHttpRequestMessageProcessor} from './http-request-message';
 import {JSONPRequestMessage,createJSONPRequestMessageProcessor} from './jsonp-request-message';
@@ -45,7 +46,7 @@ export class HttpClient {
    * @param {Function} fn A function that takes a RequestBuilder as an argument.
    * @chainable
    */
-  configure(fn){
+  configure(fn:Function):HttpClient{
     var builder = new RequestBuilder(this);
     fn(builder);
     this.requestTransformers = builder.transformers;
@@ -77,7 +78,7 @@ export class HttpClient {
    * @param {Array} transformers A collection of transformers to apply to the HTTP request.
    * @return {Promise} A cancellable promise object.
    */
-  send(message, transformers){
+  send(message : RequestMessage, transformers : Array) : Promise<any> {
     var createProcessor = this.requestProcessorFactories.get(message.constructor),
         processor, promise, i, ii, processRequest;
 
@@ -121,7 +122,7 @@ export class HttpClient {
    * @param {String} url The target URL.
    * @return {Promise} A cancellable promise object.
    */
-  delete(url : string){
+  delete(url : string) : Promise<any>{
     return this.createRequest(url).asDelete().send();
   }
 
@@ -132,7 +133,7 @@ export class HttpClient {
    * @param {String} url The target URL.
    * @return {Promise} A cancellable promise object.
    */
-  get(url : string){
+  get(url : string) : Promise<any>{
     return this.createRequest(url).asGet().send();
   }
 
@@ -143,7 +144,7 @@ export class HttpClient {
    * @param {String} url The target URL.
    * @return {Promise} A cancellable promise object.
    */
-  head(url : string){
+  head(url : string) : Promise<any>{
     return this.createRequest(url).asHead().send();
   }
 
@@ -154,7 +155,7 @@ export class HttpClient {
    * @param {String} url The target URL.
    * @return {Promise} A cancellable promise object.
    */
-  jsonp(url : string, callbackParameterName='jsoncallback'){
+  jsonp(url : string, callbackParameterName : string = 'jsoncallback') : Promise<any>{
     return this.createRequest(url).asJsonp(callbackParameterName).send();
   }
 
@@ -165,7 +166,7 @@ export class HttpClient {
    * @param {String} url The target URL.
    * @return {Promise} A cancellable promise object.
    */
-  options(url : string){
+  options(url : string) : Promise<any>{
     return this.createRequest(url).asOptions().send();
   }
 
@@ -177,7 +178,7 @@ export class HttpClient {
    * @param {Object} url The request payload.
    * @return {Promise} A cancellable promise object.
    */
-  put(url : string, content){
+  put(url : string, content : any) : Promise<any>{
     return this.createRequest(url).asPut().withContent(content).send();
   }
 
@@ -189,7 +190,7 @@ export class HttpClient {
    * @param {Object} url The request payload.
    * @return {Promise} A cancellable promise object.
    */
-  patch(url : string, content){
+  patch(url : string, content : any) : Promise<any>{
     return this.createRequest(url).asPatch().withContent(content).send();
   }
 
@@ -201,7 +202,7 @@ export class HttpClient {
    * @param {Object} url The request payload.
    * @return {Promise} A cancellable promise object.
    */
-  post(url : string, content){
+  post(url : string, content : any) : Promise<any>{
     return this.createRequest(url).asPost().withContent(content).send();
   }
 }

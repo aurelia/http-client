@@ -1,8 +1,9 @@
 /*jshint -W093 */
 import {Headers} from './headers';
+import {RequestMessage} from './request-message';
 
 export class HttpResponseMessage {
-  constructor(requestMessage, xhr, responseType, reviver){
+  constructor(requestMessage : RequestMessage, xhr, responseType, reviver : Function){
     this.requestMessage = requestMessage;
     this.statusCode = xhr.status;
     this.response = xhr.response || xhr.responseText;
@@ -31,7 +32,7 @@ export class HttpResponseMessage {
     this.responseType = responseType;
   }
 
-  get content(){
+  get content() : any {
     try{
       if(this._content !== undefined){
         return this._content;
@@ -65,7 +66,7 @@ export class HttpResponseMessage {
  *
  * @type {Object}
  */
-export var mimeTypes = {
+export let mimeTypes = {
   "text/html": "html",
   "text/javascript": "js",
   "application/javascript": "js",

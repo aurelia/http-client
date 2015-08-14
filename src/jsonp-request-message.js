@@ -6,7 +6,7 @@ import {
 } from './xhr-transformers';
 
 export class JSONPRequestMessage extends RequestMessage {
-  constructor(url, callbackParameterName){
+  constructor(url : string, callbackParameterName : string){
     super('JSONP', url);
     this.responseType = 'jsonp';
     this.callbackParameterName = callbackParameterName;

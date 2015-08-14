@@ -1,5 +1,5 @@
 export class Headers {
-  constructor(headers={}){
+  constructor(headers?:Object={}){
     this.headers = headers;
   }
 
@@ -29,7 +29,7 @@ export class Headers {
    * http://www.w3.org/TR/XMLHttpRequest/#the-getallresponseheaders-method
    * This method parses that string into a user-friendly key/value pair object.
    */
-  static parse(headerStr) : Headers {
+  static parse(headerStr : string) : Headers {
     var headers = new Headers();
     if (!headerStr) {
       return headers;
