@@ -176,3 +176,9 @@ RequestBuilder.addHelper('withInterceptor', function(interceptor) {
     message.interceptors.unshift(interceptor);
   };
 });
+
+RequestBuilder.addHelper('skipContentProcessing', function(){
+  return function(client, processor, message) {
+    message.skipContentProcessing = true;
+  }
+});

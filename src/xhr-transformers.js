@@ -37,6 +37,10 @@ export function headerTransformer(client, processor, message, xhr){
 }
 
 export function contentTransformer(client, processor, message, xhr){
+  if(message.skipContentProcessing){
+    return;       
+  }    
+    
   if(window.FormData && message.content instanceof FormData){
     return;
   }
