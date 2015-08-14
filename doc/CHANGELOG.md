@@ -1,3 +1,23 @@
+### 0.10.3 (2015-08-14)
+
+
+#### Bug Fixes
+
+* **http-client:** Use correct import for core-js We were previously using `import core from core-j ([694fe35c](http://github.com/aurelia/http-client/commit/694fe35cc010623855be565ac550ce2d2dc147bc))
+
+
+#### Features
+
+* **all:**
+  * improvements to type info ([bad7bb5b](http://github.com/aurelia/http-client/commit/bad7bb5bf6026046f9b900e4bda9d4c085b783b1))
+  * more type info added ([d7775b87](http://github.com/aurelia/http-client/commit/d7775b87704a6f6b188ec14befc2eddc05af37b5))
+* **type annotation:**
+  * added type info ([7a468549](http://github.com/aurelia/http-client/commit/7a468549f566fdd12fc81d7f12ecee394ac370a6))
+  * added type info ([1608675d](http://github.com/aurelia/http-client/commit/1608675d086c069da63e35545ddf1826cc958dbf))
+  * added type info ([2c59d7bb](http://github.com/aurelia/http-client/commit/2c59d7bb49cd9f4305b200e019a192250ccf270a))
+  * added type info ([496f4003](http://github.com/aurelia/http-client/commit/496f4003da642486e6c74689e0fff390d541ad0d))
+
+
 ### 0.10.2 (2015-07-29)
 
 

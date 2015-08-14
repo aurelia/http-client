@@ -14,21 +14,21 @@ exports.contentTransformer = contentTransformer;
 exports.createJSONPRequestMessageProcessor = createJSONPRequestMessageProcessor;
 exports.createHttpRequestMessageProcessor = createHttpRequestMessageProcessor;
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 var _coreJs = require('core-js');
 
-var _coreJs2 = _interopRequireDefault(_coreJs);
+var core = _interopRequireWildcard(_coreJs);
 
 var _aureliaPath = require('aurelia-path');
 
 var Headers = (function () {
   function Headers() {
-    var headers = arguments[0] === undefined ? {} : arguments[0];
+    var headers = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
     _classCallCheck(this, Headers);
 
@@ -132,9 +132,9 @@ var HttpResponseMessage = (function () {
     }
 
     var contentType;
-    if (this.headers && this.headers.headers) contentType = this.headers.headers['Content-Type'];
+    if (this.headers && this.headers.headers) contentType = this.headers.headers["Content-Type"];
     if (contentType) {
-      this.mimeType = responseType = contentType.split(';')[0].trim();
+      this.mimeType = responseType = contentType.split(";")[0].trim();
       if (mimeTypes.hasOwnProperty(this.mimeType)) responseType = mimeTypes[this.mimeType];
     }
     this.responseType = responseType;
@@ -176,26 +176,26 @@ var HttpResponseMessage = (function () {
 
 exports.HttpResponseMessage = HttpResponseMessage;
 var mimeTypes = {
-  'text/html': 'html',
-  'text/javascript': 'js',
-  'application/javascript': 'js',
-  'text/json': 'json',
-  'application/json': 'json',
-  'application/rss+xml': 'rss',
-  'application/atom+xml': 'atom',
-  'application/xhtml+xml': 'xhtml',
-  'text/markdown': 'md',
-  'text/xml': 'xml',
-  'text/mathml': 'mml',
-  'application/xml': 'xml',
-  'text/yml': 'yml',
-  'text/csv': 'csv',
-  'text/css': 'css',
-  'text/less': 'less',
-  'text/stylus': 'styl',
-  'text/scss': 'scss',
-  'text/sass': 'sass',
-  'text/plain': 'txt'
+  "text/html": "html",
+  "text/javascript": "js",
+  "application/javascript": "js",
+  "text/json": "json",
+  "application/json": "json",
+  "application/rss+xml": "rss",
+  "application/atom+xml": "atom",
+  "application/xhtml+xml": "xhtml",
+  "text/markdown": "md",
+  "text/xml": "xml",
+  "text/mathml": "mml",
+  "application/xml": "xml",
+  "text/yml": "yml",
+  "text/csv": "csv",
+  "text/css": "css",
+  "text/less": "less",
+  "text/stylus": "styl",
+  "text/scss": "scss",
+  "text/sass": "sass",
+  "text/plain": "txt"
 };
 
 exports.mimeTypes = mimeTypes;
@@ -291,7 +291,9 @@ var RequestMessageProcessor = (function () {
       var interceptorsPromise = Promise.resolve(message);
 
       while (chain.length) {
-        interceptorsPromise = interceptorsPromise.then.apply(interceptorsPromise, chain.shift());
+        var _interceptorsPromise;
+
+        interceptorsPromise = (_interceptorsPromise = interceptorsPromise).then.apply(_interceptorsPromise, chain.shift());
       }
 
       return interceptorsPromise;
@@ -342,6 +344,10 @@ function headerTransformer(client, processor, message, xhr) {
 }
 
 function contentTransformer(client, processor, message, xhr) {
+  if (message.skipContentProcessing) {
+    return;
+  }
+
   if (window.FormData && message.content instanceof FormData) {
     return;
   }
@@ -374,6 +380,8 @@ function contentTransformer(client, processor, message, xhr) {
 }
 
 var JSONPRequestMessage = (function (_RequestMessage) {
+  _inherits(JSONPRequestMessage, _RequestMessage);
+
   function JSONPRequestMessage(url, callbackParameterName) {
     _classCallCheck(this, JSONPRequestMessage);
 
@@ -381,8 +389,6 @@ var JSONPRequestMessage = (function (_RequestMessage) {
     this.responseType = 'jsonp';
     this.callbackParameterName = callbackParameterName;
   }
-
-  _inherits(JSONPRequestMessage, _RequestMessage);
 
   return JSONPRequestMessage;
 })(RequestMessage);
@@ -459,14 +465,14 @@ function createJSONPRequestMessageProcessor() {
 }
 
 var HttpRequestMessage = (function (_RequestMessage2) {
+  _inherits(HttpRequestMessage, _RequestMessage2);
+
   function HttpRequestMessage(method, url, content, headers) {
     _classCallCheck(this, HttpRequestMessage);
 
     _RequestMessage2.call(this, method, url, content, headers);
     this.responseType = 'json';
   }
-
-  _inherits(HttpRequestMessage, _RequestMessage2);
 
   return HttpRequestMessage;
 })(RequestMessage);
@@ -631,6 +637,11 @@ RequestBuilder.addHelper('withInterceptor', function (interceptor) {
   };
 });
 
+RequestBuilder.addHelper('skipContentProcessing', function () {
+  return function (client, processor, message) {
+    message.skipContentProcessing = true;
+  };
+});
 function trackRequestStart(client, processor) {
   client.pendingRequests.push(processor);
   client.isRequesting = true;
@@ -732,7 +743,7 @@ var HttpClient = (function () {
   };
 
   HttpClient.prototype.jsonp = function jsonp(url) {
-    var callbackParameterName = arguments[1] === undefined ? 'jsoncallback' : arguments[1];
+    var callbackParameterName = arguments.length <= 1 || arguments[1] === undefined ? 'jsoncallback' : arguments[1];
 
     return this.createRequest(url).asJsonp(callbackParameterName).send();
   };

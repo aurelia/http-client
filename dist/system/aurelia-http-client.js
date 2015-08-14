@@ -23,7 +23,7 @@ System.register(['core-js', 'aurelia-path'], function (_export) {
 
   _export('createHttpRequestMessageProcessor', createHttpRequestMessageProcessor);
 
-  function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+  function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
@@ -73,6 +73,10 @@ System.register(['core-js', 'aurelia-path'], function (_export) {
   }
 
   function contentTransformer(client, processor, message, xhr) {
+    if (message.skipContentProcessing) {
+      return;
+    }
+
     if (window.FormData && message.content instanceof FormData) {
       return;
     }
@@ -133,7 +137,7 @@ System.register(['core-js', 'aurelia-path'], function (_export) {
 
   return {
     setters: [function (_coreJs) {
-      core = _coreJs['default'];
+      core = _coreJs;
     }, function (_aureliaPath) {
       join = _aureliaPath.join;
       buildQueryString = _aureliaPath.buildQueryString;
@@ -141,7 +145,7 @@ System.register(['core-js', 'aurelia-path'], function (_export) {
     execute: function () {
       Headers = (function () {
         function Headers() {
-          var headers = arguments[0] === undefined ? {} : arguments[0];
+          var headers = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
           _classCallCheck(this, Headers);
 
@@ -245,9 +249,9 @@ System.register(['core-js', 'aurelia-path'], function (_export) {
           }
 
           var contentType;
-          if (this.headers && this.headers.headers) contentType = this.headers.headers['Content-Type'];
+          if (this.headers && this.headers.headers) contentType = this.headers.headers["Content-Type"];
           if (contentType) {
-            this.mimeType = responseType = contentType.split(';')[0].trim();
+            this.mimeType = responseType = contentType.split(";")[0].trim();
             if (mimeTypes.hasOwnProperty(this.mimeType)) responseType = mimeTypes[this.mimeType];
           }
           this.responseType = responseType;
@@ -290,26 +294,26 @@ System.register(['core-js', 'aurelia-path'], function (_export) {
       _export('HttpResponseMessage', HttpResponseMessage);
 
       mimeTypes = {
-        'text/html': 'html',
-        'text/javascript': 'js',
-        'application/javascript': 'js',
-        'text/json': 'json',
-        'application/json': 'json',
-        'application/rss+xml': 'rss',
-        'application/atom+xml': 'atom',
-        'application/xhtml+xml': 'xhtml',
-        'text/markdown': 'md',
-        'text/xml': 'xml',
-        'text/mathml': 'mml',
-        'application/xml': 'xml',
-        'text/yml': 'yml',
-        'text/csv': 'csv',
-        'text/css': 'css',
-        'text/less': 'less',
-        'text/stylus': 'styl',
-        'text/scss': 'scss',
-        'text/sass': 'sass',
-        'text/plain': 'txt'
+        "text/html": "html",
+        "text/javascript": "js",
+        "application/javascript": "js",
+        "text/json": "json",
+        "application/json": "json",
+        "application/rss+xml": "rss",
+        "application/atom+xml": "atom",
+        "application/xhtml+xml": "xhtml",
+        "text/markdown": "md",
+        "text/xml": "xml",
+        "text/mathml": "mml",
+        "application/xml": "xml",
+        "text/yml": "yml",
+        "text/csv": "csv",
+        "text/css": "css",
+        "text/less": "less",
+        "text/stylus": "styl",
+        "text/scss": "scss",
+        "text/sass": "sass",
+        "text/plain": "txt"
       };
 
       _export('mimeTypes', mimeTypes);
@@ -399,7 +403,9 @@ System.register(['core-js', 'aurelia-path'], function (_export) {
             var interceptorsPromise = Promise.resolve(message);
 
             while (chain.length) {
-              interceptorsPromise = interceptorsPromise.then.apply(interceptorsPromise, chain.shift());
+              var _interceptorsPromise;
+
+              interceptorsPromise = (_interceptorsPromise = interceptorsPromise).then.apply(_interceptorsPromise, chain.shift());
             }
 
             return interceptorsPromise;
@@ -412,6 +418,8 @@ System.register(['core-js', 'aurelia-path'], function (_export) {
       _export('RequestMessageProcessor', RequestMessageProcessor);
 
       JSONPRequestMessage = (function (_RequestMessage) {
+        _inherits(JSONPRequestMessage, _RequestMessage);
+
         function JSONPRequestMessage(url, callbackParameterName) {
           _classCallCheck(this, JSONPRequestMessage);
 
@@ -419,8 +427,6 @@ System.register(['core-js', 'aurelia-path'], function (_export) {
           this.responseType = 'jsonp';
           this.callbackParameterName = callbackParameterName;
         }
-
-        _inherits(JSONPRequestMessage, _RequestMessage);
 
         return JSONPRequestMessage;
       })(RequestMessage);
@@ -493,14 +499,14 @@ System.register(['core-js', 'aurelia-path'], function (_export) {
       })();
 
       HttpRequestMessage = (function (_RequestMessage2) {
+        _inherits(HttpRequestMessage, _RequestMessage2);
+
         function HttpRequestMessage(method, url, content, headers) {
           _classCallCheck(this, HttpRequestMessage);
 
           _RequestMessage2.call(this, method, url, content, headers);
           this.responseType = 'json';
         }
-
-        _inherits(HttpRequestMessage, _RequestMessage2);
 
         return HttpRequestMessage;
       })(RequestMessage);
@@ -660,6 +666,12 @@ System.register(['core-js', 'aurelia-path'], function (_export) {
           message.interceptors.unshift(interceptor);
         };
       });
+
+      RequestBuilder.addHelper('skipContentProcessing', function () {
+        return function (client, processor, message) {
+          message.skipContentProcessing = true;
+        };
+      });
       HttpClient = (function () {
         function HttpClient() {
           _classCallCheck(this, HttpClient);
@@ -742,7 +754,7 @@ System.register(['core-js', 'aurelia-path'], function (_export) {
         };
 
         HttpClient.prototype.jsonp = function jsonp(url) {
-          var callbackParameterName = arguments[1] === undefined ? 'jsoncallback' : arguments[1];
+          var callbackParameterName = arguments.length <= 1 || arguments[1] === undefined ? 'jsoncallback' : arguments[1];
 
           return this.createRequest(url).asJsonp(callbackParameterName).send();
         };

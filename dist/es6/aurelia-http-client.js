@@ -1,24 +1,24 @@
-import core from 'core-js';
+import * as core from 'core-js';
 import {join,buildQueryString} from 'aurelia-path';
 
 export class Headers {
-  constructor(headers={}){
+  constructor(headers? : Object = {}){
     this.headers = headers;
   }
 
-  add(key, value){
+  add(key : string, value : string) : void {
     this.headers[key] = value;
   }
 
-  get(key){
+  get(key : string) : string {
     return this.headers[key];
   }
 
-  clear(){
+  clear() : void {
     this.headers = {};
   }
 
-  configureXHR(xhr){
+  configureXHR(xhr : XHR) : void {
     var headers = this.headers, key;
 
     for(key in headers){
@@ -32,7 +32,7 @@ export class Headers {
    * http://www.w3.org/TR/XMLHttpRequest/#the-getallresponseheaders-method
    * This method parses that string into a user-friendly key/value pair object.
    */
-  static parse(headerStr){
+  static parse(headerStr : string) : Headers {
     var headers = new Headers();
     if (!headerStr) {
       return headers;
@@ -56,7 +56,7 @@ export class Headers {
 }
 
 export class RequestMessage {
-  constructor(method, url, content, headers) {
+  constructor(method : string, url : string, content : any, headers?: Headers) {
     this.method = method;
     this.url = url;
     this.content = content;
@@ -64,7 +64,7 @@ export class RequestMessage {
     this.baseUrl = '';
   }
 
-  buildFullUrl() {
+  buildFullUrl() : string {
     var url = join(this.baseUrl, this.url);
 
     if(this.params){
@@ -78,7 +78,7 @@ export class RequestMessage {
 
 /*jshint -W093 */
 export class HttpResponseMessage {
-  constructor(requestMessage, xhr, responseType, reviver){
+  constructor(requestMessage : RequestMessage, xhr : XHR, responseType : string, reviver : Function){
     this.requestMessage = requestMessage;
     this.statusCode = xhr.status;
     this.response = xhr.response || xhr.responseText;
@@ -107,7 +107,7 @@ export class HttpResponseMessage {
     this.responseType = responseType;
   }
 
-  get content(){
+  get content() : any {
     try{
       if(this._content !== undefined){
         return this._content;
@@ -141,7 +141,7 @@ export class HttpResponseMessage {
  *
  * @type {Object}
  */
-export var mimeTypes = {
+export let mimeTypes = {
   "text/html": "html",
   "text/javascript": "js",
   "application/javascript": "js",
@@ -171,14 +171,36 @@ function applyXhrTransformers(xhrTransformers, client, processor, message, xhr) 
   }
 }
 
+interface XHRConstructor {
+	//new():XHR;
+}
+
+interface XHR {
+  status : number;
+  statusText : string;
+  response : any;
+  responseText : string;
+  onload : Function;
+  ontimeout : Function;
+  onerror : Function;
+  onabort : Function;
+  abort() : void;
+  //open(method : string, url : string, isAsync : boolean) : void;
+  send(content? : any) : void;
+}
+
+interface XHRTransformer {
+  (client : HttpClient, processor : RequestMessageProcessor, message : RequestMessage, xhr : XHR) : void;
+}
+
 export class RequestMessageProcessor {
-  constructor(xhrType, xhrTransformers){
+  constructor(xhrType : XHRConstructor, xhrTransformers : XHRTransformer[]){
     this.XHRType = xhrType;
     this.xhrTransformers = xhrTransformers;
     this.isAborted = false;
   }
 
-  abort(){
+  abort() : void{
     // The logic here is if the xhr object is not set then there is nothing to abort so the intent was carried out
     // Also test if the XHR is UNSENT - if not, it will be aborted in the process() phase
     if(this.xhr && this.xhr.readyState !== XMLHttpRequest.UNSENT){
@@ -187,7 +209,7 @@ export class RequestMessageProcessor {
     this.isAborted = true;
   }
 
-  process(client, message) {
+  process(client, message : RequestMessage) : Promise<any> {
     var promise = new Promise((resolve, reject) => {
       var xhr = this.xhr = new this.XHRType();
 
@@ -311,6 +333,10 @@ export function headerTransformer(client, processor, message, xhr){
 }
 
 export function contentTransformer(client, processor, message, xhr){
+  if(message.skipContentProcessing){
+    return;       
+  }    
+    
   if(window.FormData && message.content instanceof FormData){
     return;
   }
@@ -343,7 +369,7 @@ export function contentTransformer(client, processor, message, xhr){
 }
 
 export class JSONPRequestMessage extends RequestMessage {
-  constructor(url, callbackParameterName){
+  constructor(url : string, callbackParameterName : string) {
     super('JSONP', url);
     this.responseType = 'jsonp';
     this.callbackParameterName = callbackParameterName;
@@ -351,13 +377,13 @@ export class JSONPRequestMessage extends RequestMessage {
 }
 
 class JSONPXHR {
-  open(method, url){
+  open(method : string, url : string) : void {
     this.method = method;
     this.url = url;
     this.callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
   }
 
-  send(){
+  send() : void {
     let url = this.url + (this.url.indexOf('?') >= 0 ? '&' : '?') + encodeURIComponent(this.callbackParameterName) + '=' + this.callbackName;
     let script = document.createElement('script');
 
@@ -397,7 +423,7 @@ class JSONPXHR {
     }
   }
 
-  abort(){
+  abort() : void {
     if(this.status === undefined){
       this.status = 0;
       this.onabort(new Error('abort'));
@@ -415,13 +441,13 @@ export function createJSONPRequestMessageProcessor(){
 }
 
 export class HttpRequestMessage extends RequestMessage {
-  constructor(method, url, content, headers){
+  constructor(method : string, url : string, content, headers?: Headers) {
     super(method, url, content, headers);
     this.responseType = 'json'; //text, arraybuffer, blob, document
   }
 }
 
-export function createHttpRequestMessageProcessor(){
+export function createHttpRequestMessageProcessor() : RequestMessageProcessor {
   return new RequestMessageProcessor(XMLHttpRequest, [
     timeoutTransformer,
     credentialsTransformer,
@@ -432,6 +458,10 @@ export function createHttpRequestMessageProcessor(){
   ]);
 }
 
+interface RequestTransformer {
+	(client : HttpClient, processor : RequestMessageProcessor, message : RequestMessage) : void;
+}
+
 /**
  * A builder class allowing fluent composition of HTTP requests.
  *
@@ -439,7 +469,7 @@ export function createHttpRequestMessageProcessor(){
  * @constructor
  */
 export class RequestBuilder {
-  constructor(client){
+  constructor(client : HttpClient){
     this.client = client;
     this.transformers = client.requestTransformers.slice(0);
     this.useJsonp = false;
@@ -453,7 +483,7 @@ export class RequestBuilder {
    * @param {Function} fn The helper function.
    * @chainable
    */
-  static addHelper(name, fn){
+  static addHelper(name : string, fn : () => RequestTransformer) : void {
     RequestBuilder.prototype[name] = function(){
       this.transformers.push(fn.apply(this, arguments));
       return this;
@@ -466,7 +496,7 @@ export class RequestBuilder {
    * @method send
    * @return {Promise} A cancellable promise object.
    */
-  send(){
+  send() : Promise<any> {
     let message = this.useJsonp ? new JSONPRequestMessage() : new HttpRequestMessage();
     return this.client.send(message, this.transformers);
   }
@@ -603,12 +633,17 @@ RequestBuilder.addHelper('withInterceptor', function(interceptor) {
   };
 });
 
-function trackRequestStart(client, processor){
+RequestBuilder.addHelper('skipContentProcessing', function(){
+  return function(client, processor, message) {
+    message.skipContentProcessing = true;
+  }
+});
+function trackRequestStart(client : HttpClient, processor : RequestMessageProcessor){
   client.pendingRequests.push(processor);
   client.isRequesting = true;
 }
 
-function trackRequestEnd(client, processor){
+function trackRequestEnd(client : HttpClient, processor : RequestMessageProcessor){
   var index = client.pendingRequests.indexOf(processor);
 
   client.pendingRequests.splice(index, 1);
@@ -643,7 +678,7 @@ export class HttpClient {
    * @param {Function} fn A function that takes a RequestBuilder as an argument.
    * @chainable
    */
-  configure(fn){
+  configure(fn : Function) : HttpClient {
     var builder = new RequestBuilder(this);
     fn(builder);
     this.requestTransformers = builder.transformers;
@@ -657,7 +692,7 @@ export class HttpClient {
    * @param url The target URL.
    * @type RequestBuilder
    */
-  createRequest(url){
+  createRequest(url : string) : RequestBuilder {
     let builder = new RequestBuilder(this);
 
     if(url) {
@@ -675,7 +710,7 @@ export class HttpClient {
    * @param {Array} transformers A collection of transformers to apply to the HTTP request.
    * @return {Promise} A cancellable promise object.
    */
-  send(message, transformers){
+  send(message : RequestMessage, transformers : Array<RequestTransformer>) : Promise<any> {
     var createProcessor = this.requestProcessorFactories.get(message.constructor),
         processor, promise, i, ii, processRequest;
 
@@ -719,7 +754,7 @@ export class HttpClient {
    * @param {String} url The target URL.
    * @return {Promise} A cancellable promise object.
    */
-  delete(url){
+  delete(url : string) : Promise<any> {
     return this.createRequest(url).asDelete().send();
   }
 
@@ -730,7 +765,7 @@ export class HttpClient {
    * @param {String} url The target URL.
    * @return {Promise} A cancellable promise object.
    */
-  get(url){
+  get(url : string) : Promise<any> {
     return this.createRequest(url).asGet().send();
   }
 
@@ -741,7 +776,7 @@ export class HttpClient {
    * @param {String} url The target URL.
    * @return {Promise} A cancellable promise object.
    */
-  head(url){
+  head(url : string) : Promise<any> {
     return this.createRequest(url).asHead().send();
   }
 
@@ -752,7 +787,7 @@ export class HttpClient {
    * @param {String} url The target URL.
    * @return {Promise} A cancellable promise object.
    */
-  jsonp(url, callbackParameterName='jsoncallback'){
+  jsonp(url : string, callbackParameterName : string = 'jsoncallback') : Promise<any> {
     return this.createRequest(url).asJsonp(callbackParameterName).send();
   }
 
@@ -763,7 +798,7 @@ export class HttpClient {
    * @param {String} url The target URL.
    * @return {Promise} A cancellable promise object.
    */
-  options(url){
+  options(url : string) : Promise<any> {
     return this.createRequest(url).asOptions().send();
   }
 
@@ -775,7 +810,7 @@ export class HttpClient {
    * @param {Object} url The request payload.
    * @return {Promise} A cancellable promise object.
    */
-  put(url, content){
+  put(url : string, content : any) : Promise<any> {
     return this.createRequest(url).asPut().withContent(content).send();
   }
 
@@ -787,7 +822,7 @@ export class HttpClient {
    * @param {Object} url The request payload.
    * @return {Promise} A cancellable promise object.
    */
-  patch(url, content){
+  patch(url : string, content : any) : Promise<any> {
     return this.createRequest(url).asPatch().withContent(content).send();
   }
 
@@ -799,7 +834,7 @@ export class HttpClient {
    * @param {Object} url The request payload.
    * @return {Promise} A cancellable promise object.
    */
-  post(url, content){
+  post(url : string, content : any) : Promise<any> {
     return this.createRequest(url).asPost().withContent(content).send();
   }
 }
