@@ -15,7 +15,7 @@ describe("JSONPRequestMessage", () => {
     expect(jsonpRequest.callbackParameterName).toBe(callbackName);
   });
 
-  describe("createJSONPRequestMessageProcessor",() => {
+  describe("createJSONPRequestMessageProcessor", () => {
     it("should create a RequestMessageProcessor with an JSONPXHR and the correct xhrTransformers", () => {
       let httpProcessor = createJSONPRequestMessageProcessor();
 

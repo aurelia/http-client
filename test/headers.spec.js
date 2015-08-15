@@ -3,21 +3,21 @@ import {Headers} from '../src/headers';
 describe('headers', () => {
 
   it('can add header value', () => {
-    var headers = new Headers();
+    let headers = new Headers();
     headers.add('Authorization', '123');
 
     expect(headers.headers['Authorization']).toBe('123');
   });
 
   it('can get header value', () => {
-    var headers = new Headers();
+    let headers = new Headers();
     headers.add('Authorization', '123');
 
     expect(headers.get('Authorization')).toBe('123');
   });
 
   it('will clear headers on clear', () => {
-    var headers = new Headers();
+    let headers = new Headers();
     headers.add('Authorization', '123');
 
     expect(headers.get('Authorization')).toBe('123');
@@ -29,12 +29,12 @@ describe('headers', () => {
   });
 
   it('configureXHR should add the headers', () => {
-    var headers = new Headers();
+    let headers = new Headers();
     headers.add('Authorization', '123');
     headers.add('Content-Type', 'application/json');
 
     jasmine.Ajax.withMock(() => {
-      var xhr = new XMLHttpRequest();
+      let xhr = new XMLHttpRequest();
 
       headers.configureXHR(xhr);
 
