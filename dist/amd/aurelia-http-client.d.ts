@@ -14,8 +14,8 @@ declare module 'aurelia-http-client' {
     ontimeout: Function;
     onerror: Function;
     onabort: Function;
-    abort(): undefined;
-    send(content?: any): undefined;
+    abort(): void;
+    send(content?: any): void;
   }
   export interface XHRTransformer {
   }
