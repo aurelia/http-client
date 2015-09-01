@@ -1,1 +1,2831 @@
-{"classes":[{"name":"HttpClient","file":"aurelia/http-client/src/http-client.js","line":26,"description":"The main HTTP client object.","is_constructor":1,"methods":[{"line":42,"description":"Configure this HttpClient with default settings to be used by all requests.","name":"configure","params":[{"name":"fn","description":"A function that takes a RequestBuilder as an argument.","type":"Function"}],"chainable":1},{"line":56,"description":"Returns a new RequestBuilder for this HttpClient instance that can be used to build and send HTTP requests.","name":"createRequest","params":[{"name":"url","description":"The target URL."}],"type":"RequestBuilder"},{"line":73,"description":"Sends a message using the underlying networking stack.","name":"send","params":[{"name":"message","description":"A configured HttpRequestMessage or JSONPRequestMessage."},{"name":"transformers","description":"A collection of transformers to apply to the HTTP request.","type":"Array"}],"return":{"description":"A cancellable promise object.","type":"Promise"}},{"line":118,"description":"Sends an HTTP DELETE request.","name":"delete","params":[{"name":"url","description":"The target URL.","type":"String"}],"return":{"description":"A cancellable promise object.","type":"Promise"}},{"line":129,"description":"Sends an HTTP GET request.","name":"get","params":[{"name":"url","description":"The target URL.","type":"String"}],"return":{"description":"A cancellable promise object.","type":"Promise"}},{"line":140,"description":"Sends an HTTP HEAD request.","name":"head","params":[{"name":"url","description":"The target URL.","type":"String"}],"return":{"description":"A cancellable promise object.","type":"Promise"}},{"line":151,"description":"Sends a JSONP request.","name":"jsonp","params":[{"name":"url","description":"The target URL.","type":"String"}],"return":{"description":"A cancellable promise object.","type":"Promise"}},{"line":162,"description":"Sends an HTTP OPTIONS request.","name":"options","params":[{"name":"url","description":"The target URL.","type":"String"}],"return":{"description":"A cancellable promise object.","type":"Promise"}},{"line":173,"description":"Sends an HTTP PUT request.","name":"put","params":[{"name":"url","description":"The target URL.","type":"String"},{"name":"url","description":"The request payload.","type":"Object"}],"return":{"description":"A cancellable promise object.","type":"Promise"}},{"line":185,"description":"Sends an HTTP PATCH request.","name":"patch","params":[{"name":"url","description":"The target URL.","type":"String"},{"name":"url","description":"The request payload.","type":"Object"}],"return":{"description":"A cancellable promise object.","type":"Promise"}},{"line":197,"description":"Sends an HTTP POST request.","name":"post","params":[{"name":"url","description":"The target URL.","type":"String"},{"name":"url","description":"The request payload.","type":"Object"}],"return":{"description":"A cancellable promise object.","type":"Promise"}}],"properties":[],"events":[]},{"name":"RequestBuilder","file":"aurelia/http-client/src/request-builder.js","line":9,"description":"A builder class allowing fluent composition of HTTP requests.","is_constructor":1,"methods":[{"line":22,"description":"Adds a user-defined request transformer to the RequestBuilder.","name":"addHelper","params":[{"name":"name","description":"The name of the helper to add.","type":"String"},{"name":"fn","description":"The helper function.","type":"Function"}],"chainable":1},{"line":37,"description":"Sends the request.","name":"send","return":{"description":"A cancellable promise object.","type":"Promise"}}],"properties":[],"events":[]}],"methods":[],"properties":[],"events":[]}
+{
+  "id": 2,
+  "name": "\"aurelia-http-client\"",
+  "kind": 2,
+  "kindString": "Module",
+  "flags": {},
+  "children": [
+    {
+      "id": 20,
+      "name": "Headers",
+      "kind": 128,
+      "kindString": "Class",
+      "flags": {
+        "isExported": true
+      },
+      "children": [
+        {
+          "id": 21,
+          "name": "constructor",
+          "kind": 512,
+          "kindString": "Constructor",
+          "flags": {
+            "isExported": true
+          },
+          "signatures": [
+            {
+              "id": 22,
+              "name": "new Headers",
+              "kind": 16384,
+              "kindString": "Constructor signature",
+              "flags": {},
+              "parameters": [
+                {
+                  "id": 23,
+                  "name": "headers",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {
+                    "isOptional": true
+                  },
+                  "type": {
+                    "type": "reference",
+                    "name": "Object"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "name": "Headers",
+                "id": 20,
+                "moduleName": "\"aurelia-http-client\""
+              }
+            }
+          ]
+        },
+        {
+          "id": 24,
+          "name": "add",
+          "kind": 2048,
+          "kindString": "Method",
+          "flags": {
+            "isExported": true
+          },
+          "signatures": [
+            {
+              "id": 25,
+              "name": "add",
+              "kind": 4096,
+              "kindString": "Call signature",
+              "flags": {},
+              "parameters": [
+                {
+                  "id": 26,
+                  "name": "key",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {},
+                  "type": {
+                    "type": "instrinct",
+                    "name": "string"
+                  }
+                },
+                {
+                  "id": 27,
+                  "name": "value",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {},
+                  "type": {
+                    "type": "instrinct",
+                    "name": "string"
+                  }
+                }
+              ],
+              "type": {
+                "type": "instrinct",
+                "name": "void"
+              }
+            }
+          ]
+        },
+        {
+          "id": 31,
+          "name": "clear",
+          "kind": 2048,
+          "kindString": "Method",
+          "flags": {
+            "isExported": true
+          },
+          "signatures": [
+            {
+              "id": 32,
+              "name": "clear",
+              "kind": 4096,
+              "kindString": "Call signature",
+              "flags": {},
+              "type": {
+                "type": "instrinct",
+                "name": "void"
+              }
+            }
+          ]
+        },
+        {
+          "id": 33,
+          "name": "configureXHR",
+          "kind": 2048,
+          "kindString": "Method",
+          "flags": {
+            "isExported": true
+          },
+          "signatures": [
+            {
+              "id": 34,
+              "name": "configureXHR",
+              "kind": 4096,
+              "kindString": "Call signature",
+              "flags": {},
+              "parameters": [
+                {
+                  "id": 35,
+                  "name": "xhr",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "XHR",
+                    "id": 4,
+                    "moduleName": "\"aurelia-http-client\""
+                  }
+                }
+              ],
+              "type": {
+                "type": "instrinct",
+                "name": "void"
+              }
+            }
+          ]
+        },
+        {
+          "id": 28,
+          "name": "get",
+          "kind": 2048,
+          "kindString": "Method",
+          "flags": {
+            "isExported": true
+          },
+          "signatures": [
+            {
+              "id": 29,
+              "name": "get",
+              "kind": 4096,
+              "kindString": "Call signature",
+              "flags": {},
+              "parameters": [
+                {
+                  "id": 30,
+                  "name": "key",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {},
+                  "type": {
+                    "type": "instrinct",
+                    "name": "string"
+                  }
+                }
+              ],
+              "type": {
+                "type": "instrinct",
+                "name": "string"
+              }
+            }
+          ]
+        },
+        {
+          "id": 36,
+          "name": "parse",
+          "kind": 2048,
+          "kindString": "Method",
+          "flags": {
+            "isStatic": true,
+            "isExported": true
+          },
+          "signatures": [
+            {
+              "id": 37,
+              "name": "parse",
+              "kind": 4096,
+              "kindString": "Call signature",
+              "flags": {},
+              "comment": {
+                "shortText": "XmlHttpRequest's getAllResponseHeaders() method returns a string of response\nheaders according to the format described here:\nhttp://www.w3.org/TR/XMLHttpRequest/#the-getallresponseheaders-method\nThis method parses that string into a user-friendly key/value pair object."
+              },
+              "parameters": [
+                {
+                  "id": 38,
+                  "name": "headerStr",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {},
+                  "type": {
+                    "type": "instrinct",
+                    "name": "string"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "name": "Headers",
+                "id": 20,
+                "moduleName": "\"aurelia-http-client\""
+              }
+            }
+          ]
+        }
+      ],
+      "groups": [
+        {
+          "title": "Constructors",
+          "kind": 512,
+          "children": [
+            21
+          ]
+        },
+        {
+          "title": "Methods",
+          "kind": 2048,
+          "children": [
+            24,
+            31,
+            33,
+            28,
+            36
+          ]
+        }
+      ]
+    },
+    {
+      "id": 107,
+      "name": "HttpClient",
+      "kind": 128,
+      "kindString": "Class",
+      "flags": {
+        "isExported": true
+      },
+      "comment": {
+        "shortText": "The main HTTP client object.",
+        "tags": [
+          {
+            "tag": "class",
+            "text": "HttpClient"
+          },
+          {
+            "tag": "constructor",
+            "text": "\n"
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 108,
+          "name": "constructor",
+          "kind": 512,
+          "kindString": "Constructor",
+          "flags": {
+            "isExported": true
+          },
+          "signatures": [
+            {
+              "id": 109,
+              "name": "new HttpClient",
+              "kind": 16384,
+              "kindString": "Constructor signature",
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "name": "HttpClient",
+                "id": 107,
+                "moduleName": "\"aurelia-http-client\""
+              }
+            }
+          ]
+        },
+        {
+          "id": 110,
+          "name": "configure",
+          "kind": 2048,
+          "kindString": "Method",
+          "flags": {
+            "isExported": true
+          },
+          "signatures": [
+            {
+              "id": 111,
+              "name": "configure",
+              "kind": 4096,
+              "kindString": "Call signature",
+              "flags": {},
+              "comment": {
+                "shortText": "Configure this HttpClient with default settings to be used by all requests.",
+                "tags": [
+                  {
+                    "tag": "method",
+                    "text": "configure"
+                  },
+                  {
+                    "tag": "chainable",
+                    "text": "\n"
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 112,
+                  "name": "fn",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {},
+                  "comment": {
+                    "text": "A function that takes a RequestBuilder as an argument."
+                  },
+                  "type": {
+                    "type": "reference",
+                    "name": "Function"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "name": "HttpClient",
+                "id": 107,
+                "moduleName": "\"aurelia-http-client\""
+              }
+            }
+          ]
+        },
+        {
+          "id": 113,
+          "name": "createRequest",
+          "kind": 2048,
+          "kindString": "Method",
+          "flags": {
+            "isExported": true
+          },
+          "signatures": [
+            {
+              "id": 114,
+              "name": "createRequest",
+              "kind": 4096,
+              "kindString": "Call signature",
+              "flags": {},
+              "comment": {
+                "shortText": "Returns a new RequestBuilder for this HttpClient instance that can be used to build and send HTTP requests.",
+                "tags": [
+                  {
+                    "tag": "method",
+                    "text": "createRequest"
+                  },
+                  {
+                    "tag": "type",
+                    "text": "RequestBuilder\n"
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 115,
+                  "name": "url",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {},
+                  "comment": {
+                    "text": "The target URL."
+                  },
+                  "type": {
+                    "type": "instrinct",
+                    "name": "string"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "name": "RequestBuilder",
+                "id": 95,
+                "moduleName": "\"aurelia-http-client\""
+              }
+            }
+          ]
+        },
+        {
+          "id": 120,
+          "name": "delete",
+          "kind": 2048,
+          "kindString": "Method",
+          "flags": {
+            "isExported": true
+          },
+          "signatures": [
+            {
+              "id": 121,
+              "name": "delete",
+              "kind": 4096,
+              "kindString": "Call signature",
+              "flags": {},
+              "comment": {
+                "shortText": "Sends an HTTP DELETE request.",
+                "returns": "A cancellable promise object.\n",
+                "tags": [
+                  {
+                    "tag": "method",
+                    "text": "delete"
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 122,
+                  "name": "url",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {},
+                  "comment": {
+                    "text": "The target URL."
+                  },
+                  "type": {
+                    "type": "instrinct",
+                    "name": "string"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "name": "Promise",
+                "typeArguments": [
+                  {
+                    "type": "instrinct",
+                    "name": "any"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": 123,
+          "name": "get",
+          "kind": 2048,
+          "kindString": "Method",
+          "flags": {
+            "isExported": true
+          },
+          "signatures": [
+            {
+              "id": 124,
+              "name": "get",
+              "kind": 4096,
+              "kindString": "Call signature",
+              "flags": {},
+              "comment": {
+                "shortText": "Sends an HTTP GET request.",
+                "returns": "A cancellable promise object.\n",
+                "tags": [
+                  {
+                    "tag": "method",
+                    "text": "get"
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 125,
+                  "name": "url",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {},
+                  "comment": {
+                    "text": "The target URL."
+                  },
+                  "type": {
+                    "type": "instrinct",
+                    "name": "string"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "name": "Promise",
+                "typeArguments": [
+                  {
+                    "type": "instrinct",
+                    "name": "any"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": 126,
+          "name": "head",
+          "kind": 2048,
+          "kindString": "Method",
+          "flags": {
+            "isExported": true
+          },
+          "signatures": [
+            {
+              "id": 127,
+              "name": "head",
+              "kind": 4096,
+              "kindString": "Call signature",
+              "flags": {},
+              "comment": {
+                "shortText": "Sends an HTTP HEAD request.",
+                "returns": "A cancellable promise object.\n",
+                "tags": [
+                  {
+                    "tag": "method",
+                    "text": "head"
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 128,
+                  "name": "url",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {},
+                  "comment": {
+                    "text": "The target URL."
+                  },
+                  "type": {
+                    "type": "instrinct",
+                    "name": "string"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "name": "Promise",
+                "typeArguments": [
+                  {
+                    "type": "instrinct",
+                    "name": "any"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": 129,
+          "name": "jsonp",
+          "kind": 2048,
+          "kindString": "Method",
+          "flags": {
+            "isExported": true
+          },
+          "signatures": [
+            {
+              "id": 130,
+              "name": "jsonp",
+              "kind": 4096,
+              "kindString": "Call signature",
+              "flags": {},
+              "comment": {
+                "shortText": "Sends a JSONP request.",
+                "returns": "A cancellable promise object.\n",
+                "tags": [
+                  {
+                    "tag": "method",
+                    "text": "jsonp"
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 131,
+                  "name": "url",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {},
+                  "comment": {
+                    "text": "The target URL."
+                  },
+                  "type": {
+                    "type": "instrinct",
+                    "name": "string"
+                  }
+                },
+                {
+                  "id": 132,
+                  "name": "callbackParameterName",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {
+                    "isOptional": true
+                  },
+                  "type": {
+                    "type": "instrinct",
+                    "name": "string"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "name": "Promise",
+                "typeArguments": [
+                  {
+                    "type": "instrinct",
+                    "name": "any"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": 133,
+          "name": "options",
+          "kind": 2048,
+          "kindString": "Method",
+          "flags": {
+            "isExported": true
+          },
+          "signatures": [
+            {
+              "id": 134,
+              "name": "options",
+              "kind": 4096,
+              "kindString": "Call signature",
+              "flags": {},
+              "comment": {
+                "shortText": "Sends an HTTP OPTIONS request.",
+                "returns": "A cancellable promise object.\n",
+                "tags": [
+                  {
+                    "tag": "method",
+                    "text": "options"
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 135,
+                  "name": "url",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {},
+                  "comment": {
+                    "text": "The target URL."
+                  },
+                  "type": {
+                    "type": "instrinct",
+                    "name": "string"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "name": "Promise",
+                "typeArguments": [
+                  {
+                    "type": "instrinct",
+                    "name": "any"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": 140,
+          "name": "patch",
+          "kind": 2048,
+          "kindString": "Method",
+          "flags": {
+            "isExported": true
+          },
+          "signatures": [
+            {
+              "id": 141,
+              "name": "patch",
+              "kind": 4096,
+              "kindString": "Call signature",
+              "flags": {},
+              "comment": {
+                "shortText": "Sends an HTTP PATCH request.",
+                "returns": "A cancellable promise object.\n",
+                "tags": [
+                  {
+                    "tag": "method",
+                    "text": "patch"
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 142,
+                  "name": "url",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {},
+                  "comment": {
+                    "shortText": "The request payload."
+                  },
+                  "type": {
+                    "type": "instrinct",
+                    "name": "string"
+                  }
+                },
+                {
+                  "id": 143,
+                  "name": "content",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {},
+                  "type": {
+                    "type": "instrinct",
+                    "name": "any"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "name": "Promise",
+                "typeArguments": [
+                  {
+                    "type": "instrinct",
+                    "name": "any"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": 144,
+          "name": "post",
+          "kind": 2048,
+          "kindString": "Method",
+          "flags": {
+            "isExported": true
+          },
+          "signatures": [
+            {
+              "id": 145,
+              "name": "post",
+              "kind": 4096,
+              "kindString": "Call signature",
+              "flags": {},
+              "comment": {
+                "shortText": "Sends an HTTP POST request.",
+                "returns": "A cancellable promise object.\n",
+                "tags": [
+                  {
+                    "tag": "method",
+                    "text": "post"
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 146,
+                  "name": "url",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {},
+                  "comment": {
+                    "shortText": "The request payload."
+                  },
+                  "type": {
+                    "type": "instrinct",
+                    "name": "string"
+                  }
+                },
+                {
+                  "id": 147,
+                  "name": "content",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {},
+                  "type": {
+                    "type": "instrinct",
+                    "name": "any"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "name": "Promise",
+                "typeArguments": [
+                  {
+                    "type": "instrinct",
+                    "name": "any"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": 136,
+          "name": "put",
+          "kind": 2048,
+          "kindString": "Method",
+          "flags": {
+            "isExported": true
+          },
+          "signatures": [
+            {
+              "id": 137,
+              "name": "put",
+              "kind": 4096,
+              "kindString": "Call signature",
+              "flags": {},
+              "comment": {
+                "shortText": "Sends an HTTP PUT request.",
+                "returns": "A cancellable promise object.\n",
+                "tags": [
+                  {
+                    "tag": "method",
+                    "text": "put"
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 138,
+                  "name": "url",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {},
+                  "comment": {
+                    "shortText": "The request payload."
+                  },
+                  "type": {
+                    "type": "instrinct",
+                    "name": "string"
+                  }
+                },
+                {
+                  "id": 139,
+                  "name": "content",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {},
+                  "type": {
+                    "type": "instrinct",
+                    "name": "any"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "name": "Promise",
+                "typeArguments": [
+                  {
+                    "type": "instrinct",
+                    "name": "any"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": 116,
+          "name": "send",
+          "kind": 2048,
+          "kindString": "Method",
+          "flags": {
+            "isExported": true
+          },
+          "signatures": [
+            {
+              "id": 117,
+              "name": "send",
+              "kind": 4096,
+              "kindString": "Call signature",
+              "flags": {},
+              "comment": {
+                "shortText": "Sends a message using the underlying networking stack.",
+                "returns": "A cancellable promise object.\n",
+                "tags": [
+                  {
+                    "tag": "method",
+                    "text": "send"
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 118,
+                  "name": "message",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {},
+                  "comment": {
+                    "text": "A configured HttpRequestMessage or JSONPRequestMessage."
+                  },
+                  "type": {
+                    "type": "reference",
+                    "name": "RequestMessage",
+                    "id": 39,
+                    "moduleName": "\"aurelia-http-client\""
+                  }
+                },
+                {
+                  "id": 119,
+                  "name": "transformers",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {},
+                  "comment": {
+                    "text": "A collection of transformers to apply to the HTTP request."
+                  },
+                  "type": {
+                    "type": "reference",
+                    "name": "Array",
+                    "typeArguments": [
+                      {
+                        "type": "reference",
+                        "name": "RequestTransformer",
+                        "id": 19
+                      }
+                    ]
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "name": "Promise",
+                "typeArguments": [
+                  {
+                    "type": "instrinct",
+                    "name": "any"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "groups": [
+        {
+          "title": "Constructors",
+          "kind": 512,
+          "children": [
+            108
+          ]
+        },
+        {
+          "title": "Methods",
+          "kind": 2048,
+          "children": [
+            110,
+            113,
+            120,
+            123,
+            126,
+            129,
+            133,
+            140,
+            144,
+            136,
+            116
+          ]
+        }
+      ]
+    },
+    {
+      "id": 86,
+      "name": "HttpRequestMessage",
+      "kind": 128,
+      "kindString": "Class",
+      "flags": {
+        "isExported": true
+      },
+      "children": [
+        {
+          "id": 87,
+          "name": "constructor",
+          "kind": 512,
+          "kindString": "Constructor",
+          "flags": {
+            "isExported": true
+          },
+          "signatures": [
+            {
+              "id": 88,
+              "name": "new HttpRequestMessage",
+              "kind": 16384,
+              "kindString": "Constructor signature",
+              "flags": {},
+              "parameters": [
+                {
+                  "id": 89,
+                  "name": "method",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {},
+                  "type": {
+                    "type": "instrinct",
+                    "name": "string"
+                  }
+                },
+                {
+                  "id": 90,
+                  "name": "url",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {},
+                  "type": {
+                    "type": "instrinct",
+                    "name": "string"
+                  }
+                },
+                {
+                  "id": 91,
+                  "name": "content",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {},
+                  "type": {
+                    "type": "instrinct",
+                    "name": "any"
+                  }
+                },
+                {
+                  "id": 92,
+                  "name": "headers",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {
+                    "isOptional": true
+                  },
+                  "type": {
+                    "type": "reference",
+                    "name": "Headers",
+                    "id": 20,
+                    "moduleName": "\"aurelia-http-client\""
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "name": "HttpRequestMessage",
+                "id": 86,
+                "moduleName": "\"aurelia-http-client\""
+              },
+              "overwrites": {
+                "type": "reference",
+                "name": "RequestMessage.__constructor",
+                "id": 40
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "name": "RequestMessage.__constructor",
+            "id": 40
+          }
+        },
+        {
+          "id": 93,
+          "name": "buildFullUrl",
+          "kind": 2048,
+          "kindString": "Method",
+          "flags": {
+            "isExported": true
+          },
+          "signatures": [
+            {
+              "id": 94,
+              "name": "buildFullUrl",
+              "kind": 4096,
+              "kindString": "Call signature",
+              "flags": {},
+              "type": {
+                "type": "instrinct",
+                "name": "string"
+              },
+              "inheritedFrom": {
+                "type": "reference",
+                "name": "RequestMessage.buildFullUrl",
+                "id": 46
+              }
+            }
+          ],
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "RequestMessage.buildFullUrl",
+            "id": 46
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Constructors",
+          "kind": 512,
+          "children": [
+            87
+          ]
+        },
+        {
+          "title": "Methods",
+          "kind": 2048,
+          "children": [
+            93
+          ]
+        }
+      ],
+      "extendedTypes": [
+        {
+          "type": "reference",
+          "name": "RequestMessage",
+          "id": 39
+        }
+      ]
+    },
+    {
+      "id": 48,
+      "name": "HttpResponseMessage",
+      "kind": 128,
+      "kindString": "Class",
+      "flags": {
+        "isExported": true
+      },
+      "children": [
+        {
+          "id": 49,
+          "name": "constructor",
+          "kind": 512,
+          "kindString": "Constructor",
+          "flags": {
+            "isExported": true
+          },
+          "signatures": [
+            {
+              "id": 50,
+              "name": "new HttpResponseMessage",
+              "kind": 16384,
+              "kindString": "Constructor signature",
+              "flags": {},
+              "parameters": [
+                {
+                  "id": 51,
+                  "name": "requestMessage",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "RequestMessage",
+                    "id": 39,
+                    "moduleName": "\"aurelia-http-client\""
+                  }
+                },
+                {
+                  "id": 52,
+                  "name": "xhr",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "XHR",
+                    "id": 4,
+                    "moduleName": "\"aurelia-http-client\""
+                  }
+                },
+                {
+                  "id": 53,
+                  "name": "responseType",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {},
+                  "type": {
+                    "type": "instrinct",
+                    "name": "string"
+                  }
+                },
+                {
+                  "id": 54,
+                  "name": "reviver",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "Function"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "name": "HttpResponseMessage",
+                "id": 48,
+                "moduleName": "\"aurelia-http-client\""
+              }
+            }
+          ]
+        },
+        {
+          "id": 55,
+          "name": "content",
+          "kind": 2048,
+          "kindString": "Method",
+          "flags": {
+            "isExported": true
+          },
+          "signatures": [
+            {
+              "id": 56,
+              "name": "content",
+              "kind": 4096,
+              "kindString": "Call signature",
+              "flags": {},
+              "type": {
+                "type": "instrinct",
+                "name": "any"
+              }
+            }
+          ]
+        }
+      ],
+      "groups": [
+        {
+          "title": "Constructors",
+          "kind": 512,
+          "children": [
+            49
+          ]
+        },
+        {
+          "title": "Methods",
+          "kind": 2048,
+          "children": [
+            55
+          ]
+        }
+      ]
+    },
+    {
+      "id": 68,
+      "name": "JSONPRequestMessage",
+      "kind": 128,
+      "kindString": "Class",
+      "flags": {
+        "isExported": true
+      },
+      "children": [
+        {
+          "id": 69,
+          "name": "constructor",
+          "kind": 512,
+          "kindString": "Constructor",
+          "flags": {
+            "isExported": true
+          },
+          "signatures": [
+            {
+              "id": 70,
+              "name": "new JSONPRequestMessage",
+              "kind": 16384,
+              "kindString": "Constructor signature",
+              "flags": {},
+              "parameters": [
+                {
+                  "id": 71,
+                  "name": "url",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {},
+                  "type": {
+                    "type": "instrinct",
+                    "name": "string"
+                  }
+                },
+                {
+                  "id": 72,
+                  "name": "callbackParameterName",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {},
+                  "type": {
+                    "type": "instrinct",
+                    "name": "string"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "name": "JSONPRequestMessage",
+                "id": 68,
+                "moduleName": "\"aurelia-http-client\""
+              },
+              "overwrites": {
+                "type": "reference",
+                "name": "RequestMessage.__constructor",
+                "id": 40
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "name": "RequestMessage.__constructor",
+            "id": 40
+          }
+        },
+        {
+          "id": 73,
+          "name": "buildFullUrl",
+          "kind": 2048,
+          "kindString": "Method",
+          "flags": {
+            "isExported": true
+          },
+          "signatures": [
+            {
+              "id": 74,
+              "name": "buildFullUrl",
+              "kind": 4096,
+              "kindString": "Call signature",
+              "flags": {},
+              "type": {
+                "type": "instrinct",
+                "name": "string"
+              },
+              "inheritedFrom": {
+                "type": "reference",
+                "name": "RequestMessage.buildFullUrl",
+                "id": 46
+              }
+            }
+          ],
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "RequestMessage.buildFullUrl",
+            "id": 46
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Constructors",
+          "kind": 512,
+          "children": [
+            69
+          ]
+        },
+        {
+          "title": "Methods",
+          "kind": 2048,
+          "children": [
+            73
+          ]
+        }
+      ],
+      "extendedTypes": [
+        {
+          "type": "reference",
+          "name": "RequestMessage",
+          "id": 39
+        }
+      ]
+    },
+    {
+      "id": 75,
+      "name": "JSONPXHR",
+      "kind": 128,
+      "kindString": "Class",
+      "flags": {},
+      "children": [
+        {
+          "id": 82,
+          "name": "abort",
+          "kind": 2048,
+          "kindString": "Method",
+          "flags": {},
+          "signatures": [
+            {
+              "id": 83,
+              "name": "abort",
+              "kind": 4096,
+              "kindString": "Call signature",
+              "flags": {},
+              "type": {
+                "type": "instrinct",
+                "name": "void"
+              }
+            }
+          ]
+        },
+        {
+          "id": 76,
+          "name": "open",
+          "kind": 2048,
+          "kindString": "Method",
+          "flags": {},
+          "signatures": [
+            {
+              "id": 77,
+              "name": "open",
+              "kind": 4096,
+              "kindString": "Call signature",
+              "flags": {},
+              "parameters": [
+                {
+                  "id": 78,
+                  "name": "method",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {},
+                  "type": {
+                    "type": "instrinct",
+                    "name": "string"
+                  }
+                },
+                {
+                  "id": 79,
+                  "name": "url",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {},
+                  "type": {
+                    "type": "instrinct",
+                    "name": "string"
+                  }
+                }
+              ],
+              "type": {
+                "type": "instrinct",
+                "name": "void"
+              }
+            }
+          ]
+        },
+        {
+          "id": 80,
+          "name": "send",
+          "kind": 2048,
+          "kindString": "Method",
+          "flags": {},
+          "signatures": [
+            {
+              "id": 81,
+              "name": "send",
+              "kind": 4096,
+              "kindString": "Call signature",
+              "flags": {},
+              "type": {
+                "type": "instrinct",
+                "name": "void"
+              }
+            }
+          ]
+        },
+        {
+          "id": 84,
+          "name": "setRequestHeader",
+          "kind": 2048,
+          "kindString": "Method",
+          "flags": {},
+          "signatures": [
+            {
+              "id": 85,
+              "name": "setRequestHeader",
+              "kind": 4096,
+              "kindString": "Call signature",
+              "flags": {},
+              "type": {
+                "type": "instrinct",
+                "name": "any"
+              }
+            }
+          ]
+        }
+      ],
+      "groups": [
+        {
+          "title": "Methods",
+          "kind": 2048,
+          "children": [
+            82,
+            76,
+            80,
+            84
+          ]
+        }
+      ]
+    },
+    {
+      "id": 95,
+      "name": "RequestBuilder",
+      "kind": 128,
+      "kindString": "Class",
+      "flags": {
+        "isExported": true
+      },
+      "comment": {
+        "shortText": "A builder class allowing fluent composition of HTTP requests.",
+        "tags": [
+          {
+            "tag": "class",
+            "text": "RequestBuilder"
+          },
+          {
+            "tag": "constructor",
+            "text": "\n"
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 96,
+          "name": "constructor",
+          "kind": 512,
+          "kindString": "Constructor",
+          "flags": {
+            "isExported": true
+          },
+          "signatures": [
+            {
+              "id": 97,
+              "name": "new RequestBuilder",
+              "kind": 16384,
+              "kindString": "Constructor signature",
+              "flags": {},
+              "parameters": [
+                {
+                  "id": 98,
+                  "name": "client",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "HttpClient",
+                    "id": 107,
+                    "moduleName": "\"aurelia-http-client\""
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "name": "RequestBuilder",
+                "id": 95,
+                "moduleName": "\"aurelia-http-client\""
+              }
+            }
+          ]
+        },
+        {
+          "id": 105,
+          "name": "send",
+          "kind": 2048,
+          "kindString": "Method",
+          "flags": {
+            "isExported": true
+          },
+          "signatures": [
+            {
+              "id": 106,
+              "name": "send",
+              "kind": 4096,
+              "kindString": "Call signature",
+              "flags": {},
+              "comment": {
+                "shortText": "Sends the request.",
+                "returns": "A cancellable promise object.\n",
+                "tags": [
+                  {
+                    "tag": "method",
+                    "text": "send"
+                  }
+                ]
+              },
+              "type": {
+                "type": "reference",
+                "name": "Promise",
+                "typeArguments": [
+                  {
+                    "type": "instrinct",
+                    "name": "any"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": 99,
+          "name": "addHelper",
+          "kind": 2048,
+          "kindString": "Method",
+          "flags": {
+            "isStatic": true,
+            "isExported": true
+          },
+          "signatures": [
+            {
+              "id": 100,
+              "name": "addHelper",
+              "kind": 4096,
+              "kindString": "Call signature",
+              "flags": {},
+              "comment": {
+                "shortText": "Adds a user-defined request transformer to the RequestBuilder.",
+                "tags": [
+                  {
+                    "tag": "method",
+                    "text": "addHelper"
+                  },
+                  {
+                    "tag": "chainable",
+                    "text": "\n"
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "id": 101,
+                  "name": "name",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {},
+                  "comment": {
+                    "text": "The name of the helper to add."
+                  },
+                  "type": {
+                    "type": "instrinct",
+                    "name": "string"
+                  }
+                },
+                {
+                  "id": 102,
+                  "name": "fn",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {},
+                  "comment": {
+                    "text": "The helper function."
+                  },
+                  "type": {
+                    "type": "reflection",
+                    "declaration": {
+                      "id": 103,
+                      "name": "__type",
+                      "kind": 65536,
+                      "kindString": "Type literal",
+                      "flags": {},
+                      "signatures": [
+                        {
+                          "id": 104,
+                          "name": "__call",
+                          "kind": 4096,
+                          "kindString": "Call signature",
+                          "flags": {},
+                          "type": {
+                            "type": "reference",
+                            "name": "RequestTransformer",
+                            "id": 19
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ],
+              "type": {
+                "type": "instrinct",
+                "name": "void"
+              }
+            }
+          ]
+        }
+      ],
+      "groups": [
+        {
+          "title": "Constructors",
+          "kind": 512,
+          "children": [
+            96
+          ]
+        },
+        {
+          "title": "Methods",
+          "kind": 2048,
+          "children": [
+            105,
+            99
+          ]
+        }
+      ]
+    },
+    {
+      "id": 39,
+      "name": "RequestMessage",
+      "kind": 128,
+      "kindString": "Class",
+      "flags": {
+        "isExported": true
+      },
+      "children": [
+        {
+          "id": 40,
+          "name": "constructor",
+          "kind": 512,
+          "kindString": "Constructor",
+          "flags": {
+            "isExported": true
+          },
+          "signatures": [
+            {
+              "id": 41,
+              "name": "new RequestMessage",
+              "kind": 16384,
+              "kindString": "Constructor signature",
+              "flags": {},
+              "parameters": [
+                {
+                  "id": 42,
+                  "name": "method",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {},
+                  "type": {
+                    "type": "instrinct",
+                    "name": "string"
+                  }
+                },
+                {
+                  "id": 43,
+                  "name": "url",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {},
+                  "type": {
+                    "type": "instrinct",
+                    "name": "string"
+                  }
+                },
+                {
+                  "id": 44,
+                  "name": "content",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {},
+                  "type": {
+                    "type": "instrinct",
+                    "name": "any"
+                  }
+                },
+                {
+                  "id": 45,
+                  "name": "headers",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {
+                    "isOptional": true
+                  },
+                  "type": {
+                    "type": "reference",
+                    "name": "Headers",
+                    "id": 20,
+                    "moduleName": "\"aurelia-http-client\""
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "name": "RequestMessage",
+                "id": 39,
+                "moduleName": "\"aurelia-http-client\""
+              }
+            }
+          ]
+        },
+        {
+          "id": 46,
+          "name": "buildFullUrl",
+          "kind": 2048,
+          "kindString": "Method",
+          "flags": {
+            "isExported": true
+          },
+          "signatures": [
+            {
+              "id": 47,
+              "name": "buildFullUrl",
+              "kind": 4096,
+              "kindString": "Call signature",
+              "flags": {},
+              "type": {
+                "type": "instrinct",
+                "name": "string"
+              }
+            }
+          ]
+        }
+      ],
+      "groups": [
+        {
+          "title": "Constructors",
+          "kind": 512,
+          "children": [
+            40
+          ]
+        },
+        {
+          "title": "Methods",
+          "kind": 2048,
+          "children": [
+            46
+          ]
+        }
+      ],
+      "extendedBy": [
+        {
+          "type": "reference",
+          "name": "JSONPRequestMessage",
+          "id": 68
+        },
+        {
+          "type": "reference",
+          "name": "HttpRequestMessage",
+          "id": 86
+        }
+      ]
+    },
+    {
+      "id": 57,
+      "name": "RequestMessageProcessor",
+      "kind": 128,
+      "kindString": "Class",
+      "flags": {
+        "isExported": true
+      },
+      "children": [
+        {
+          "id": 58,
+          "name": "constructor",
+          "kind": 512,
+          "kindString": "Constructor",
+          "flags": {
+            "isExported": true
+          },
+          "signatures": [
+            {
+              "id": 59,
+              "name": "new RequestMessageProcessor",
+              "kind": 16384,
+              "kindString": "Constructor signature",
+              "flags": {},
+              "parameters": [
+                {
+                  "id": 60,
+                  "name": "xhrType",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "XHRConstructor",
+                    "id": 3,
+                    "moduleName": "\"aurelia-http-client\""
+                  }
+                },
+                {
+                  "id": 61,
+                  "name": "xhrTransformers",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "isArray": true,
+                    "name": "XHRTransformer",
+                    "id": 18,
+                    "moduleName": "\"aurelia-http-client\""
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "name": "RequestMessageProcessor",
+                "id": 57,
+                "moduleName": "\"aurelia-http-client\""
+              }
+            }
+          ]
+        },
+        {
+          "id": 62,
+          "name": "abort",
+          "kind": 2048,
+          "kindString": "Method",
+          "flags": {
+            "isExported": true
+          },
+          "signatures": [
+            {
+              "id": 63,
+              "name": "abort",
+              "kind": 4096,
+              "kindString": "Call signature",
+              "flags": {},
+              "type": {
+                "type": "instrinct",
+                "name": "void"
+              }
+            }
+          ]
+        },
+        {
+          "id": 64,
+          "name": "process",
+          "kind": 2048,
+          "kindString": "Method",
+          "flags": {
+            "isExported": true
+          },
+          "signatures": [
+            {
+              "id": 65,
+              "name": "process",
+              "kind": 4096,
+              "kindString": "Call signature",
+              "flags": {},
+              "parameters": [
+                {
+                  "id": 66,
+                  "name": "client",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {},
+                  "type": {
+                    "type": "instrinct",
+                    "name": "any"
+                  }
+                },
+                {
+                  "id": 67,
+                  "name": "message",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "RequestMessage",
+                    "id": 39,
+                    "moduleName": "\"aurelia-http-client\""
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "name": "Promise",
+                "typeArguments": [
+                  {
+                    "type": "instrinct",
+                    "name": "any"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "groups": [
+        {
+          "title": "Constructors",
+          "kind": 512,
+          "children": [
+            58
+          ]
+        },
+        {
+          "title": "Methods",
+          "kind": 2048,
+          "children": [
+            62,
+            64
+          ]
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "name": "RequestTransformer",
+      "kind": 256,
+      "kindString": "Interface",
+      "flags": {
+        "isExported": true
+      }
+    },
+    {
+      "id": 4,
+      "name": "XHR",
+      "kind": 256,
+      "kindString": "Interface",
+      "flags": {
+        "isExported": true
+      },
+      "children": [
+        {
+          "id": 12,
+          "name": "onabort",
+          "kind": 1024,
+          "kindString": "Property",
+          "flags": {
+            "isExported": true
+          },
+          "type": {
+            "type": "reference",
+            "name": "Function"
+          }
+        },
+        {
+          "id": 11,
+          "name": "onerror",
+          "kind": 1024,
+          "kindString": "Property",
+          "flags": {
+            "isExported": true
+          },
+          "type": {
+            "type": "reference",
+            "name": "Function"
+          }
+        },
+        {
+          "id": 9,
+          "name": "onload",
+          "kind": 1024,
+          "kindString": "Property",
+          "flags": {
+            "isExported": true
+          },
+          "type": {
+            "type": "reference",
+            "name": "Function"
+          }
+        },
+        {
+          "id": 10,
+          "name": "ontimeout",
+          "kind": 1024,
+          "kindString": "Property",
+          "flags": {
+            "isExported": true
+          },
+          "type": {
+            "type": "reference",
+            "name": "Function"
+          }
+        },
+        {
+          "id": 7,
+          "name": "response",
+          "kind": 1024,
+          "kindString": "Property",
+          "flags": {
+            "isExported": true
+          },
+          "type": {
+            "type": "instrinct",
+            "name": "any"
+          }
+        },
+        {
+          "id": 8,
+          "name": "responseText",
+          "kind": 1024,
+          "kindString": "Property",
+          "flags": {
+            "isExported": true
+          },
+          "type": {
+            "type": "instrinct",
+            "name": "string"
+          }
+        },
+        {
+          "id": 5,
+          "name": "status",
+          "kind": 1024,
+          "kindString": "Property",
+          "flags": {
+            "isExported": true
+          },
+          "type": {
+            "type": "instrinct",
+            "name": "number"
+          }
+        },
+        {
+          "id": 6,
+          "name": "statusText",
+          "kind": 1024,
+          "kindString": "Property",
+          "flags": {
+            "isExported": true
+          },
+          "type": {
+            "type": "instrinct",
+            "name": "string"
+          }
+        },
+        {
+          "id": 13,
+          "name": "abort",
+          "kind": 2048,
+          "kindString": "Method",
+          "flags": {
+            "isExported": true
+          },
+          "signatures": [
+            {
+              "id": 14,
+              "name": "abort",
+              "kind": 4096,
+              "kindString": "Call signature",
+              "flags": {},
+              "type": {
+                "type": "instrinct",
+                "name": "void"
+              }
+            }
+          ]
+        },
+        {
+          "id": 15,
+          "name": "send",
+          "kind": 2048,
+          "kindString": "Method",
+          "flags": {
+            "isExported": true
+          },
+          "signatures": [
+            {
+              "id": 16,
+              "name": "send",
+              "kind": 4096,
+              "kindString": "Call signature",
+              "flags": {},
+              "parameters": [
+                {
+                  "id": 17,
+                  "name": "content",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {
+                    "isOptional": true
+                  },
+                  "type": {
+                    "type": "instrinct",
+                    "name": "any"
+                  }
+                }
+              ],
+              "type": {
+                "type": "instrinct",
+                "name": "void"
+              }
+            }
+          ]
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "kind": 1024,
+          "children": [
+            12,
+            11,
+            9,
+            10,
+            7,
+            8,
+            5,
+            6
+          ]
+        },
+        {
+          "title": "Methods",
+          "kind": 2048,
+          "children": [
+            13,
+            15
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "XHRConstructor",
+      "kind": 256,
+      "kindString": "Interface",
+      "flags": {
+        "isExported": true
+      }
+    },
+    {
+      "id": 18,
+      "name": "XHRTransformer",
+      "kind": 256,
+      "kindString": "Interface",
+      "flags": {
+        "isExported": true
+      }
+    },
+    {
+      "id": 148,
+      "name": "mimeTypes",
+      "kind": 32,
+      "kindString": "Variable",
+      "flags": {
+        "isExported": true
+      },
+      "comment": {
+        "shortText": "MimeTypes mapped to responseTypes",
+        "tags": [
+          {
+            "tag": "type",
+            "text": "{Object}\n"
+          }
+        ]
+      },
+      "type": {
+        "type": "instrinct",
+        "name": "any"
+      }
+    },
+    {
+      "id": 155,
+      "name": "callbackParameterNameTransformer",
+      "kind": 64,
+      "kindString": "Function",
+      "flags": {
+        "isExported": true
+      },
+      "signatures": [
+        {
+          "id": 156,
+          "name": "callbackParameterNameTransformer",
+          "kind": 4096,
+          "kindString": "Call signature",
+          "flags": {},
+          "parameters": [
+            {
+              "id": 157,
+              "name": "client",
+              "kind": 32768,
+              "kindString": "Parameter",
+              "flags": {},
+              "type": {
+                "type": "instrinct",
+                "name": "any"
+              }
+            },
+            {
+              "id": 158,
+              "name": "processor",
+              "kind": 32768,
+              "kindString": "Parameter",
+              "flags": {},
+              "type": {
+                "type": "instrinct",
+                "name": "any"
+              }
+            },
+            {
+              "id": 159,
+              "name": "message",
+              "kind": 32768,
+              "kindString": "Parameter",
+              "flags": {},
+              "type": {
+                "type": "instrinct",
+                "name": "any"
+              }
+            },
+            {
+              "id": 160,
+              "name": "xhr",
+              "kind": 32768,
+              "kindString": "Parameter",
+              "flags": {},
+              "type": {
+                "type": "instrinct",
+                "name": "any"
+              }
+            }
+          ],
+          "type": {
+            "type": "instrinct",
+            "name": "any"
+          }
+        }
+      ]
+    },
+    {
+      "id": 185,
+      "name": "contentTransformer",
+      "kind": 64,
+      "kindString": "Function",
+      "flags": {
+        "isExported": true
+      },
+      "signatures": [
+        {
+          "id": 186,
+          "name": "contentTransformer",
+          "kind": 4096,
+          "kindString": "Call signature",
+          "flags": {},
+          "parameters": [
+            {
+              "id": 187,
+              "name": "client",
+              "kind": 32768,
+              "kindString": "Parameter",
+              "flags": {},
+              "type": {
+                "type": "instrinct",
+                "name": "any"
+              }
+            },
+            {
+              "id": 188,
+              "name": "processor",
+              "kind": 32768,
+              "kindString": "Parameter",
+              "flags": {},
+              "type": {
+                "type": "instrinct",
+                "name": "any"
+              }
+            },
+            {
+              "id": 189,
+              "name": "message",
+              "kind": 32768,
+              "kindString": "Parameter",
+              "flags": {},
+              "type": {
+                "type": "instrinct",
+                "name": "any"
+              }
+            },
+            {
+              "id": 190,
+              "name": "xhr",
+              "kind": 32768,
+              "kindString": "Parameter",
+              "flags": {},
+              "type": {
+                "type": "instrinct",
+                "name": "any"
+              }
+            }
+          ],
+          "type": {
+            "type": "instrinct",
+            "name": "any"
+          }
+        }
+      ]
+    },
+    {
+      "id": 193,
+      "name": "createHttpRequestMessageProcessor",
+      "kind": 64,
+      "kindString": "Function",
+      "flags": {
+        "isExported": true
+      },
+      "signatures": [
+        {
+          "id": 194,
+          "name": "createHttpRequestMessageProcessor",
+          "kind": 4096,
+          "kindString": "Call signature",
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "name": "RequestMessageProcessor",
+            "id": 57,
+            "moduleName": "\"aurelia-http-client\""
+          }
+        }
+      ]
+    },
+    {
+      "id": 191,
+      "name": "createJSONPRequestMessageProcessor",
+      "kind": 64,
+      "kindString": "Function",
+      "flags": {
+        "isExported": true
+      },
+      "signatures": [
+        {
+          "id": 192,
+          "name": "createJSONPRequestMessageProcessor",
+          "kind": 4096,
+          "kindString": "Call signature",
+          "flags": {},
+          "type": {
+            "type": "instrinct",
+            "name": "any"
+          }
+        }
+      ]
+    },
+    {
+      "id": 161,
+      "name": "credentialsTransformer",
+      "kind": 64,
+      "kindString": "Function",
+      "flags": {
+        "isExported": true
+      },
+      "signatures": [
+        {
+          "id": 162,
+          "name": "credentialsTransformer",
+          "kind": 4096,
+          "kindString": "Call signature",
+          "flags": {},
+          "parameters": [
+            {
+              "id": 163,
+              "name": "client",
+              "kind": 32768,
+              "kindString": "Parameter",
+              "flags": {},
+              "type": {
+                "type": "instrinct",
+                "name": "any"
+              }
+            },
+            {
+              "id": 164,
+              "name": "processor",
+              "kind": 32768,
+              "kindString": "Parameter",
+              "flags": {},
+              "type": {
+                "type": "instrinct",
+                "name": "any"
+              }
+            },
+            {
+              "id": 165,
+              "name": "message",
+              "kind": 32768,
+              "kindString": "Parameter",
+              "flags": {},
+              "type": {
+                "type": "instrinct",
+                "name": "any"
+              }
+            },
+            {
+              "id": 166,
+              "name": "xhr",
+              "kind": 32768,
+              "kindString": "Parameter",
+              "flags": {},
+              "type": {
+                "type": "instrinct",
+                "name": "any"
+              }
+            }
+          ],
+          "type": {
+            "type": "instrinct",
+            "name": "any"
+          }
+        }
+      ]
+    },
+    {
+      "id": 179,
+      "name": "headerTransformer",
+      "kind": 64,
+      "kindString": "Function",
+      "flags": {
+        "isExported": true
+      },
+      "signatures": [
+        {
+          "id": 180,
+          "name": "headerTransformer",
+          "kind": 4096,
+          "kindString": "Call signature",
+          "flags": {},
+          "parameters": [
+            {
+              "id": 181,
+              "name": "client",
+              "kind": 32768,
+              "kindString": "Parameter",
+              "flags": {},
+              "type": {
+                "type": "instrinct",
+                "name": "any"
+              }
+            },
+            {
+              "id": 182,
+              "name": "processor",
+              "kind": 32768,
+              "kindString": "Parameter",
+              "flags": {},
+              "type": {
+                "type": "instrinct",
+                "name": "any"
+              }
+            },
+            {
+              "id": 183,
+              "name": "message",
+              "kind": 32768,
+              "kindString": "Parameter",
+              "flags": {},
+              "type": {
+                "type": "instrinct",
+                "name": "any"
+              }
+            },
+            {
+              "id": 184,
+              "name": "xhr",
+              "kind": 32768,
+              "kindString": "Parameter",
+              "flags": {},
+              "type": {
+                "type": "instrinct",
+                "name": "any"
+              }
+            }
+          ],
+          "type": {
+            "type": "instrinct",
+            "name": "any"
+          }
+        }
+      ]
+    },
+    {
+      "id": 167,
+      "name": "progressTransformer",
+      "kind": 64,
+      "kindString": "Function",
+      "flags": {
+        "isExported": true
+      },
+      "signatures": [
+        {
+          "id": 168,
+          "name": "progressTransformer",
+          "kind": 4096,
+          "kindString": "Call signature",
+          "flags": {},
+          "parameters": [
+            {
+              "id": 169,
+              "name": "client",
+              "kind": 32768,
+              "kindString": "Parameter",
+              "flags": {},
+              "type": {
+                "type": "instrinct",
+                "name": "any"
+              }
+            },
+            {
+              "id": 170,
+              "name": "processor",
+              "kind": 32768,
+              "kindString": "Parameter",
+              "flags": {},
+              "type": {
+                "type": "instrinct",
+                "name": "any"
+              }
+            },
+            {
+              "id": 171,
+              "name": "message",
+              "kind": 32768,
+              "kindString": "Parameter",
+              "flags": {},
+              "type": {
+                "type": "instrinct",
+                "name": "any"
+              }
+            },
+            {
+              "id": 172,
+              "name": "xhr",
+              "kind": 32768,
+              "kindString": "Parameter",
+              "flags": {},
+              "type": {
+                "type": "instrinct",
+                "name": "any"
+              }
+            }
+          ],
+          "type": {
+            "type": "instrinct",
+            "name": "any"
+          }
+        }
+      ]
+    },
+    {
+      "id": 173,
+      "name": "responseTypeTransformer",
+      "kind": 64,
+      "kindString": "Function",
+      "flags": {
+        "isExported": true
+      },
+      "signatures": [
+        {
+          "id": 174,
+          "name": "responseTypeTransformer",
+          "kind": 4096,
+          "kindString": "Call signature",
+          "flags": {},
+          "parameters": [
+            {
+              "id": 175,
+              "name": "client",
+              "kind": 32768,
+              "kindString": "Parameter",
+              "flags": {},
+              "type": {
+                "type": "instrinct",
+                "name": "any"
+              }
+            },
+            {
+              "id": 176,
+              "name": "processor",
+              "kind": 32768,
+              "kindString": "Parameter",
+              "flags": {},
+              "type": {
+                "type": "instrinct",
+                "name": "any"
+              }
+            },
+            {
+              "id": 177,
+              "name": "message",
+              "kind": 32768,
+              "kindString": "Parameter",
+              "flags": {},
+              "type": {
+                "type": "instrinct",
+                "name": "any"
+              }
+            },
+            {
+              "id": 178,
+              "name": "xhr",
+              "kind": 32768,
+              "kindString": "Parameter",
+              "flags": {},
+              "type": {
+                "type": "instrinct",
+                "name": "any"
+              }
+            }
+          ],
+          "type": {
+            "type": "instrinct",
+            "name": "any"
+          }
+        }
+      ]
+    },
+    {
+      "id": 149,
+      "name": "timeoutTransformer",
+      "kind": 64,
+      "kindString": "Function",
+      "flags": {
+        "isExported": true
+      },
+      "signatures": [
+        {
+          "id": 150,
+          "name": "timeoutTransformer",
+          "kind": 4096,
+          "kindString": "Call signature",
+          "flags": {},
+          "parameters": [
+            {
+              "id": 151,
+              "name": "client",
+              "kind": 32768,
+              "kindString": "Parameter",
+              "flags": {},
+              "type": {
+                "type": "instrinct",
+                "name": "any"
+              }
+            },
+            {
+              "id": 152,
+              "name": "processor",
+              "kind": 32768,
+              "kindString": "Parameter",
+              "flags": {},
+              "type": {
+                "type": "instrinct",
+                "name": "any"
+              }
+            },
+            {
+              "id": 153,
+              "name": "message",
+              "kind": 32768,
+              "kindString": "Parameter",
+              "flags": {},
+              "type": {
+                "type": "instrinct",
+                "name": "any"
+              }
+            },
+            {
+              "id": 154,
+              "name": "xhr",
+              "kind": 32768,
+              "kindString": "Parameter",
+              "flags": {},
+              "type": {
+                "type": "instrinct",
+                "name": "any"
+              }
+            }
+          ],
+          "type": {
+            "type": "instrinct",
+            "name": "any"
+          }
+        }
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "title": "Classes",
+      "kind": 128,
+      "children": [
+        20,
+        107,
+        86,
+        48,
+        68,
+        75,
+        95,
+        39,
+        57
+      ]
+    },
+    {
+      "title": "Interfaces",
+      "kind": 256,
+      "children": [
+        19,
+        4,
+        3,
+        18
+      ]
+    },
+    {
+      "title": "Variables",
+      "kind": 32,
+      "children": [
+        148
+      ]
+    },
+    {
+      "title": "Functions",
+      "kind": 64,
+      "children": [
+        155,
+        185,
+        193,
+        191,
+        161,
+        179,
+        167,
+        173,
+        149
+      ]
+    }
+  ]
+}
