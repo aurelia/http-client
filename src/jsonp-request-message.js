@@ -6,7 +6,7 @@ import {
 } from './xhr-transformers';
 
 export class JSONPRequestMessage extends RequestMessage {
-  constructor(url : string, callbackParameterName : string) {
+  constructor(url: string, callbackParameterName: string) {
     super('JSONP', url);
     this.responseType = 'jsonp';
     this.callbackParameterName = callbackParameterName;
@@ -14,13 +14,13 @@ export class JSONPRequestMessage extends RequestMessage {
 }
 
 class JSONPXHR {
-  open(method : string, url : string) : void {
+  open(method: string, url: string): void {
     this.method = method;
     this.url = url;
     this.callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
   }
 
-  send() : void {
+  send(): void {
     let url = this.url + (this.url.indexOf('?') >= 0 ? '&' : '?') + encodeURIComponent(this.callbackParameterName) + '=' + this.callbackName;
     let script = document.createElement('script');
 
@@ -29,7 +29,7 @@ class JSONPXHR {
       cleanUp();
 
       this.status = 0;
-      this.onerror(new Error('error'))
+      this.onerror(new Error('error'));
     };
 
     let cleanUp = () => {
@@ -40,7 +40,7 @@ class JSONPXHR {
     window[this.callbackName] = (data) => {
       cleanUp();
 
-      if(this.status === undefined){
+      if (this.status === undefined) {
         this.status = 200;
         this.statusText = 'OK';
         this.response = data;
@@ -50,9 +50,9 @@ class JSONPXHR {
 
     document.body.appendChild(script);
 
-    if(this.timeout !== undefined){
+    if (this.timeout !== undefined) {
       setTimeout(() => {
-        if(this.status === undefined){
+        if (this.status === undefined) {
           this.status = 0;
           this.ontimeout(new Error('timeout'));
         }
@@ -61,16 +61,16 @@ class JSONPXHR {
   }
 
   abort() : void {
-    if(this.status === undefined){
+    if (this.status === undefined) {
       this.status = 0;
       this.onabort(new Error('abort'));
     }
   }
 
-  setRequestHeader(){}
+  setRequestHeader() {}
 }
 
-export function createJSONPRequestMessageProcessor(){
+export function createJSONPRequestMessageProcessor() {
   return new RequestMessageProcessor(JSONPXHR, [
     timeoutTransformer,
     callbackParameterNameTransformer
