@@ -4,23 +4,23 @@ import {RequestMessage} from '../src/request-message';
 
 describe("Request message processor", () => {
   it("constructor() correctly setup the xhrType and the xhrTransformers", () => {
-    var xhrType = {};
-    var xhrTransformers = {};
-    var processor = new RequestMessageProcessor(xhrType, xhrTransformers);
+    let xhrType = {};
+    let xhrTransformers = {};
+    let processor = new RequestMessageProcessor(xhrType, xhrTransformers);
 
     expect(processor.XHRType).toBe(xhrType);
     expect(processor.xhrTransformers).toBe(xhrTransformers);
   });
 
   it("abort() tell the request to abort", () => {
-    var processor = new RequestMessageProcessor();
+    let processor = new RequestMessageProcessor();
     let xhr = processor.xhr = jasmine.createSpyObj('xhr', ['abort']);
     processor.abort();
     expect(xhr.abort).toHaveBeenCalled();
   });
 
   it("abort() won't throw if the request hasn't started yet", () => {
-    var processor = new RequestMessageProcessor();
+    let processor = new RequestMessageProcessor();
     expect(() => processor.abort()).not.toThrow();
   });
 
@@ -55,7 +55,7 @@ describe("Request message processor", () => {
       expect(reqProcessor.xhr).toEqual(jasmine.any(MockXhrType));
     });
 
-    // promise only resolves 
+    // promise only resolves
     it("should call xhr.open with the method, full url and ajax set to true", (done) => {
       reqProcessor.process(client, message).then(() => {
         expect(openSpy).toHaveBeenCalledWith(message.method, message.url, true);
@@ -83,7 +83,7 @@ describe("Request message processor", () => {
       });
       reqProcessor.xhr.fakeResponse();
     });
-    
+
     //The next couple of functions are breaking the idea of a unit test and treading
     //into integration tests but spying on the constructor of HttpResponseMessage isn't possible
     it("will resolve if the onload response is successful", (done) => {
@@ -180,7 +180,7 @@ describe("Request message processor", () => {
         }
       }
 
-      var interceptor = new RequestInterceptor();
+      let interceptor = new RequestInterceptor();
       spyOn(interceptor, 'request').and.callThrough();
 
       function mockTransformer() {

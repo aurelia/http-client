@@ -1,67 +1,67 @@
-export function timeoutTransformer(client, processor, message, xhr){
-  if(message.timeout !== undefined){
+export function timeoutTransformer(client, processor, message, xhr) {
+  if (message.timeout !== undefined) {
     xhr.timeout = message.timeout;
   }
 }
 
-export function callbackParameterNameTransformer(client, processor, message, xhr){
-  if(message.callbackParameterName !== undefined){
+export function callbackParameterNameTransformer(client, processor, message, xhr) {
+  if (message.callbackParameterName !== undefined) {
     xhr.callbackParameterName = message.callbackParameterName;
   }
 }
 
-export function credentialsTransformer(client, processor, message, xhr){
-  if(message.withCredentials !== undefined){
+export function credentialsTransformer(client, processor, message, xhr) {
+  if (message.withCredentials !== undefined) {
     xhr.withCredentials = message.withCredentials;
   }
 }
 
-export function progressTransformer(client, processor, message, xhr){
-  if(message.progressCallback){
+export function progressTransformer(client, processor, message, xhr) {
+  if (message.progressCallback) {
     xhr.upload.onprogress = message.progressCallback;
   }
 }
 
-export function responseTypeTransformer(client, processor, message, xhr){
-  var responseType = message.responseType;
+export function responseTypeTransformer(client, processor, message, xhr) {
+  let responseType = message.responseType;
 
-  if(responseType === 'json'){
+  if (responseType === 'json') {
     responseType = 'text'; //IE does not support json
   }
 
   xhr.responseType = responseType;
 }
 
-export function headerTransformer(client, processor, message, xhr){
+export function headerTransformer(client, processor, message, xhr) {
   message.headers.configureXHR(xhr);
 }
 
-export function contentTransformer(client, processor, message, xhr){
-  if(message.skipContentProcessing){
-    return;       
-  }    
-    
-  if(window.FormData && message.content instanceof FormData){
+export function contentTransformer(client, processor, message, xhr) {
+  if (message.skipContentProcessing){
     return;
   }
 
-  if(window.Blob && message.content instanceof Blob){
+  if (window.FormData && message.content instanceof FormData) {
     return;
   }
 
-  if(window.ArrayBufferView && message.content instanceof ArrayBufferView){
+  if (window.Blob && message.content instanceof Blob) {
     return;
   }
 
-  if(message.content instanceof Document){
+  if (window.ArrayBufferView && message.content instanceof ArrayBufferView) {
     return;
   }
 
-  if(typeof message.content === 'string'){
+  if (message.content instanceof Document) {
     return;
   }
 
-  if(message.content === null || message.content === undefined){
+  if (typeof message.content === 'string') {
+    return;
+  }
+
+  if (message.content === null || message.content === undefined) {
     return;
   }
 

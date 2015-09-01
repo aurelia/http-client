@@ -4,9 +4,8 @@ import {HttpResponseMessage} from './http-response-message';
 import {join, buildQueryString} from 'aurelia-path';
 
 function applyXhrTransformers(xhrTransformers, client, processor, message, xhr) {
-  var i, ii;
-  for (i = 0, ii = xhrTransformers.length; i < ii; ++i) {
-      xhrTransformers[i](client, processor, message, xhr);
+  for (let i = 0, ii = xhrTransformers.length; i < ii; ++i) {
+    xhrTransformers[i](client, processor, message, xhr);
   }
 }
 
@@ -33,27 +32,27 @@ interface XHRTransformer {
 }
 
 export class RequestMessageProcessor {
-  constructor(xhrType : XHRConstructor, xhrTransformers : XHRTransformer[]){
+  constructor(xhrType : XHRConstructor, xhrTransformers : XHRTransformer[]) {
     this.XHRType = xhrType;
     this.xhrTransformers = xhrTransformers;
     this.isAborted = false;
   }
 
-  abort() : void{
+  abort() : void {
     // The logic here is if the xhr object is not set then there is nothing to abort so the intent was carried out
     // Also test if the XHR is UNSENT - if not, it will be aborted in the process() phase
-    if(this.xhr && this.xhr.readyState !== XMLHttpRequest.UNSENT){
+    if (this.xhr && this.xhr.readyState !== XMLHttpRequest.UNSENT) {
       this.xhr.abort();
     }
     this.isAborted = true;
   }
 
   process(client, message : RequestMessage) : Promise<any> {
-    var promise = new Promise((resolve, reject) => {
-      var xhr = this.xhr = new this.XHRType();
+    let promise = new Promise((resolve, reject) => {
+      let xhr = this.xhr = new this.XHRType();
 
       xhr.onload = (e) => {
-        var response = new HttpResponseMessage(message, xhr, message.responseType, message.reviver);
+        let response = new HttpResponseMessage(message, xhr, message.responseType, message.reviver);
         if (response.isSuccess) {
           resolve(response);
         } else {
@@ -67,7 +66,6 @@ export class RequestMessageProcessor {
           status: xhr.status,
           statusText: xhr.statusText
         }, 'timeout'));
-      };
 
       xhr.onerror = (e) => {
         reject(new HttpResponseMessage(message, {
@@ -84,11 +82,12 @@ export class RequestMessageProcessor {
           statusText: xhr.statusText
         }, 'abort'));
       };
+      };
     });
 
     return Promise.resolve(message)
       .then((message) => {
-        var processRequest = () => {
+        let processRequest = () => {
           if (this.isAborted) {
             // Some interceptors can delay sending of XHR, so when abort is called
             // before XHR is actually sent we abort() instead send()
@@ -103,10 +102,10 @@ export class RequestMessageProcessor {
         };
 
         // [ onFullfilled, onReject ] pairs
-        var chain = [[processRequest, undefined]];
+        let chain = [[processRequest, undefined]];
         // Apply interceptors chain from the message.interceptors
-        var interceptors = message.interceptors || [];
-        interceptors.forEach(function (interceptor) {
+        let interceptors = message.interceptors || [];
+        interceptors.forEach((interceptor) => {
           if (interceptor.request || interceptor.requestError) {
             chain.unshift([
               interceptor.request ? interceptor.request.bind(interceptor) : undefined,
@@ -122,7 +121,7 @@ export class RequestMessageProcessor {
           }
         });
 
-        var interceptorsPromise = Promise.resolve(message);
+        let interceptorsPromise = Promise.resolve(message);
 
         while (chain.length) {
           interceptorsPromise = interceptorsPromise.then(...chain.shift());

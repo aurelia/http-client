@@ -6,19 +6,19 @@ import {HttpRequestMessage,createHttpRequestMessageProcessor} from './http-reque
 import {JSONPRequestMessage,createJSONPRequestMessageProcessor} from './jsonp-request-message';
 import {RequestMessageProcessor} from './request-message-processor';
 
-function trackRequestStart(client : HttpClient, processor : RequestMessageProcessor){
+function trackRequestStart(client : HttpClient, processor : RequestMessageProcessor) {
   client.pendingRequests.push(processor);
   client.isRequesting = true;
 }
 
-function trackRequestEnd(client : HttpClient, processor : RequestMessageProcessor){
-  var index = client.pendingRequests.indexOf(processor);
+function trackRequestEnd(client : HttpClient, processor : RequestMessageProcessor) {
+  let index = client.pendingRequests.indexOf(processor);
 
   client.pendingRequests.splice(index, 1);
   client.isRequesting = client.pendingRequests.length > 0;
 
-  if(!client.isRequesting){
-    var evt = new window.CustomEvent('aurelia-http-client-requests-drained', { bubbles: true, cancelable: true });
+  if (!client.isRequesting) {
+    let evt = new window.CustomEvent('aurelia-http-client-requests-drained', { bubbles: true, cancelable: true });
     setTimeout(() => document.dispatchEvent(evt), 1);
   }
 }
@@ -30,7 +30,7 @@ function trackRequestEnd(client : HttpClient, processor : RequestMessageProcesso
 * @constructor
 */
 export class HttpClient {
-  constructor(){
+  constructor() {
     this.requestTransformers = [];
     this.requestProcessorFactories = new Map();
     this.requestProcessorFactories.set(HttpRequestMessage, createHttpRequestMessageProcessor);
@@ -47,7 +47,7 @@ export class HttpClient {
    * @chainable
    */
   configure(fn : Function) : HttpClient {
-    var builder = new RequestBuilder(this);
+    let builder = new RequestBuilder(this);
     fn(builder);
     this.requestTransformers = builder.transformers;
     return this;
@@ -63,7 +63,7 @@ export class HttpClient {
   createRequest(url : string) : RequestBuilder {
     let builder = new RequestBuilder(this);
 
-    if(url) {
+    if (url) {
       builder.withUrl(url);
     }
 
@@ -79,10 +79,10 @@ export class HttpClient {
    * @return {Promise} A cancellable promise object.
    */
   send(message : RequestMessage, transformers : Array<RequestTransformer>) : Promise<any> {
-    var createProcessor = this.requestProcessorFactories.get(message.constructor),
+    let createProcessor = this.requestProcessorFactories.get(message.constructor),
         processor, promise, i, ii, processRequest;
 
-    if(!createProcessor){
+    if (!createProcessor) {
       throw new Error(`No request message processor factory for ${message.constructor}.`);
     }
 
@@ -98,14 +98,13 @@ export class HttpClient {
           transformers[i](this, processor, message);
         }
 
-        return processor.process(this, message).then(response => {
+        return processor.process(this, message).then((response) => {
           trackRequestEnd(this, processor);
           return response;
-        }).catch(response => {
+        }).catch((response) => {
           trackRequestEnd(this, processor);
           throw response;
         });
-
       });
 
     promise.abort = promise.cancel = function() {

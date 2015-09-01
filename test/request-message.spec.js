@@ -2,7 +2,7 @@ import {RequestMessage} from '../src/request-message';
 
 describe('RequestMessage', () => {
   describe('buildFullUrl', () => {
-    var message;
+    let message;
     beforeEach(() => {
       message = new RequestMessage('get', '/anotherurl');
       message.baseUrl = 'example.com';

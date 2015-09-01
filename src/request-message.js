@@ -11,10 +11,10 @@ export class RequestMessage {
   }
 
   buildFullUrl() : string {
-    var url = join(this.baseUrl, this.url);
+    let url = join(this.baseUrl, this.url);
 
-    if(this.params){
-      var qs = buildQueryString(this.params);
+    if (this.params) {
+      let qs = buildQueryString(this.params);
       url = qs ? `${url}?${qs}` : url;
     }
 

@@ -40,7 +40,7 @@ class JSONPXHR {
     window[this.callbackName] = (data) => {
       cleanUp();
 
-      if(this.status === undefined){
+      if (this.status === undefined) {
         this.status = 200;
         this.statusText = 'OK';
         this.response = data;
@@ -50,9 +50,9 @@ class JSONPXHR {
 
     document.body.appendChild(script);
 
-    if(this.timeout !== undefined){
+    if (this.timeout !== undefined) {
       setTimeout(() => {
-        if(this.status === undefined){
+        if(this.status === undefined) {
           this.status = 0;
           this.ontimeout(new Error('timeout'));
         }
@@ -61,7 +61,7 @@ class JSONPXHR {
   }
 
   abort() : void {
-    if(this.status === undefined){
+    if(this.status === undefined) {
       this.status = 0;
       this.onabort(new Error('abort'));
     }

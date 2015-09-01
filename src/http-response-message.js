@@ -3,7 +3,7 @@ import {Headers} from './headers';
 import {RequestMessage} from './request-message';
 
 export class HttpResponseMessage {
-  constructor(requestMessage : RequestMessage, xhr : XHR, responseType : string, reviver : Function){
+  constructor(requestMessage : RequestMessage, xhr : XHR, responseType : string, reviver : Function) {
     this.requestMessage = requestMessage;
     this.statusCode = xhr.status;
     this.response = xhr.response || xhr.responseText;
@@ -12,47 +12,59 @@ export class HttpResponseMessage {
     this.reviver = reviver;
     this.mimeType = null;
 
-    if(xhr.getAllResponseHeaders){
-      try{
+    if (xhr.getAllResponseHeaders) {
+      try {
         this.headers = Headers.parse(xhr.getAllResponseHeaders());
-      }catch(err){
+      } catch(err) {
         //if this fails it means the xhr was a mock object so the `requestHeaders` property should be used
-        if(xhr.requestHeaders) this.headers = { headers:xhr.requestHeaders };
+        if (xhr.requestHeaders) {
+          this.headers = { headers:xhr.requestHeaders };
+        }
       }
-    }else {
+    } else {
       this.headers = new Headers();
     }
 
-    var contentType;
-    if(this.headers && this.headers.headers) contentType = this.headers.headers["Content-Type"];
-    if(contentType) {
+    let contentType;
+    if (this.headers && this.headers.headers) {
+      contentType = this.headers.headers["Content-Type"];
+    }
+    if (contentType) {
       this.mimeType = responseType = contentType.split(";")[0].trim();
-      if(mimeTypes.hasOwnProperty(this.mimeType)) responseType = mimeTypes[this.mimeType];
+      if (mimeTypes.hasOwnProperty(this.mimeType)) {
+        responseType = mimeTypes[this.mimeType];
+      }
+    }
+    if (contentType) {
+      this.mimeType = responseType = contentType.split(";")[0].trim();
+      if (mimeTypes.hasOwnProperty(this.mimeType)) {
+        responseType = mimeTypes[this.mimeType];
+      }
     }
     this.responseType = responseType;
   }
 
   get content() : any {
-    try{
-      if(this._content !== undefined){
+    try {
+      if (this._content !== undefined){
         return this._content;
       }
 
-      if(this.response === undefined || this.response === null){
+      if (this.response === undefined || this.response === null) {
         return this._content = this.response;
       }
 
-      if(this.responseType === 'json'){
+      if (this.responseType === 'json') {
         return this._content = JSON.parse(this.response, this.reviver);
       }
 
-      if(this.reviver){
+      if (this.reviver) {
         return this._content = this.reviver(this.response);
       }
 
       return this._content = this.response;
-    }catch(e){
-      if(this.isSuccess){
+    } catch(e) {
+      if (this.isSuccess) {
         throw e;
       }
 

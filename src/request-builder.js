@@ -13,7 +13,7 @@ interface RequestTransformer {
  * @constructor
  */
 export class RequestBuilder {
-  constructor(client : HttpClient){
+  constructor(client : HttpClient) {
     this.client = client;
     this.transformers = client.requestTransformers.slice(0);
     this.useJsonp = false;
@@ -28,7 +28,7 @@ export class RequestBuilder {
    * @chainable
    */
   static addHelper(name : string, fn : () => RequestTransformer) : void {
-    RequestBuilder.prototype[name] = function(){
+    RequestBuilder.prototype[name] = function() {
       this.transformers.push(fn.apply(this, arguments));
       return this;
     };
@@ -46,128 +46,128 @@ export class RequestBuilder {
   }
 }
 
-RequestBuilder.addHelper('asDelete', function(){
-  return function(client, processor, message){
+RequestBuilder.addHelper('asDelete', () => {
+  return function(client, processor, message) {
     message.method = 'DELETE';
   };
 });
 
-RequestBuilder.addHelper('asGet', function(){
-  return function(client, processor, message){
+RequestBuilder.addHelper('asGet', () => {
+  return function(client, processor, message) {
     message.method = 'GET';
   };
 });
 
-RequestBuilder.addHelper('asHead', function(){
-  return function(client, processor, message){
+RequestBuilder.addHelper('asHead', () => {
+  return function(client, processor, message) {
     message.method = 'HEAD';
   };
 });
 
-RequestBuilder.addHelper('asOptions', function(){
-  return function(client, processor, message){
+RequestBuilder.addHelper('asOptions', () => {
+  return function(client, processor, message) {
     message.method = 'OPTIONS';
   };
 });
 
-RequestBuilder.addHelper('asPatch', function(){
-  return function(client, processor, message){
+RequestBuilder.addHelper('asPatch', () => {
+  return function(client, processor, message) {
     message.method = 'PATCH';
   };
 });
 
-RequestBuilder.addHelper('asPost', function(){
-  return function(client, processor, message){
+RequestBuilder.addHelper('asPost', () => {
+  return function(client, processor, message) {
     message.method = 'POST';
   };
 });
 
-RequestBuilder.addHelper('asPut', function(){
-  return function(client, processor, message){
+RequestBuilder.addHelper('asPut', () => {
+  return function(client, processor, message) {
     message.method = 'PUT';
   };
 });
 
-RequestBuilder.addHelper('asJsonp', function(callbackParameterName){
+RequestBuilder.addHelper('asJsonp', (callbackParameterName) => {
   this.useJsonp = true;
-  return function(client, processor, message){
+  return function(client, processor, message) {
     message.callbackParameterName = callbackParameterName;
   };
 });
 
-RequestBuilder.addHelper('withUrl', function(url){
-  return function(client, processor, message){
+RequestBuilder.addHelper('withUrl', (url) => {
+  return function(client, processor, message) {
     message.url = url;
   };
 });
 
-RequestBuilder.addHelper('withContent', function(content){
-  return function(client, processor, message){
+RequestBuilder.addHelper('withContent', (content) => {
+  return function(client, processor, message) {
     message.content = content;
   };
 });
 
-RequestBuilder.addHelper('withBaseUrl', function(baseUrl){
-  return function(client, processor, message){
+RequestBuilder.addHelper('withBaseUrl', (baseUrl) => {
+  return function(client, processor, message) {
     message.baseUrl = baseUrl;
   };
 });
 
-RequestBuilder.addHelper('withParams', function(params){
-  return function(client, processor, message){
+RequestBuilder.addHelper('withParams', (params) => {
+  return function(client, processor, message) {
     message.params = params;
   };
 });
 
-RequestBuilder.addHelper('withResponseType', function(responseType){
-  return function(client, processor, message){
+RequestBuilder.addHelper('withResponseType', (responseType) => {
+  return function(client, processor, message) {
     message.responseType = responseType;
   };
 });
 
-RequestBuilder.addHelper('withTimeout', function(timeout){
-  return function(client, processor, message){
+RequestBuilder.addHelper('withTimeout', (timeout) => {
+  return function(client, processor, message) {
     message.timeout = timeout;
   };
 });
 
-RequestBuilder.addHelper('withHeader', function(key, value){
-  return function(client, processor, message){
+RequestBuilder.addHelper('withHeader', (key, value) => {
+  return function(client, processor, message) {
     message.headers.add(key, value);
   };
 });
 
-RequestBuilder.addHelper('withCredentials', function(value){
-  return function(client, processor, message){
+RequestBuilder.addHelper('withCredentials', (value) => {
+  return function(client, processor, message) {
     message.withCredentials = value;
   };
 });
 
-RequestBuilder.addHelper('withReviver', function(reviver){
-  return function(client, processor, message){
+RequestBuilder.addHelper('withReviver', (reviver) => {
+  return function(client, processor, message) {
     message.reviver = reviver;
   };
 });
 
-RequestBuilder.addHelper('withReplacer', function(replacer){
-  return function(client, processor, message){
+RequestBuilder.addHelper('withReplacer', (replacer) => {
+  return function(client, processor, message) {
     message.replacer = replacer;
   };
 });
 
-RequestBuilder.addHelper('withProgressCallback', function(progressCallback){
-  return function(client, processor, message){
+RequestBuilder.addHelper('withProgressCallback', (progressCallback) => {
+  return function(client, processor, message) {
     message.progressCallback = progressCallback;
   };
 });
 
-RequestBuilder.addHelper('withCallbackParameterName', function(callbackParameterName){
-  return function(client, processor, message){
+RequestBuilder.addHelper('withCallbackParameterName', (callbackParameterName) => {
+  return function(client, processor, message) {
     message.callbackParameterName = callbackParameterName;
   };
 });
 
-RequestBuilder.addHelper('withInterceptor', function(interceptor) {
+RequestBuilder.addHelper('withInterceptor', (interceptor) => {
   return function(client, processor, message) {
     // NOTE: Interceptors are stored in reverse order. Inner interceptors before outer interceptors.
     // This reversal is needed so that we can build up the interception chain around the
@@ -177,7 +177,7 @@ RequestBuilder.addHelper('withInterceptor', function(interceptor) {
   };
 });
 
-RequestBuilder.addHelper('skipContentProcessing', function(){
+RequestBuilder.addHelper('skipContentProcessing', () => {
   return function(client, processor, message) {
     message.skipContentProcessing = true;
   }
