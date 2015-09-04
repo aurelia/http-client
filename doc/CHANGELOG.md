@@ -1,3 +1,17 @@
+## 0.11.0 (2015-09-04)
+
+
+#### Bug Fixes
+
+* **build:** update linting, testing and tools ([f808d92c](http://github.com/aurelia/http-client/commit/f808d92c5140e60783f298dac1a8552048bb47dc))
+
+
+#### Features
+
+* **docs:** generate api.json from .d.ts file ([9ef8112d](http://github.com/aurelia/http-client/commit/9ef8112ded6a2a94712d30b296ba84d6832cb95b))
+* **type annotation:** added type info ([14eab7fd](http://github.com/aurelia/http-client/commit/14eab7fdc6de5b4a361e1babbfe445636b1e319f))
+
+
 ### 0.10.3 (2015-08-14)
 
 

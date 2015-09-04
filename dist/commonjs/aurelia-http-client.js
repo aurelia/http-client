@@ -48,10 +48,9 @@ var Headers = (function () {
   };
 
   Headers.prototype.configureXHR = function configureXHR(xhr) {
-    var headers = this.headers,
-        key;
+    var headers = this.headers;
 
-    for (key in headers) {
+    for (var key in headers) {
       xhr.setRequestHeader(key, headers[key]);
     }
   };
@@ -131,12 +130,13 @@ var HttpResponseMessage = (function () {
       this.headers = new Headers();
     }
 
-    var contentType;
-    if (this.headers && this.headers.headers) contentType = this.headers.headers["Content-Type"];
+    var contentType = undefined;
+    if (this.headers && this.headers.headers) contentType = this.headers.headers['Content-Type'];
     if (contentType) {
-      this.mimeType = responseType = contentType.split(";")[0].trim();
+      this.mimeType = responseType = contentType.split(';')[0].trim();
       if (mimeTypes.hasOwnProperty(this.mimeType)) responseType = mimeTypes[this.mimeType];
     }
+
     this.responseType = responseType;
   }
 
@@ -149,24 +149,29 @@ var HttpResponseMessage = (function () {
         }
 
         if (this.response === undefined || this.response === null) {
-          return this._content = this.response;
+          this._content = this.response;
+          return this._content;
         }
 
         if (this.responseType === 'json') {
-          return this._content = JSON.parse(this.response, this.reviver);
+          this._content = JSON.parse(this.response, this.reviver);
+          return this._content;
         }
 
         if (this.reviver) {
-          return this._content = this.reviver(this.response);
+          this._content = this.reviver(this.response);
+          return this._content;
         }
 
-        return this._content = this.response;
+        this._content = this.response;
+        return this._content;
       } catch (e) {
         if (this.isSuccess) {
           throw e;
         }
 
-        return this._content = null;
+        this._content = null;
+        return this._content;
       }
     }
   }]);
@@ -176,31 +181,34 @@ var HttpResponseMessage = (function () {
 
 exports.HttpResponseMessage = HttpResponseMessage;
 var mimeTypes = {
-  "text/html": "html",
-  "text/javascript": "js",
-  "application/javascript": "js",
-  "text/json": "json",
-  "application/json": "json",
-  "application/rss+xml": "rss",
-  "application/atom+xml": "atom",
-  "application/xhtml+xml": "xhtml",
-  "text/markdown": "md",
-  "text/xml": "xml",
-  "text/mathml": "mml",
-  "application/xml": "xml",
-  "text/yml": "yml",
-  "text/csv": "csv",
-  "text/css": "css",
-  "text/less": "less",
-  "text/stylus": "styl",
-  "text/scss": "scss",
-  "text/sass": "sass",
-  "text/plain": "txt"
+  'text/html': 'html',
+  'text/javascript': 'js',
+  'application/javascript': 'js',
+  'text/json': 'json',
+  'application/json': 'json',
+  'application/rss+xml': 'rss',
+  'application/atom+xml': 'atom',
+  'application/xhtml+xml': 'xhtml',
+  'text/markdown': 'md',
+  'text/xml': 'xml',
+  'text/mathml': 'mml',
+  'application/xml': 'xml',
+  'text/yml': 'yml',
+  'text/csv': 'csv',
+  'text/css': 'css',
+  'text/less': 'less',
+  'text/stylus': 'styl',
+  'text/scss': 'scss',
+  'text/sass': 'sass',
+  'text/plain': 'txt'
 };
 
 exports.mimeTypes = mimeTypes;
+
 function applyXhrTransformers(xhrTransformers, client, processor, message, xhr) {
-  var i, ii;
+  var i = undefined;
+  var ii = undefined;
+
   for (i = 0, ii = xhrTransformers.length; i < ii; ++i) {
     xhrTransformers[i](client, processor, message, xhr);
   }
@@ -219,17 +227,18 @@ var RequestMessageProcessor = (function () {
     if (this.xhr && this.xhr.readyState !== XMLHttpRequest.UNSENT) {
       this.xhr.abort();
     }
+
     this.isAborted = true;
   };
 
-  RequestMessageProcessor.prototype.process = function process(client, message) {
+  RequestMessageProcessor.prototype.process = function process(client, requestMessage) {
     var _this = this;
 
     var promise = new Promise(function (resolve, reject) {
       var xhr = _this.xhr = new _this.XHRType();
 
       xhr.onload = function (e) {
-        var response = new HttpResponseMessage(message, xhr, message.responseType, message.reviver);
+        var response = new HttpResponseMessage(requestMessage, xhr, requestMessage.responseType, requestMessage.reviver);
         if (response.isSuccess) {
           resolve(response);
         } else {
@@ -238,7 +247,7 @@ var RequestMessageProcessor = (function () {
       };
 
       xhr.ontimeout = function (e) {
-        reject(new HttpResponseMessage(message, {
+        reject(new HttpResponseMessage(requestMessage, {
           response: e,
           status: xhr.status,
           statusText: xhr.statusText
@@ -246,7 +255,7 @@ var RequestMessageProcessor = (function () {
       };
 
       xhr.onerror = function (e) {
-        reject(new HttpResponseMessage(message, {
+        reject(new HttpResponseMessage(requestMessage, {
           response: e,
           status: xhr.status,
           statusText: xhr.statusText
@@ -254,7 +263,7 @@ var RequestMessageProcessor = (function () {
       };
 
       xhr.onabort = function (e) {
-        reject(new HttpResponseMessage(message, {
+        reject(new HttpResponseMessage(requestMessage, {
           response: e,
           status: xhr.status,
           statusText: xhr.statusText
@@ -262,7 +271,7 @@ var RequestMessageProcessor = (function () {
       };
     });
 
-    return Promise.resolve(message).then(function (message) {
+    return Promise.resolve(requestMessage).then(function (message) {
       var processRequest = function processRequest() {
         if (_this.isAborted) {
           _this.xhr.abort();
@@ -642,6 +651,7 @@ RequestBuilder.addHelper('skipContentProcessing', function () {
     message.skipContentProcessing = true;
   };
 });
+
 function trackRequestStart(client, processor) {
   client.pendingRequests.push(processor);
   client.isRequesting = true;
@@ -654,10 +664,12 @@ function trackRequestEnd(client, processor) {
   client.isRequesting = client.pendingRequests.length > 0;
 
   if (!client.isRequesting) {
-    var evt = new window.CustomEvent('aurelia-http-client-requests-drained', { bubbles: true, cancelable: true });
-    setTimeout(function () {
-      return document.dispatchEvent(evt);
-    }, 1);
+    (function () {
+      var evt = new window.CustomEvent('aurelia-http-client-requests-drained', { bubbles: true, cancelable: true });
+      setTimeout(function () {
+        return document.dispatchEvent(evt);
+      }, 1);
+    })();
   }
 }
 
@@ -690,18 +702,17 @@ var HttpClient = (function () {
     return builder;
   };
 
-  HttpClient.prototype.send = function send(message, transformers) {
+  HttpClient.prototype.send = function send(requestMessage, transformers) {
     var _this3 = this;
 
-    var createProcessor = this.requestProcessorFactories.get(message.constructor),
-        processor,
-        promise,
-        i,
-        ii,
-        processRequest;
+    var createProcessor = this.requestProcessorFactories.get(requestMessage.constructor);
+    var processor = undefined;
+    var promise = undefined;
+    var i = undefined;
+    var ii = undefined;
 
     if (!createProcessor) {
-      throw new Error('No request message processor factory for ' + message.constructor + '.');
+      throw new Error('No request message processor factory for ' + requestMessage.constructor + '.');
     }
 
     processor = createProcessor();
@@ -709,7 +720,7 @@ var HttpClient = (function () {
 
     transformers = transformers || this.requestTransformers;
 
-    promise = Promise.resolve(message).then(function (message) {
+    promise = Promise.resolve(requestMessage).then(function (message) {
       for (i = 0, ii = transformers.length; i < ii; ++i) {
         transformers[i](_this3, processor, message);
       }
