@@ -40,7 +40,7 @@ export class HttpClient {
    * Configure this HttpClient with default settings to be used by all requests.
    * @param fn A function that takes a RequestBuilder as an argument.
    */
-  configure(fn: Function): HttpClient {
+  configure(fn: (builder: RequestBuilder) => RequestBuilder): HttpClient {
     let builder = new RequestBuilder(this);
     fn(builder);
     this.requestTransformers = builder.transformers;
