@@ -51,7 +51,7 @@ export class RequestMessageProcessor {
     this.isAborted = true;
   }
 
-  process(client, requestMessage: RequestMessage): Promise<any> {
+  process(client, requestMessage: RequestMessage): Promise<HttpResponseMessage> {
     let promise = new Promise((resolve, reject) => {
       let xhr = this.xhr = new this.XHRType();
 

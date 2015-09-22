@@ -1,5 +1,6 @@
 import {HttpRequestMessage} from './http-request-message';
 import {JSONPRequestMessage} from './jsonp-request-message';
+import {HttpResponseMessage} from './http-response-message';
 
 interface RequestTransformer {
 	(client: HttpClient, processor: RequestMessageProcessor, message: RequestMessage): void;
@@ -31,7 +32,7 @@ export class RequestBuilder {
    * Sends the request.
    * @return {Promise} A cancellable promise object.
    */
-  send(): Promise<any> {
+  send(): Promise<HttpResponseMessage> {
     let message = this.useJsonp ? new JSONPRequestMessage() : new HttpRequestMessage();
     return this.client.send(message, this.transformers);
   }
