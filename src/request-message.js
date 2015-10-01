@@ -11,7 +11,7 @@ export class RequestMessage {
   }
 
   buildFullUrl(): string {
-    let url = join(this.baseUrl, this.url);
+    let url = this.url.match(/^(http(s?))\:\/\//i) ? this.url : join(this.baseUrl, this.url);
 
     if (this.params) {
       let qs = buildQueryString(this.params);
