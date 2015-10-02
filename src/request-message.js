@@ -11,7 +11,8 @@ export class RequestMessage {
   }
 
   buildFullUrl(): string {
-    let url = this.url.match(/^(http(s?))\:\/\//i) ? this.url : join(this.baseUrl, this.url);
+    let absoluteUrl = /^([a-z][a-z0-9+\-.]*:)?\/\//i;
+    let url = absoluteUrl.test(this.url) ? this.url : join(this.baseUrl, this.url);
 
     if (this.params) {
       let qs = buildQueryString(this.params);
