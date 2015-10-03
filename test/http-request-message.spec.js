@@ -9,8 +9,10 @@ import {
   headerTransformer,
   contentTransformer
   } from '../src/xhr-transformers';
+import {initialize} from 'aurelia-pal-browser';
 
 describe("http-request-message", () => {
+  beforeAll(() => initialize());
 
   it("should have a constructor that takes in the method, url, content and headers", () => {
     let method = {}, url = {}, content = {}, headers = {};

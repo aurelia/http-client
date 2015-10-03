@@ -2,10 +2,12 @@ import {HttpClient} from '../src/http-client';
 import {HttpRequestMessage} from '../src/http-request-message';
 import {HttpResponseMessage} from '../src/http-response-message';
 import {Headers} from '../src/headers';
+import {initialize} from 'aurelia-pal-browser';
 
 describe('http client', () => {
-
   var baseUrl = "http://example.com/";
+
+  beforeAll(() => initialize());
 
   beforeEach(() => {
     jasmine.Ajax.install();
@@ -536,7 +538,7 @@ describe('http client', () => {
 
     it('should reject when aborted', (done) => {
       var client = new HttpClient()
-        .configure(x => x.withBaseUrl(baseUrl)); 
+        .configure(x => x.withBaseUrl(baseUrl));
 
       var promise = client.send(new HttpRequestMessage('GET', 'some/cool/path'));
       promise.catch((response) => {

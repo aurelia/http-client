@@ -1,5 +1,6 @@
 /*eslint no-unused-vars:0*/
-import * as core from 'core-js';
+import {PLATFORM} from 'aurelia-pal';
+import 'core-js';
 import {RequestMessage} from './request-message';
 import {HttpResponseMessage} from './http-response-message';
 
@@ -44,7 +45,7 @@ export class RequestMessageProcessor {
   abort(): void {
     // The logic here is if the xhr object is not set then there is nothing to abort so the intent was carried out
     // Also test if the XHR is UNSENT - if not, it will be aborted in the process() phase
-    if (this.xhr && this.xhr.readyState !== XMLHttpRequest.UNSENT) {
+    if (this.xhr && this.xhr.readyState !== PLATFORM.XMLHttpRequest.UNSENT) {
       this.xhr.abort();
     }
 

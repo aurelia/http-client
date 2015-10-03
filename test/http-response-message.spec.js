@@ -1,7 +1,9 @@
 import {HttpResponseMessage, mimeTypes} from '../src/http-response-message';
 import {Headers} from '../src/headers';
+import {initialize} from 'aurelia-pal-browser';
 
 describe("HttpResponseMessage", () => {
+  beforeAll(() => initialize());
 
   describe("constructor", () => {
     it("should have a isSuccess defined by the xhr.status", () => {

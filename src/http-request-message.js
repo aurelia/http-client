@@ -1,3 +1,4 @@
+import {PLATFORM} from 'aurelia-pal';
 import {RequestMessage} from './request-message';
 import {RequestMessageProcessor} from './request-message-processor';
 import {
@@ -17,7 +18,7 @@ export class HttpRequestMessage extends RequestMessage {
 }
 
 export function createHttpRequestMessageProcessor(): RequestMessageProcessor {
-  return new RequestMessageProcessor(XMLHttpRequest, [
+  return new RequestMessageProcessor(PLATFORM.XMLHttpRequest, [
     timeoutTransformer,
     credentialsTransformer,
     progressTransformer,

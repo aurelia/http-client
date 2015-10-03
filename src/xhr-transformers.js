@@ -1,3 +1,5 @@
+import {PLATFORM} from 'aurelia-pal';
+
 export function timeoutTransformer(client, processor, message, xhr) {
   if (message.timeout !== undefined) {
     xhr.timeout = message.timeout;
@@ -41,15 +43,15 @@ export function contentTransformer(client, processor, message, xhr) {
     return;
   }
 
-  if (window.FormData && message.content instanceof FormData) {
+  if (PLATFORM.global.FormData && message.content instanceof FormData) {
     return;
   }
 
-  if (window.Blob && message.content instanceof Blob) {
+  if (PLATFORM.global.Blob && message.content instanceof Blob) {
     return;
   }
 
-  if (window.ArrayBufferView && message.content instanceof ArrayBufferView) {
+  if (PLATFORM.global.ArrayBufferView && message.content instanceof ArrayBufferView) {
     return;
   }
 

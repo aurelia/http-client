@@ -2,8 +2,11 @@ import {JSONPRequestMessage, createJSONPRequestMessageProcessor} from '../src/js
 import {Headers} from '../src/headers';
 import {RequestMessageProcessor} from '../src/request-message-processor';
 import { timeoutTransformer, callbackParameterNameTransformer } from '../src/xhr-transformers';
+import {initialize} from 'aurelia-pal-browser';
 
 describe("JSONPRequestMessage", () => {
+  beforeAll(() => initialize());
+  
   it("should have a constructor that correctly sets the methods and response type", () => {
     let url = {}, callbackName = {};
     let jsonpRequest = new JSONPRequestMessage(url, callbackName);

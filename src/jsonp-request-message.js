@@ -1,3 +1,4 @@
+import {DOM, PLATFORM} from 'aurelia-pal';
 import {RequestMessage} from './request-message';
 import {RequestMessageProcessor} from './request-message-processor';
 import {
@@ -22,7 +23,7 @@ class JSONPXHR {
 
   send(): void {
     let url = this.url + (this.url.indexOf('?') >= 0 ? '&' : '?') + encodeURIComponent(this.callbackParameterName) + '=' + this.callbackName;
-    let script = document.createElement('script');
+    let script = DOM.createElement('script');
 
     script.src = url;
     script.onerror = (e) => {
@@ -33,11 +34,11 @@ class JSONPXHR {
     };
 
     let cleanUp = () => {
-      delete window[this.callbackName];
-      document.body.removeChild(script);
+      delete PLATFORM.global[this.callbackName];
+      DOM.removeNode(script);
     };
 
-    window[this.callbackName] = (data) => {
+    PLATFORM.global[this.callbackName] = (data) => {
       cleanUp();
 
       if (this.status === undefined) {
@@ -48,7 +49,7 @@ class JSONPXHR {
       }
     };
 
-    document.body.appendChild(script);
+    DOM.appendNode(script);
 
     if (this.timeout !== undefined) {
       setTimeout(() => {

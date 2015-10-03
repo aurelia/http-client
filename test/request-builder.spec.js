@@ -1,8 +1,11 @@
 import {RequestBuilder} from '../src/request-builder';
 import {HttpClient} from '../src/http-client';
+import {initialize} from 'aurelia-pal-browser';
 
 describe('request builder', () => {
   var requestBuilder;
+
+  beforeAll(() => initialize());
 
   beforeEach(() => {
     var client = new HttpClient();

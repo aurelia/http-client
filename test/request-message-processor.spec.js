@@ -1,8 +1,12 @@
 import {RequestMessageProcessor} from '../src/request-message-processor';
 import {HttpResponseMessage} from '../src/http-response-message';
 import {RequestMessage} from '../src/request-message';
+import {initialize} from 'aurelia-pal-browser';
+import {PLATFORM} from 'aurelia-pal';
 
 describe("Request message processor", () => {
+  beforeAll(() => initialize());
+
   it("constructor() correctly setup the xhrType and the xhrTransformers", () => {
     var xhrType = {};
     var xhrTransformers = {};
@@ -55,7 +59,7 @@ describe("Request message processor", () => {
       expect(reqProcessor.xhr).toEqual(jasmine.any(MockXhrType));
     });
 
-    // promise only resolves 
+    // promise only resolves
     it("should call xhr.open with the method, full url and ajax set to true", (done) => {
       reqProcessor.process(client, message).then(() => {
         expect(openSpy).toHaveBeenCalledWith(message.method, message.url, true);
@@ -83,7 +87,7 @@ describe("Request message processor", () => {
       });
       reqProcessor.xhr.fakeResponse();
     });
-    
+
     //The next couple of functions are breaking the idea of a unit test and treading
     //into integration tests but spying on the constructor of HttpResponseMessage isn't possible
     it("will resolve if the onload response is successful", (done) => {

@@ -1,5 +1,6 @@
 /*eslint no-unused-vars:0*/
-import * as core from 'core-js';
+import 'core-js';
+import {DOM} from 'aurelia-pal';
 import {RequestMessage} from './request-message';
 import {RequestBuilder} from './request-builder';
 import {HttpRequestMessage, createHttpRequestMessageProcessor} from './http-request-message';
@@ -19,8 +20,8 @@ function trackRequestEnd(client: HttpClient, processor: RequestMessageProcessor)
   client.isRequesting = client.pendingRequests.length > 0;
 
   if (!client.isRequesting) {
-    let evt = new window.CustomEvent('aurelia-http-client-requests-drained', { bubbles: true, cancelable: true });
-    setTimeout(() => document.dispatchEvent(evt), 1);
+    let evt = DOM.createCustomEvent('aurelia-http-client-requests-drained', { bubbles: true, cancelable: true });
+    setTimeout(() => DOM.dispatchEvent(evt), 1);
   }
 }
 

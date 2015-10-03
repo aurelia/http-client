@@ -1,6 +1,8 @@
 import {Headers} from '../src/headers';
+import {initialize} from 'aurelia-pal-browser';
 
 describe('headers', () => {
+  beforeAll(() => initialize());
 
   it('can add header value', () => {
     var headers = new Headers();

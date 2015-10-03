@@ -1,6 +1,9 @@
 import {RequestMessage} from '../src/request-message';
+import {initialize} from 'aurelia-pal-browser';
 
 describe('RequestMessage', () => {
+  beforeAll(() => initialize());
+
   describe('buildFullUrl', () => {
     var message;
     beforeEach(() => {
