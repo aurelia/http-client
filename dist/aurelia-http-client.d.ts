@@ -1,6 +1,7 @@
 declare module 'aurelia-http-client' {
-  import * as core from 'core-js';
+  import 'core-js';
   import { join, buildQueryString }  from 'aurelia-path';
+  import { PLATFORM, DOM }  from 'aurelia-pal';
   export interface XHRConstructor {
   }
   
@@ -43,7 +44,7 @@ declare module 'aurelia-http-client' {
   }
   export class HttpResponseMessage {
     constructor(requestMessage: RequestMessage, xhr: XHR, responseType: string, reviver: Function);
-    content(): any;
+    content: any;
   }
   
   /**
@@ -55,7 +56,7 @@ declare module 'aurelia-http-client' {
   export class RequestMessageProcessor {
     constructor(xhrType: XHRConstructor, xhrTransformers: XHRTransformer[]);
     abort(): void;
-    process(client: any, requestMessage: RequestMessage): Promise<any>;
+    process(client: any, requestMessage: RequestMessage): Promise<HttpResponseMessage>;
   }
   export function timeoutTransformer(client: any, processor: any, message: any, xhr: any): any;
   export function callbackParameterNameTransformer(client: any, processor: any, message: any, xhr: any): any;
@@ -98,7 +99,7 @@ declare module 'aurelia-http-client' {
        * Sends the request.
        * @return {Promise} A cancellable promise object.
        */
-    send(): Promise<any>;
+    send(): Promise<HttpResponseMessage>;
   }
   
   /**
@@ -111,7 +112,7 @@ declare module 'aurelia-http-client' {
        * Configure this HttpClient with default settings to be used by all requests.
        * @param fn A function that takes a RequestBuilder as an argument.
        */
-    configure(fn: Function): HttpClient;
+    configure(fn: ((builder: RequestBuilder) => void)): HttpClient;
     
     /**
        * Returns a new RequestBuilder for this HttpClient instance that can be used to build and send HTTP requests.
@@ -125,42 +126,42 @@ declare module 'aurelia-http-client' {
        * @param transformers A collection of transformers to apply to the HTTP request.
        * @return A cancellable promise object.
        */
-    send(requestMessage: RequestMessage, transformers: Array<RequestTransformer>): Promise<any>;
+    send(requestMessage: RequestMessage, transformers: Array<RequestTransformer>): Promise<HttpResponseMessage>;
     
     /**
        * Sends an HTTP DELETE request.
        * @param url The target URL.
        * @return A cancellable promise object.
        */
-    delete(url: string): Promise<any>;
+    delete(url: string): Promise<HttpResponseMessage>;
     
     /**
        * Sends an HTTP GET request.
        * @param url The target URL.
        * @return {Promise} A cancellable promise object.
        */
-    get(url: string): Promise<any>;
+    get(url: string): Promise<HttpResponseMessage>;
     
     /**
        * Sends an HTTP HEAD request.
        * @param url The target URL.
        * @return A cancellable promise object.
        */
-    head(url: string): Promise<any>;
+    head(url: string): Promise<HttpResponseMessage>;
     
     /**
        * Sends a JSONP request.
        * @param url The target URL.
        * @return A cancellable promise object.
        */
-    jsonp(url: string, callbackParameterName?: string): Promise<any>;
+    jsonp(url: string, callbackParameterName?: string): Promise<HttpResponseMessage>;
     
     /**
        * Sends an HTTP OPTIONS request.
        * @param url The target URL.
        * @return A cancellable promise object.
        */
-    options(url: string): Promise<any>;
+    options(url: string): Promise<HttpResponseMessage>;
     
     /**
        * Sends an HTTP PUT request.
@@ -168,7 +169,7 @@ declare module 'aurelia-http-client' {
        * @param url The request payload.
        * @return A cancellable promise object.
        */
-    put(url: string, content: any): Promise<any>;
+    put(url: string, content: any): Promise<HttpResponseMessage>;
     
     /**
        * Sends an HTTP PATCH request.
@@ -176,7 +177,7 @@ declare module 'aurelia-http-client' {
        * @param url The request payload.
        * @return A cancellable promise object.
        */
-    patch(url: string, content: any): Promise<any>;
+    patch(url: string, content: any): Promise<HttpResponseMessage>;
     
     /**
        * Sends an HTTP POST request.
@@ -184,6 +185,6 @@ declare module 'aurelia-http-client' {
        * @param url The request payload.
        * @return A cancellable promise object.
        */
-    post(url: string, content: any): Promise<any>;
+    post(url: string, content: any): Promise<HttpResponseMessage>;
   }
 }

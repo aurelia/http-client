@@ -1,7 +1,7 @@
-System.register(['core-js', 'aurelia-path'], function (_export) {
+System.register(['core-js', 'aurelia-path', 'aurelia-pal'], function (_export) {
   'use strict';
 
-  var core, join, buildQueryString, Headers, RequestMessage, HttpResponseMessage, mimeTypes, RequestMessageProcessor, JSONPRequestMessage, JSONPXHR, HttpRequestMessage, RequestBuilder, HttpClient;
+  var join, buildQueryString, PLATFORM, DOM, Headers, RequestMessage, HttpResponseMessage, mimeTypes, RequestMessageProcessor, JSONPRequestMessage, JSONPXHR, HttpRequestMessage, RequestBuilder, HttpClient;
 
   var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
@@ -79,15 +79,15 @@ System.register(['core-js', 'aurelia-path'], function (_export) {
       return;
     }
 
-    if (window.FormData && message.content instanceof FormData) {
+    if (PLATFORM.global.FormData && message.content instanceof FormData) {
       return;
     }
 
-    if (window.Blob && message.content instanceof Blob) {
+    if (PLATFORM.global.Blob && message.content instanceof Blob) {
       return;
     }
 
-    if (window.ArrayBufferView && message.content instanceof ArrayBufferView) {
+    if (PLATFORM.global.ArrayBufferView && message.content instanceof ArrayBufferView) {
       return;
     }
 
@@ -115,7 +115,7 @@ System.register(['core-js', 'aurelia-path'], function (_export) {
   }
 
   function createHttpRequestMessageProcessor() {
-    return new RequestMessageProcessor(XMLHttpRequest, [timeoutTransformer, credentialsTransformer, progressTransformer, responseTypeTransformer, contentTransformer, headerTransformer]);
+    return new RequestMessageProcessor(PLATFORM.XMLHttpRequest, [timeoutTransformer, credentialsTransformer, progressTransformer, responseTypeTransformer, contentTransformer, headerTransformer]);
   }
 
   function trackRequestStart(client, processor) {
@@ -131,20 +131,21 @@ System.register(['core-js', 'aurelia-path'], function (_export) {
 
     if (!client.isRequesting) {
       (function () {
-        var evt = new window.CustomEvent('aurelia-http-client-requests-drained', { bubbles: true, cancelable: true });
+        var evt = DOM.createCustomEvent('aurelia-http-client-requests-drained', { bubbles: true, cancelable: true });
         setTimeout(function () {
-          return document.dispatchEvent(evt);
+          return DOM.dispatchEvent(evt);
         }, 1);
       })();
     }
   }
 
   return {
-    setters: [function (_coreJs) {
-      core = _coreJs;
-    }, function (_aureliaPath) {
+    setters: [function (_coreJs) {}, function (_aureliaPath) {
       join = _aureliaPath.join;
       buildQueryString = _aureliaPath.buildQueryString;
+    }, function (_aureliaPal) {
+      PLATFORM = _aureliaPal.PLATFORM;
+      DOM = _aureliaPal.DOM;
     }],
     execute: function () {
       Headers = (function () {
@@ -214,7 +215,8 @@ System.register(['core-js', 'aurelia-path'], function (_export) {
         }
 
         RequestMessage.prototype.buildFullUrl = function buildFullUrl() {
-          var url = join(this.baseUrl, this.url);
+          var absoluteUrl = /^([a-z][a-z0-9+\-.]*:)?\/\//i;
+          var url = absoluteUrl.test(this.url) ? this.url : join(this.baseUrl, this.url);
 
           if (this.params) {
             var qs = buildQueryString(this.params);
@@ -337,7 +339,7 @@ System.register(['core-js', 'aurelia-path'], function (_export) {
         }
 
         RequestMessageProcessor.prototype.abort = function abort() {
-          if (this.xhr && this.xhr.readyState !== XMLHttpRequest.UNSENT) {
+          if (this.xhr && this.xhr.readyState !== PLATFORM.XMLHttpRequest.UNSENT) {
             this.xhr.abort();
           }
 
@@ -458,7 +460,7 @@ System.register(['core-js', 'aurelia-path'], function (_export) {
           var _this2 = this;
 
           var url = this.url + (this.url.indexOf('?') >= 0 ? '&' : '?') + encodeURIComponent(this.callbackParameterName) + '=' + this.callbackName;
-          var script = document.createElement('script');
+          var script = DOM.createElement('script');
 
           script.src = url;
           script.onerror = function (e) {
@@ -469,11 +471,11 @@ System.register(['core-js', 'aurelia-path'], function (_export) {
           };
 
           var cleanUp = function cleanUp() {
-            delete window[_this2.callbackName];
-            document.body.removeChild(script);
+            delete PLATFORM.global[_this2.callbackName];
+            DOM.removeNode(script);
           };
 
-          window[this.callbackName] = function (data) {
+          PLATFORM.global[this.callbackName] = function (data) {
             cleanUp();
 
             if (_this2.status === undefined) {
@@ -484,7 +486,7 @@ System.register(['core-js', 'aurelia-path'], function (_export) {
             }
           };
 
-          document.body.appendChild(script);
+          DOM.appendNode(script);
 
           if (this.timeout !== undefined) {
             setTimeout(function () {

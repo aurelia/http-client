@@ -14,17 +14,15 @@ exports.contentTransformer = contentTransformer;
 exports.createJSONPRequestMessageProcessor = createJSONPRequestMessageProcessor;
 exports.createHttpRequestMessageProcessor = createHttpRequestMessageProcessor;
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
-
 function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-var _coreJs = require('core-js');
-
-var core = _interopRequireWildcard(_coreJs);
+require('core-js');
 
 var _aureliaPath = require('aurelia-path');
+
+var _aureliaPal = require('aurelia-pal');
 
 var Headers = (function () {
   function Headers() {
@@ -93,7 +91,8 @@ var RequestMessage = (function () {
   }
 
   RequestMessage.prototype.buildFullUrl = function buildFullUrl() {
-    var url = _aureliaPath.join(this.baseUrl, this.url);
+    var absoluteUrl = /^([a-z][a-z0-9+\-.]*:)?\/\//i;
+    var url = absoluteUrl.test(this.url) ? this.url : _aureliaPath.join(this.baseUrl, this.url);
 
     if (this.params) {
       var qs = _aureliaPath.buildQueryString(this.params);
@@ -224,7 +223,7 @@ var RequestMessageProcessor = (function () {
   }
 
   RequestMessageProcessor.prototype.abort = function abort() {
-    if (this.xhr && this.xhr.readyState !== XMLHttpRequest.UNSENT) {
+    if (this.xhr && this.xhr.readyState !== _aureliaPal.PLATFORM.XMLHttpRequest.UNSENT) {
       this.xhr.abort();
     }
 
@@ -357,15 +356,15 @@ function contentTransformer(client, processor, message, xhr) {
     return;
   }
 
-  if (window.FormData && message.content instanceof FormData) {
+  if (_aureliaPal.PLATFORM.global.FormData && message.content instanceof FormData) {
     return;
   }
 
-  if (window.Blob && message.content instanceof Blob) {
+  if (_aureliaPal.PLATFORM.global.Blob && message.content instanceof Blob) {
     return;
   }
 
-  if (window.ArrayBufferView && message.content instanceof ArrayBufferView) {
+  if (_aureliaPal.PLATFORM.global.ArrayBufferView && message.content instanceof ArrayBufferView) {
     return;
   }
 
@@ -419,7 +418,7 @@ var JSONPXHR = (function () {
     var _this2 = this;
 
     var url = this.url + (this.url.indexOf('?') >= 0 ? '&' : '?') + encodeURIComponent(this.callbackParameterName) + '=' + this.callbackName;
-    var script = document.createElement('script');
+    var script = _aureliaPal.DOM.createElement('script');
 
     script.src = url;
     script.onerror = function (e) {
@@ -430,11 +429,11 @@ var JSONPXHR = (function () {
     };
 
     var cleanUp = function cleanUp() {
-      delete window[_this2.callbackName];
-      document.body.removeChild(script);
+      delete _aureliaPal.PLATFORM.global[_this2.callbackName];
+      _aureliaPal.DOM.removeNode(script);
     };
 
-    window[this.callbackName] = function (data) {
+    _aureliaPal.PLATFORM.global[this.callbackName] = function (data) {
       cleanUp();
 
       if (_this2.status === undefined) {
@@ -445,7 +444,7 @@ var JSONPXHR = (function () {
       }
     };
 
-    document.body.appendChild(script);
+    _aureliaPal.DOM.appendNode(script);
 
     if (this.timeout !== undefined) {
       setTimeout(function () {
@@ -489,7 +488,7 @@ var HttpRequestMessage = (function (_RequestMessage2) {
 exports.HttpRequestMessage = HttpRequestMessage;
 
 function createHttpRequestMessageProcessor() {
-  return new RequestMessageProcessor(XMLHttpRequest, [timeoutTransformer, credentialsTransformer, progressTransformer, responseTypeTransformer, contentTransformer, headerTransformer]);
+  return new RequestMessageProcessor(_aureliaPal.PLATFORM.XMLHttpRequest, [timeoutTransformer, credentialsTransformer, progressTransformer, responseTypeTransformer, contentTransformer, headerTransformer]);
 }
 
 var RequestBuilder = (function () {
@@ -665,9 +664,9 @@ function trackRequestEnd(client, processor) {
 
   if (!client.isRequesting) {
     (function () {
-      var evt = new window.CustomEvent('aurelia-http-client-requests-drained', { bubbles: true, cancelable: true });
+      var evt = _aureliaPal.DOM.createCustomEvent('aurelia-http-client-requests-drained', { bubbles: true, cancelable: true });
       setTimeout(function () {
-        return document.dispatchEvent(evt);
+        return _aureliaPal.DOM.dispatchEvent(evt);
       }, 1);
     })();
   }

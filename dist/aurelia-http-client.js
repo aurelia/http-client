@@ -1,5 +1,6 @@
-import * as core from 'core-js';
+import 'core-js';
 import {join,buildQueryString} from 'aurelia-path';
+import {PLATFORM,DOM} from 'aurelia-pal';
 
 export class Headers {
   constructor(headers?: Object = {}) {
@@ -65,7 +66,8 @@ export class RequestMessage {
   }
 
   buildFullUrl(): string {
-    let url = join(this.baseUrl, this.url);
+    let absoluteUrl = /^([a-z][a-z0-9+\-.]*:)?\/\//i;
+    let url = absoluteUrl.test(this.url) ? this.url : join(this.baseUrl, this.url);
 
     if (this.params) {
       let qs = buildQueryString(this.params);
@@ -130,7 +132,7 @@ export class HttpResponseMessage {
 
       this._content = this.response;
       return this._content;
-    } catch(e) {
+    } catch (e) {
       if (this.isSuccess) {
         throw e;
       }
@@ -211,14 +213,14 @@ export class RequestMessageProcessor {
   abort(): void {
     // The logic here is if the xhr object is not set then there is nothing to abort so the intent was carried out
     // Also test if the XHR is UNSENT - if not, it will be aborted in the process() phase
-    if (this.xhr && this.xhr.readyState !== XMLHttpRequest.UNSENT) {
+    if (this.xhr && this.xhr.readyState !== PLATFORM.XMLHttpRequest.UNSENT) {
       this.xhr.abort();
     }
 
     this.isAborted = true;
   }
 
-  process(client, requestMessage: RequestMessage): Promise<any> {
+  process(client, requestMessage: RequestMessage): Promise<HttpResponseMessage> {
     let promise = new Promise((resolve, reject) => {
       let xhr = this.xhr = new this.XHRType();
 
@@ -346,15 +348,15 @@ export function contentTransformer(client, processor, message, xhr) {
     return;
   }
 
-  if (window.FormData && message.content instanceof FormData) {
+  if (PLATFORM.global.FormData && message.content instanceof FormData) {
     return;
   }
 
-  if (window.Blob && message.content instanceof Blob) {
+  if (PLATFORM.global.Blob && message.content instanceof Blob) {
     return;
   }
 
-  if (window.ArrayBufferView && message.content instanceof ArrayBufferView) {
+  if (PLATFORM.global.ArrayBufferView && message.content instanceof ArrayBufferView) {
     return;
   }
 
@@ -394,7 +396,7 @@ class JSONPXHR {
 
   send(): void {
     let url = this.url + (this.url.indexOf('?') >= 0 ? '&' : '?') + encodeURIComponent(this.callbackParameterName) + '=' + this.callbackName;
-    let script = document.createElement('script');
+    let script = DOM.createElement('script');
 
     script.src = url;
     script.onerror = (e) => {
@@ -405,11 +407,11 @@ class JSONPXHR {
     };
 
     let cleanUp = () => {
-      delete window[this.callbackName];
-      document.body.removeChild(script);
+      delete PLATFORM.global[this.callbackName];
+      DOM.removeNode(script);
     };
 
-    window[this.callbackName] = (data) => {
+    PLATFORM.global[this.callbackName] = (data) => {
       cleanUp();
 
       if (this.status === undefined) {
@@ -420,7 +422,7 @@ class JSONPXHR {
       }
     };
 
-    document.body.appendChild(script);
+    DOM.appendNode(script);
 
     if (this.timeout !== undefined) {
       setTimeout(() => {
@@ -457,7 +459,7 @@ export class HttpRequestMessage extends RequestMessage {
 }
 
 export function createHttpRequestMessageProcessor(): RequestMessageProcessor {
-  return new RequestMessageProcessor(XMLHttpRequest, [
+  return new RequestMessageProcessor(PLATFORM.XMLHttpRequest, [
     timeoutTransformer,
     credentialsTransformer,
     progressTransformer,
@@ -497,7 +499,7 @@ export class RequestBuilder {
    * Sends the request.
    * @return {Promise} A cancellable promise object.
    */
-  send(): Promise<any> {
+  send(): Promise<HttpResponseMessage> {
     let message = this.useJsonp ? new JSONPRequestMessage() : new HttpRequestMessage();
     return this.client.send(message, this.transformers);
   }
@@ -653,8 +655,8 @@ function trackRequestEnd(client: HttpClient, processor: RequestMessageProcessor)
   client.isRequesting = client.pendingRequests.length > 0;
 
   if (!client.isRequesting) {
-    let evt = new window.CustomEvent('aurelia-http-client-requests-drained', { bubbles: true, cancelable: true });
-    setTimeout(() => document.dispatchEvent(evt), 1);
+    let evt = DOM.createCustomEvent('aurelia-http-client-requests-drained', { bubbles: true, cancelable: true });
+    setTimeout(() => DOM.dispatchEvent(evt), 1);
   }
 }
 
@@ -675,7 +677,7 @@ export class HttpClient {
    * Configure this HttpClient with default settings to be used by all requests.
    * @param fn A function that takes a RequestBuilder as an argument.
    */
-  configure(fn: Function): HttpClient {
+  configure(fn: (builder: RequestBuilder) => void): HttpClient {
     let builder = new RequestBuilder(this);
     fn(builder);
     this.requestTransformers = builder.transformers;
@@ -702,7 +704,7 @@ export class HttpClient {
    * @param transformers A collection of transformers to apply to the HTTP request.
    * @return A cancellable promise object.
    */
-  send(requestMessage: RequestMessage, transformers: Array<RequestTransformer>): Promise<any> {
+  send(requestMessage: RequestMessage, transformers: Array<RequestTransformer>): Promise<HttpResponseMessage> {
     let createProcessor = this.requestProcessorFactories.get(requestMessage.constructor);
     let processor;
     let promise;
@@ -746,7 +748,7 @@ export class HttpClient {
    * @param url The target URL.
    * @return A cancellable promise object.
    */
-  delete(url: string): Promise<any> {
+  delete(url: string): Promise<HttpResponseMessage> {
     return this.createRequest(url).asDelete().send();
   }
 
@@ -755,7 +757,7 @@ export class HttpClient {
    * @param url The target URL.
    * @return {Promise} A cancellable promise object.
    */
-  get(url: string): Promise<any> {
+  get(url: string): Promise<HttpResponseMessage> {
     return this.createRequest(url).asGet().send();
   }
 
@@ -764,7 +766,7 @@ export class HttpClient {
    * @param url The target URL.
    * @return A cancellable promise object.
    */
-  head(url: string): Promise<any> {
+  head(url: string): Promise<HttpResponseMessage> {
     return this.createRequest(url).asHead().send();
   }
 
@@ -773,7 +775,7 @@ export class HttpClient {
    * @param url The target URL.
    * @return A cancellable promise object.
    */
-  jsonp(url: string, callbackParameterName: string = 'jsoncallback'): Promise<any> {
+  jsonp(url: string, callbackParameterName: string = 'jsoncallback'): Promise<HttpResponseMessage> {
     return this.createRequest(url).asJsonp(callbackParameterName).send();
   }
 
@@ -782,7 +784,7 @@ export class HttpClient {
    * @param url The target URL.
    * @return A cancellable promise object.
    */
-  options(url: string): Promise<any> {
+  options(url: string): Promise<HttpResponseMessage> {
     return this.createRequest(url).asOptions().send();
   }
 
@@ -792,7 +794,7 @@ export class HttpClient {
    * @param url The request payload.
    * @return A cancellable promise object.
    */
-  put(url: string, content: any): Promise<any> {
+  put(url: string, content: any): Promise<HttpResponseMessage> {
     return this.createRequest(url).asPut().withContent(content).send();
   }
 
@@ -802,7 +804,7 @@ export class HttpClient {
    * @param url The request payload.
    * @return A cancellable promise object.
    */
-  patch(url: string, content: any): Promise<any> {
+  patch(url: string, content: any): Promise<HttpResponseMessage> {
     return this.createRequest(url).asPatch().withContent(content).send();
   }
 
@@ -812,7 +814,7 @@ export class HttpClient {
    * @param url The request payload.
    * @return A cancellable promise object.
    */
-  post(url: string, content: any): Promise<any> {
+  post(url: string, content: any): Promise<HttpResponseMessage> {
     return this.createRequest(url).asPost().withContent(content).send();
   }
 }

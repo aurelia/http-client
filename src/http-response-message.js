@@ -55,7 +55,7 @@ export class HttpResponseMessage {
 
       this._content = this.response;
       return this._content;
-    } catch(e) {
+    } catch (e) {
       if (this.isSuccess) {
         throw e;
       }

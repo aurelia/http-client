@@ -1,4 +1,4 @@
-define(['exports', 'core-js', 'aurelia-path'], function (exports, _coreJs, _aureliaPath) {
+define(['exports', 'core-js', 'aurelia-path', 'aurelia-pal'], function (exports, _coreJs, _aureliaPath, _aureliaPal) {
   'use strict';
 
   exports.__esModule = true;
@@ -86,7 +86,8 @@ define(['exports', 'core-js', 'aurelia-path'], function (exports, _coreJs, _aure
     }
 
     RequestMessage.prototype.buildFullUrl = function buildFullUrl() {
-      var url = _aureliaPath.join(this.baseUrl, this.url);
+      var absoluteUrl = /^([a-z][a-z0-9+\-.]*:)?\/\//i;
+      var url = absoluteUrl.test(this.url) ? this.url : _aureliaPath.join(this.baseUrl, this.url);
 
       if (this.params) {
         var qs = _aureliaPath.buildQueryString(this.params);
@@ -217,7 +218,7 @@ define(['exports', 'core-js', 'aurelia-path'], function (exports, _coreJs, _aure
     }
 
     RequestMessageProcessor.prototype.abort = function abort() {
-      if (this.xhr && this.xhr.readyState !== XMLHttpRequest.UNSENT) {
+      if (this.xhr && this.xhr.readyState !== _aureliaPal.PLATFORM.XMLHttpRequest.UNSENT) {
         this.xhr.abort();
       }
 
@@ -350,15 +351,15 @@ define(['exports', 'core-js', 'aurelia-path'], function (exports, _coreJs, _aure
       return;
     }
 
-    if (window.FormData && message.content instanceof FormData) {
+    if (_aureliaPal.PLATFORM.global.FormData && message.content instanceof FormData) {
       return;
     }
 
-    if (window.Blob && message.content instanceof Blob) {
+    if (_aureliaPal.PLATFORM.global.Blob && message.content instanceof Blob) {
       return;
     }
 
-    if (window.ArrayBufferView && message.content instanceof ArrayBufferView) {
+    if (_aureliaPal.PLATFORM.global.ArrayBufferView && message.content instanceof ArrayBufferView) {
       return;
     }
 
@@ -412,7 +413,7 @@ define(['exports', 'core-js', 'aurelia-path'], function (exports, _coreJs, _aure
       var _this2 = this;
 
       var url = this.url + (this.url.indexOf('?') >= 0 ? '&' : '?') + encodeURIComponent(this.callbackParameterName) + '=' + this.callbackName;
-      var script = document.createElement('script');
+      var script = _aureliaPal.DOM.createElement('script');
 
       script.src = url;
       script.onerror = function (e) {
@@ -423,11 +424,11 @@ define(['exports', 'core-js', 'aurelia-path'], function (exports, _coreJs, _aure
       };
 
       var cleanUp = function cleanUp() {
-        delete window[_this2.callbackName];
-        document.body.removeChild(script);
+        delete _aureliaPal.PLATFORM.global[_this2.callbackName];
+        _aureliaPal.DOM.removeNode(script);
       };
 
-      window[this.callbackName] = function (data) {
+      _aureliaPal.PLATFORM.global[this.callbackName] = function (data) {
         cleanUp();
 
         if (_this2.status === undefined) {
@@ -438,7 +439,7 @@ define(['exports', 'core-js', 'aurelia-path'], function (exports, _coreJs, _aure
         }
       };
 
-      document.body.appendChild(script);
+      _aureliaPal.DOM.appendNode(script);
 
       if (this.timeout !== undefined) {
         setTimeout(function () {
@@ -482,7 +483,7 @@ define(['exports', 'core-js', 'aurelia-path'], function (exports, _coreJs, _aure
   exports.HttpRequestMessage = HttpRequestMessage;
 
   function createHttpRequestMessageProcessor() {
-    return new RequestMessageProcessor(XMLHttpRequest, [timeoutTransformer, credentialsTransformer, progressTransformer, responseTypeTransformer, contentTransformer, headerTransformer]);
+    return new RequestMessageProcessor(_aureliaPal.PLATFORM.XMLHttpRequest, [timeoutTransformer, credentialsTransformer, progressTransformer, responseTypeTransformer, contentTransformer, headerTransformer]);
   }
 
   var RequestBuilder = (function () {
@@ -658,9 +659,9 @@ define(['exports', 'core-js', 'aurelia-path'], function (exports, _coreJs, _aure
 
     if (!client.isRequesting) {
       (function () {
-        var evt = new window.CustomEvent('aurelia-http-client-requests-drained', { bubbles: true, cancelable: true });
+        var evt = _aureliaPal.DOM.createCustomEvent('aurelia-http-client-requests-drained', { bubbles: true, cancelable: true });
         setTimeout(function () {
-          return document.dispatchEvent(evt);
+          return _aureliaPal.DOM.dispatchEvent(evt);
         }, 1);
       })();
     }
