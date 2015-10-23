@@ -69,7 +69,7 @@ export function contentTransformer(client, processor, message, xhr) {
 
   message.content = JSON.stringify(message.content, message.replacer);
 
-  if (message.headers.get('Content-Type') === undefined) {
+  if (!message.headers.has('Content-Type')) {
     message.headers.add('Content-Type', 'application/json');
   }
 }

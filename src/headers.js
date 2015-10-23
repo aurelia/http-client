@@ -15,6 +15,19 @@ export class Headers {
     this.headers = {};
   }
 
+  has(header) {
+    let lowered = header.toLowerCase();
+    let headers = this.headers;
+
+    for (let key in headers) {
+      if (key.toLowerCase() === lowered) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   configureXHR(xhr : XHR): void {
     let headers = this.headers;
 
