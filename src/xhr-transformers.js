@@ -1,30 +1,65 @@
 import {PLATFORM} from 'aurelia-pal';
 
-export function timeoutTransformer(client, processor, message, xhr) {
+/**
+* Adds a timeout to the request.
+* @param client The http client.
+* @param processor The request message processor.
+* @param message The request message.
+* @param xhr The xhr instance.
+*/
+export function timeoutTransformer(client: HttpClient, processor: RequestMessageProcessor, message: RequestMessage, xhr: XHR) {
   if (message.timeout !== undefined) {
     xhr.timeout = message.timeout;
   }
 }
 
-export function callbackParameterNameTransformer(client, processor, message, xhr) {
+/**
+* Adds a callback parameter name to the request.
+* @param client The http client.
+* @param processor The request message processor.
+* @param message The request message.
+* @param xhr The xhr instance.
+*/
+export function callbackParameterNameTransformer(client: HttpClient, processor: RequestMessageProcessor, message: RequestMessage, xhr: XHR) {
   if (message.callbackParameterName !== undefined) {
     xhr.callbackParameterName = message.callbackParameterName;
   }
 }
 
-export function credentialsTransformer(client, processor, message, xhr) {
+/**
+* Sets withCredentials on the request.
+* @param client The http client.
+* @param processor The request message processor.
+* @param message The request message.
+* @param xhr The xhr instance.
+*/
+export function credentialsTransformer(client: HttpClient, processor: RequestMessageProcessor, message: RequestMessage, xhr: XHR) {
   if (message.withCredentials !== undefined) {
     xhr.withCredentials = message.withCredentials;
   }
 }
 
-export function progressTransformer(client, processor, message, xhr) {
+/**
+* Adds an onprogress callback to the request.
+* @param client The http client.
+* @param processor The request message processor.
+* @param message The request message.
+* @param xhr The xhr instance.
+*/
+export function progressTransformer(client: HttpClient, processor: RequestMessageProcessor, message: RequestMessage, xhr: XHR) {
   if (message.progressCallback) {
     xhr.upload.onprogress = message.progressCallback;
   }
 }
 
-export function responseTypeTransformer(client, processor, message, xhr) {
+/**
+* Adds a response type transformer to the request.
+* @param client The http client.
+* @param processor The request message processor.
+* @param message The request message.
+* @param xhr The xhr instance.
+*/
+export function responseTypeTransformer(client: HttpClient, processor: RequestMessageProcessor, message: RequestMessage, xhr: XHR) {
   let responseType = message.responseType;
 
   if (responseType === 'json') {
@@ -34,11 +69,25 @@ export function responseTypeTransformer(client, processor, message, xhr) {
   xhr.responseType = responseType;
 }
 
-export function headerTransformer(client, processor, message, xhr) {
+/**
+* Adds headers to the request.
+* @param client The http client.
+* @param processor The request message processor.
+* @param message The request message.
+* @param xhr The xhr instance.
+*/
+export function headerTransformer(client: HttpClient, processor: RequestMessageProcessor, message: RequestMessage, xhr: XHR) {
   message.headers.configureXHR(xhr);
 }
 
-export function contentTransformer(client, processor, message, xhr) {
+/**
+* Transforms the content of the request.
+* @param client The http client.
+* @param processor The request message processor.
+* @param message The request message.
+* @param xhr The xhr instance.
+*/
+export function contentTransformer(client: HttpClient, processor: RequestMessageProcessor, message: RequestMessage, xhr: XHR) {
   if (message.skipContentProcessing) {
     return;
   }

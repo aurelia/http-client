@@ -2,23 +2,65 @@ import 'core-js';
 import {join,buildQueryString} from 'aurelia-path';
 import {PLATFORM,DOM} from 'aurelia-pal';
 
+/**
+* Represents http request/response headers.
+*/
 export class Headers {
+  /**
+  * Creates an instance of the headers class.
+  * @param headers A set of key/values to initialize the headers with.
+  */
   constructor(headers?: Object = {}) {
     this.headers = headers;
   }
 
+  /**
+  * Adds a header.
+  * @param key The header key.
+  * @param value The header value.
+  */
   add(key: string, value: string): void {
     this.headers[key] = value;
   }
 
+  /**
+  * Gets a header value.
+  * @param key The header key.
+  * @return The header value.
+  */
   get(key: string): string {
     return this.headers[key];
   }
 
+  /**
+  * Clears the headers.
+  */
   clear(): void {
     this.headers = {};
   }
 
+  /**
+  * Determines whether or not the indicated header exists in the collection.
+  * @param key The header key to check.
+  * @return True if it exists, false otherwise.
+  */
+  has(header: string): boolean {
+    let lowered = header.toLowerCase();
+    let headers = this.headers;
+
+    for (let key in headers) {
+      if (key.toLowerCase() === lowered) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  /**
+  * Configures an XMR object with the headers.
+  * @param xhr The XHRT instance to configure.
+  */
   configureXHR(xhr : XHR): void {
     let headers = this.headers;
 
@@ -32,6 +74,8 @@ export class Headers {
    * headers according to the format described here:
    * http://www.w3.org/TR/XMLHttpRequest/#the-getallresponseheaders-method
    * This method parses that string into a user-friendly key/value pair object.
+   * @param headerStr The string from the XHR.
+   * @return A Headers instance containing the parsed headers.
    */
   static parse(headerStr: string): Headers {
     let headers = new Headers();
@@ -56,7 +100,42 @@ export class Headers {
   }
 }
 
+/**
+* Represents a request message.
+*/
 export class RequestMessage {
+  /**
+  * The HTTP method.
+  */
+  method: string;
+
+  /**
+  * The url to submit the request to.
+  */
+  url: string;
+
+  /**
+  * The content of the request.
+  */
+  content: any;
+
+  /**
+  * The headers to send along with the request.
+  */
+  headers: Headers;
+
+  /**
+  * The base url that the request url is joined with.
+  */
+  baseUrl: string;
+
+  /**
+  * Creates an instance of RequestMessage.
+  * @param method The HTTP method.
+  * @param url The url to submit the request to.
+  * @param content The content of the request.
+  * @param headers The headers to send along with the request.
+  */
   constructor(method: string, url: string, content: any, headers?: Headers) {
     this.method = method;
     this.url = url;
@@ -65,6 +144,10 @@ export class RequestMessage {
     this.baseUrl = '';
   }
 
+  /**
+  * Builds the url to make the request from.
+  * @return The constructed url.
+  */
   buildFullUrl(): string {
     let absoluteUrl = /^([a-z][a-z0-9+\-.]*:)?\/\//i;
     let url = absoluteUrl.test(this.url) ? this.url : join(this.baseUrl, this.url);
@@ -78,8 +161,53 @@ export class RequestMessage {
   }
 }
 
+/**
+* Represents a responce message from an HTTP or JSONP request.
+*/
 export class HttpResponseMessage {
-  constructor(requestMessage: RequestMessage, xhr: XHR, responseType: string, reviver: Function) {
+  /**
+  * The request message that resulted in this response.
+  */
+  requestMessage: RequestMessage;
+
+  /**
+  * The status code of the response.
+  */
+  statusCode: string;
+
+  /**
+  * The raw response.
+  */
+  response: any;
+
+  /**
+  * The success status of the request based on status code.
+  */
+  isSuccess: boolean;
+
+  /**
+  * The status text.
+  */
+  statusText: string;
+
+  /**
+  * A reviver function to use in transforming the content.
+  */
+  reviver: (key: string, value: any) => any;
+
+  /**
+  * The mime type of the response.
+  */
+  mimeType: string;
+
+  /**
+  * Creates an instance of HttpResponseMessage.
+  * @param requestMessage The request message that resulted in this response.
+  * @param xhr The XHR instance that made the request.
+  * @param responseType The type of the response.
+  * @param reviver A reviver function to use in transforming the content.
+  */
+  constructor(requestMessage: RequestMessage, xhr: XHR, responseType: string, reviver: (key: string, value: any) => any) {
     this.requestMessage = requestMessage;
     this.statusCode = xhr.status;
     this.response = xhr.response || xhr.responseText;
@@ -109,6 +237,10 @@ export class HttpResponseMessage {
     this.responseType = responseType;
   }
 
+  /**
+  * Gets the content of the response.
+  * @return the response content.
+  */
   get content(): any {
     try {
       if (this._content !== undefined) {
@@ -181,35 +313,86 @@ function applyXhrTransformers(xhrTransformers, client, processor, message, xhr) 
   }
 }
 
+/**
+ * Creates an XHR implementation.
+ */
 interface XHRConstructor {
 	//new():XHR;
 }
 
+/**
+ * Represents an XHR.
+ */
 interface XHR {
+  /**
+  * The status code of the response.
+  */
   status: number;
+  /**
+  * The status text.
+  */
   statusText: string;
+  /**
+  * The raw response.
+  */
   response: any;
+  /**
+  * The raw response text.
+  */
   responseText: string;
+  /**
+  * The load callback.
+  */
   onload: Function;
+  /**
+  * The timeout callback.
+  */
   ontimeout: Function;
+  /**
+  * The error callback.
+  */
   onerror: Function;
+  /**
+  * The abort callback.
+  */
   onabort: Function;
+  /**
+  * Aborts the request.
+  */
   abort(): void;
-  open(method: string, url: string, isAsync: boolean): void;
+  /**
+  * Opens the XHR channel.
+  */
+  open(method: string, url: string, isAsync: boolean, user?: string, password?: string): void;
+  /**
+  * Sends the request.
+  */
   send(content? : any): void;
 }
 
+/**
+ * Represents an XHR transformer.
+ */
 interface XHRTransformer {
   (client: HttpClient, processor: RequestMessageProcessor, message: RequestMessage, xhr: XHR): void;
 }
 
+/**
+ * Processes request messages.
+ */
 export class RequestMessageProcessor {
+  /**
+   * Creates an instance of RequestMessageProcessor.
+   */
   constructor(xhrType: XHRConstructor, xhrTransformers: XHRTransformer[]) {
     this.XHRType = xhrType;
     this.xhrTransformers = xhrTransformers;
     this.isAborted = false;
   }
 
+  /**
+   * Aborts the request.
+   */
   abort(): void {
     // The logic here is if the xhr object is not set then there is nothing to abort so the intent was carried out
     // Also test if the XHR is UNSENT - if not, it will be aborted in the process() phase
@@ -220,7 +403,13 @@ export class RequestMessageProcessor {
     this.isAborted = true;
   }
 
-  process(client, requestMessage: RequestMessage): Promise<HttpResponseMessage> {
+  /**
+   * Processes the request.
+   * @param client The HttpClient making the request.
+   * @param requestMessage The message to process.
+   * @return A promise for an HttpResponseMessage.
+   */
+  process(client: HttpClient, requestMessage: RequestMessage): Promise<HttpResponseMessage> {
     let promise = new Promise((resolve, reject) => {
       let xhr = this.xhr = new this.XHRType();
 
@@ -266,7 +455,7 @@ export class RequestMessageProcessor {
             // before XHR is actually sent we abort() instead send()
             this.xhr.abort();
           } else {
-            this.xhr.open(message.method, message.buildFullUrl(), true);
+            this.xhr.open(message.method, message.buildFullUrl(), true, message.user, message.password);
             applyXhrTransformers(this.xhrTransformers, client, this, message, this.xhr);
             this.xhr.send(message.content);
           }
@@ -305,31 +494,66 @@ export class RequestMessageProcessor {
   }
 }
 
-export function timeoutTransformer(client, processor, message, xhr) {
+/**
+* Adds a timeout to the request.
+* @param client The http client.
+* @param processor The request message processor.
+* @param message The request message.
+* @param xhr The xhr instance.
+*/
+export function timeoutTransformer(client: HttpClient, processor: RequestMessageProcessor, message: RequestMessage, xhr: XHR) {
   if (message.timeout !== undefined) {
     xhr.timeout = message.timeout;
   }
 }
 
-export function callbackParameterNameTransformer(client, processor, message, xhr) {
+/**
+* Adds a callback parameter name to the request.
+* @param client The http client.
+* @param processor The request message processor.
+* @param message The request message.
+* @param xhr The xhr instance.
+*/
+export function callbackParameterNameTransformer(client: HttpClient, processor: RequestMessageProcessor, message: RequestMessage, xhr: XHR) {
   if (message.callbackParameterName !== undefined) {
     xhr.callbackParameterName = message.callbackParameterName;
   }
 }
 
-export function credentialsTransformer(client, processor, message, xhr) {
+/**
+* Sets withCredentials on the request.
+* @param client The http client.
+* @param processor The request message processor.
+* @param message The request message.
+* @param xhr The xhr instance.
+*/
+export function credentialsTransformer(client: HttpClient, processor: RequestMessageProcessor, message: RequestMessage, xhr: XHR) {
   if (message.withCredentials !== undefined) {
     xhr.withCredentials = message.withCredentials;
   }
 }
 
-export function progressTransformer(client, processor, message, xhr) {
+/**
+* Adds an onprogress callback to the request.
+* @param client The http client.
+* @param processor The request message processor.
+* @param message The request message.
+* @param xhr The xhr instance.
+*/
+export function progressTransformer(client: HttpClient, processor: RequestMessageProcessor, message: RequestMessage, xhr: XHR) {
   if (message.progressCallback) {
     xhr.upload.onprogress = message.progressCallback;
   }
 }
 
-export function responseTypeTransformer(client, processor, message, xhr) {
+/**
+* Adds a response type transformer to the request.
+* @param client The http client.
+* @param processor The request message processor.
+* @param message The request message.
+* @param xhr The xhr instance.
+*/
+export function responseTypeTransformer(client: HttpClient, processor: RequestMessageProcessor, message: RequestMessage, xhr: XHR) {
   let responseType = message.responseType;
 
   if (responseType === 'json') {
@@ -339,11 +563,25 @@ export function responseTypeTransformer(client, processor, message, xhr) {
   xhr.responseType = responseType;
 }
 
-export function headerTransformer(client, processor, message, xhr) {
+/**
+* Adds headers to the request.
+* @param client The http client.
+* @param processor The request message processor.
+* @param message The request message.
+* @param xhr The xhr instance.
+*/
+export function headerTransformer(client: HttpClient, processor: RequestMessageProcessor, message: RequestMessage, xhr: XHR) {
   message.headers.configureXHR(xhr);
 }
 
-export function contentTransformer(client, processor, message, xhr) {
+/**
+* Transforms the content of the request.
+* @param client The http client.
+* @param processor The request message processor.
+* @param message The request message.
+* @param xhr The xhr instance.
+*/
+export function contentTransformer(client: HttpClient, processor: RequestMessageProcessor, message: RequestMessage, xhr: XHR) {
   if (message.skipContentProcessing) {
     return;
   }
@@ -374,12 +612,20 @@ export function contentTransformer(client, processor, message, xhr) {
 
   message.content = JSON.stringify(message.content, message.replacer);
 
-  if (message.headers.get('Content-Type') === undefined) {
+  if (!message.headers.has('Content-Type')) {
     message.headers.add('Content-Type', 'application/json');
   }
 }
 
+/**
+* Represents an JSONP request message.
+*/
 export class JSONPRequestMessage extends RequestMessage {
+  /**
+  * Creates an instance of JSONPRequestMessage.
+  * @param url The url to submit the request to.
+  * @param callbackParameterName The name of the callback parameter that the api expects.
+  */
   constructor(url: string, callbackParameterName: string) {
     super('JSONP', url);
     this.responseType = 'jsonp';
@@ -444,20 +690,38 @@ class JSONPXHR {
   setRequestHeader() {}
 }
 
-export function createJSONPRequestMessageProcessor() {
+/**
+* Creates a RequestMessageProcessor for handling JSONP request messages.
+* @return A processor instance for JSONP request messages.
+*/
+export function createJSONPRequestMessageProcessor(): RequestMessageProcessor {
   return new RequestMessageProcessor(JSONPXHR, [
     timeoutTransformer,
     callbackParameterNameTransformer
   ]);
 }
 
+/**
+* Represents an HTTP request message.
+*/
 export class HttpRequestMessage extends RequestMessage {
+  /**
+  * Creates an instance of HttpRequestMessage.
+  * @param method The http method.
+  * @param url The url to submit the request to.
+  * @param content The content of the request.
+  * @param headers The headers to send along with the request.
+  */
   constructor(method: string, url: string, content: any, headers?: Headers) {
     super(method, url, content, headers);
     this.responseType = 'json'; //text, arraybuffer, blob, document
   }
 }
 
+/**
+* Creates a RequestMessageProcessor for handling HTTP request messages.
+* @return A processor instance for HTTP request messages.
+*/
 export function createHttpRequestMessageProcessor(): RequestMessageProcessor {
   return new RequestMessageProcessor(PLATFORM.XMLHttpRequest, [
     timeoutTransformer,
@@ -469,6 +733,31 @@ export function createHttpRequestMessageProcessor(): RequestMessageProcessor {
   ]);
 }
 
+/**
+ * Intercepts requests, responses and errors.
+ */
+interface Interceptor {
+	/**
+	 * Intercepts the response.
+	 */
+	response?: Function;
+	/**
+	 * Intercepts a response error.
+	 */
+	responseError?: Function;
+	/**
+	 * Intercepts the request.
+	 */
+	request?: Function;
+	/**
+	 * Intercepts a request error.
+	 */
+	requestError?: Function;
+}
+
+/**
+ * Transforms a request.
+ */
 interface RequestTransformer {
 	(client: HttpClient, processor: RequestMessageProcessor, message: RequestMessage): void;
 }
@@ -477,10 +766,271 @@ interface RequestTransformer {
  * A builder class allowing fluent composition of HTTP requests.
  */
 export class RequestBuilder {
+	/**
+	 * Creates an instance of RequestBuilder
+	 * @param client An instance of HttpClient
+	 */
   constructor(client: HttpClient) {
     this.client = client;
     this.transformers = client.requestTransformers.slice(0);
     this.useJsonp = false;
+  }
+
+	/**
+	 * Makes the request a DELETE request.
+	 * @return The chainable RequestBuilder to use in further configuration of the request.
+	 */
+  asDelete(): RequestBuilder {
+    return this._addTransformer(function(client, processor, message) {
+      message.method = 'DELETE';
+    });
+  }
+
+	/**
+	 * Makes the request a GET request.
+	 * @return The chainable RequestBuilder to use in further configuration of the request.
+	 */
+  asGet(): RequestBuilder  {
+    return this._addTransformer(function(client, processor, message) {
+      message.method = 'GET';
+    });
+  }
+
+	/**
+	 * Makes the request a HEAD request.
+	 * @return The chainable RequestBuilder to use in further configuration of the request.
+	 */
+  asHead(): RequestBuilder {
+    return this._addTransformer(function(client, processor, message) {
+      message.method = 'HEAD';
+    });
+  }
+
+	/**
+	 * Makes the request a OPTIONS request.
+	 * @return The chainable RequestBuilder to use in further configuration of the request.
+	 */
+  asOptions(): RequestBuilder {
+    return this._addTransformer(function(client, processor, message) {
+      message.method = 'OPTIONS';
+    });
+  }
+
+	/**
+	 * Makes the request a PATCH request.
+	 * @return The chainable RequestBuilder to use in further configuration of the request.
+	 */
+  asPatch(): RequestBuilder {
+    return this._addTransformer(function(client, processor, message) {
+      message.method = 'PATCH';
+    });
+  }
+
+	/**
+	 * Makes the request a POST request.
+	 * @return The chainable RequestBuilder to use in further configuration of the request.
+	 */
+  asPost(): RequestBuilder {
+    return this._addTransformer(function(client, processor, message) {
+      message.method = 'POST';
+    });
+  }
+
+	/**
+	 * Makes the request a PUT request.
+	 * @return The chainable RequestBuilder to use in further configuration of the request.
+	 */
+  asPut(): RequestBuilder {
+    return this._addTransformer(function(client, processor, message) {
+      message.method = 'PUT';
+    });
+  }
+
+	/**
+	 * Makes the request a JSONP request.
+	 * @param callbackParameterName The name of the callback to use.
+	 * @return The chainable RequestBuilder to use in further configuration of the request.
+	 */
+  asJsonp(callbackParameterName: string): RequestBuilder {
+    this.useJsonp = true;
+    return this._addTransformer(function(client, processor, message) {
+      message.callbackParameterName = callbackParameterName;
+    });
+  }
+
+	/**
+	 * Sets the request url.
+	 * @param url The url to use.
+	 * @return The chainable RequestBuilder to use in further configuration of the request.
+	 */
+  withUrl(url: string): RequestBuilder {
+    return this._addTransformer(function(client, processor, message) {
+      message.url = url;
+    });
+  }
+
+	/**
+	 * Sets the request content.
+	 * @param The content to send.
+	 * @return The chainable RequestBuilder to use in further configuration of the request.
+	 */
+  withContent(content: any): RequestBuilder {
+    return this._addTransformer(function(client, processor, message) {
+      message.content = content;
+    });
+  }
+
+	/**
+	 * Sets the base url that will be prepended to the url.
+	 * @param baseUrl The base url to use.
+	 * @return The chainable RequestBuilder to use in further configuration of the request.
+	 */
+  withBaseUrl(baseUrl: string): RequestBuilder {
+    return this._addTransformer(function(client, processor, message) {
+      message.baseUrl = baseUrl;
+    });
+  }
+
+	/**
+	 * Sets params that will be added to the request url as a query string.
+	 * @param params The key/value pairs to use to build the query string.
+	 * @return The chainable RequestBuilder to use in further configuration of the request.
+	 */
+  withParams(params: Object): RequestBuilder {
+    return this._addTransformer(function(client, processor, message) {
+      message.params = params;
+    });
+  }
+
+	/**
+	 * Sets the response type.
+	 * @param responseType The response type to expect.
+	 * @return The chainable RequestBuilder to use in further configuration of the request.
+	 */
+  withResponseType(responseType: string): RequestBuilder {
+    return this._addTransformer(function(client, processor, message) {
+      message.responseType = responseType;
+    });
+  }
+
+	/**
+	 * Sets a timeout for the request.
+	 * @param timeout The timeout for the request.
+	 * @return The chainable RequestBuilder to use in further configuration of the request.
+	 */
+  withTimeout(timeout: number): RequestBuilder {
+    return this._addTransformer(function(client, processor, message) {
+      message.timeout = timeout;
+    });
+  }
+
+	/**
+	 * Sets a header on the request.
+	 * @param key The header key to add.
+	 * @param value The header value to add.
+	 * @return The chainable RequestBuilder to use in further configuration of the request.
+	 */
+  withHeader(key: string, value: string): RequestBuilder {
+    return this._addTransformer(function(client, processor, message) {
+      message.headers.add(key, value);
+    });
+  }
+
+	/**
+	 * Sets the withCredentials flag on the request.
+	 * @param value The value of the withCredentials flag to set.
+	 * @return The chainable RequestBuilder to use in further configuration of the request.
+	 */
+  withCredentials(value: boolean): RequestBuilder {
+    return this._addTransformer(function(client, processor, message) {
+      message.withCredentials = value;
+    });
+  }
+
+	/**
+	 * Sets the user and password to use in opening the request.
+	 * @param user The username to send.
+	 * @param password The password to send.
+	 * @return The chainable RequestBuilder to use in further configuration of the request.
+	 */
+  withLogin(user: string, password: string): RequestBuilder {
+    return this._addTransformer(function(client, processor, message) {
+      message.user = user; message.password = password;
+    });
+  }
+
+	/**
+	 * Sets a reviver to transform the response content.
+	 * @param reviver The reviver to use in processing the response.
+	 * @return The chainable RequestBuilder to use in further configuration of the request.
+	 */
+  withReviver(reviver: (key: string, value: any) => any): RequestBuilder {
+    return this._addTransformer(function(client, processor, message) {
+      message.reviver = reviver;
+    });
+  }
+
+	/**
+	 * Sets a replacer to transform the request content.
+	 * @param replacer The replacer to use in preparing the request.
+	 * @return The chainable RequestBuilder to use in further configuration of the request.
+	 */
+  withReplacer(replacer: (key: string, value: any) => any): RequestBuilder {
+    return this._addTransformer(function(client, processor, message) {
+      message.replacer = replacer;
+    });
+  }
+
+	/**
+	 * Sets an upload progress callback.
+	 * @param progressCallback The progress callback function.
+	 * @return The chainable RequestBuilder to use in further configuration of the request.
+	 */
+  withProgressCallback(progressCallback: Function): RequestBuilder {
+    return this._addTransformer(function(client, processor, message) {
+      message.progressCallback = progressCallback;
+    });
+  }
+
+	/**
+	 * Sets a callback parameter name for JSONP.
+	 * @param callbackParameterName The name of the callback parameter that the JSONP request requires.
+	 * @return The chainable RequestBuilder to use in further configuration of the request.
+	 */
+  withCallbackParameterName(callbackParameterName: string): RequestBuilder {
+    return this._addTransformer(function(client, processor, message) {
+      message.callbackParameterName = callbackParameterName;
+    });
+  }
+
+	/**
+	 * Adds an interceptor to the request.
+	 * @param interceptor The interceptor to add.
+	 * @return The chainable RequestBuilder to use in further configuration of the request.
+	 */
+  withInterceptor(interceptor: Interceptor): RequestBuilder {
+    return this._addTransformer(function(client, processor, message) {
+      // NOTE: Interceptors are stored in reverse order. Inner interceptors before outer interceptors.
+      // This reversal is needed so that we can build up the interception chain around the
+      // server request.
+      message.interceptors = message.interceptors || [];
+      message.interceptors.unshift(interceptor);
+    });
+  }
+
+	/**
+	 * Skips the request content processing transform.
+	 * @return The chainable RequestBuilder to use in further configuration of the request.
+	 */
+  skipContentProcessing(): RequestBuilder {
+    return this._addTransformer(function(client, processor, message) {
+      message.skipContentProcessing = true;
+    });
+  }
+
+  _addTransformer(fn) {
+    this.transformers.push(fn);
+    return this;
   }
 
   /**
@@ -490,8 +1040,7 @@ export class RequestBuilder {
    */
   static addHelper(name: string, fn: () => RequestTransformer): void {
     RequestBuilder.prototype[name] = function() {
-      this.transformers.push(fn.apply(this, arguments));
-      return this;
+      return this._addTransformer(fn.apply(this, arguments));
     };
   }
 
@@ -504,143 +1053,6 @@ export class RequestBuilder {
     return this.client.send(message, this.transformers);
   }
 }
-
-RequestBuilder.addHelper('asDelete', function() {
-  return function(client, processor, message) {
-    message.method = 'DELETE';
-  };
-});
-
-RequestBuilder.addHelper('asGet', function() {
-  return function(client, processor, message) {
-    message.method = 'GET';
-  };
-});
-
-RequestBuilder.addHelper('asHead', function() {
-  return function(client, processor, message) {
-    message.method = 'HEAD';
-  };
-});
-
-RequestBuilder.addHelper('asOptions', function() {
-  return function(client, processor, message) {
-    message.method = 'OPTIONS';
-  };
-});
-
-RequestBuilder.addHelper('asPatch', function() {
-  return function(client, processor, message) {
-    message.method = 'PATCH';
-  };
-});
-
-RequestBuilder.addHelper('asPost', function() {
-  return function(client, processor, message) {
-    message.method = 'POST';
-  };
-});
-
-RequestBuilder.addHelper('asPut', function() {
-  return function(client, processor, message) {
-    message.method = 'PUT';
-  };
-});
-
-RequestBuilder.addHelper('asJsonp', function(callbackParameterName) {
-  this.useJsonp = true;
-  return function(client, processor, message) {
-    message.callbackParameterName = callbackParameterName;
-  };
-});
-
-RequestBuilder.addHelper('withUrl', function(url) {
-  return function(client, processor, message) {
-    message.url = url;
-  };
-});
-
-RequestBuilder.addHelper('withContent', function(content) {
-  return function(client, processor, message) {
-    message.content = content;
-  };
-});
-
-RequestBuilder.addHelper('withBaseUrl', function(baseUrl) {
-  return function(client, processor, message) {
-    message.baseUrl = baseUrl;
-  };
-});
-
-RequestBuilder.addHelper('withParams', function(params) {
-  return function(client, processor, message) {
-    message.params = params;
-  };
-});
-
-RequestBuilder.addHelper('withResponseType', function(responseType) {
-  return function(client, processor, message) {
-    message.responseType = responseType;
-  };
-});
-
-RequestBuilder.addHelper('withTimeout', function(timeout) {
-  return function(client, processor, message) {
-    message.timeout = timeout;
-  };
-});
-
-RequestBuilder.addHelper('withHeader', function(key, value) {
-  return function(client, processor, message) {
-    message.headers.add(key, value);
-  };
-});
-
-RequestBuilder.addHelper('withCredentials', function(value) {
-  return function(client, processor, message) {
-    message.withCredentials = value;
-  };
-});
-
-RequestBuilder.addHelper('withReviver', function(reviver) {
-  return function(client, processor, message) {
-    message.reviver = reviver;
-  };
-});
-
-RequestBuilder.addHelper('withReplacer', function(replacer) {
-  return function(client, processor, message) {
-    message.replacer = replacer;
-  };
-});
-
-RequestBuilder.addHelper('withProgressCallback', function(progressCallback) {
-  return function(client, processor, message) {
-    message.progressCallback = progressCallback;
-  };
-});
-
-RequestBuilder.addHelper('withCallbackParameterName', function(callbackParameterName) {
-  return function(client, processor, message) {
-    message.callbackParameterName = callbackParameterName;
-  };
-});
-
-RequestBuilder.addHelper('withInterceptor', function(interceptor) {
-  return function(client, processor, message) {
-    // NOTE: Interceptors are stored in reverse order. Inner interceptors before outer interceptors.
-    // This reversal is needed so that we can build up the interception chain around the
-    // server request.
-    message.interceptors = message.interceptors || [];
-    message.interceptors.unshift(interceptor);
-  };
-});
-
-RequestBuilder.addHelper('skipContentProcessing', function() {
-  return function(client, processor, message) {
-    message.skipContentProcessing = true;
-  };
-});
 
 /*eslint no-unused-vars:0*/
 function trackRequestStart(client: HttpClient, processor: RequestMessageProcessor) {
@@ -664,6 +1076,9 @@ function trackRequestEnd(client: HttpClient, processor: RequestMessageProcessor)
 * The main HTTP client object.
 */
 export class HttpClient {
+  /**
+  * Creates an instance of HttpClient.
+  */
   constructor() {
     this.requestTransformers = [];
     this.requestProcessorFactories = new Map();

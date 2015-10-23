@@ -40,11 +40,24 @@ define(['exports', 'core-js', 'aurelia-path', 'aurelia-pal'], function (exports,
       this.headers = {};
     };
 
+    Headers.prototype.has = function has(header) {
+      var lowered = header.toLowerCase();
+      var headers = this.headers;
+
+      for (var _key in headers) {
+        if (_key.toLowerCase() === lowered) {
+          return true;
+        }
+      }
+
+      return false;
+    };
+
     Headers.prototype.configureXHR = function configureXHR(xhr) {
       var headers = this.headers;
 
-      for (var key in headers) {
-        xhr.setRequestHeader(key, headers[key]);
+      for (var _key2 in headers) {
+        xhr.setRequestHeader(_key2, headers[_key2]);
       }
     };
 
@@ -60,9 +73,9 @@ define(['exports', 'core-js', 'aurelia-path', 'aurelia-pal'], function (exports,
 
         var index = headerPair.indexOf(': ');
         if (index > 0) {
-          var key = headerPair.substring(0, index);
+          var _key3 = headerPair.substring(0, index);
           var val = headerPair.substring(index + 2);
-          headers.add(key, val);
+          headers.add(_key3, val);
         }
       }
 
@@ -270,7 +283,7 @@ define(['exports', 'core-js', 'aurelia-path', 'aurelia-pal'], function (exports,
           if (_this.isAborted) {
             _this.xhr.abort();
           } else {
-            _this.xhr.open(message.method, message.buildFullUrl(), true);
+            _this.xhr.open(message.method, message.buildFullUrl(), true, message.user, message.password);
             applyXhrTransformers(_this.xhrTransformers, client, _this, message, _this.xhr);
             _this.xhr.send(message.content);
           }
@@ -377,7 +390,7 @@ define(['exports', 'core-js', 'aurelia-path', 'aurelia-pal'], function (exports,
 
     message.content = JSON.stringify(message.content, message.replacer);
 
-    if (message.headers.get('Content-Type') === undefined) {
+    if (!message.headers.has('Content-Type')) {
       message.headers.add('Content-Type', 'application/json');
     }
   }
@@ -495,10 +508,154 @@ define(['exports', 'core-js', 'aurelia-path', 'aurelia-pal'], function (exports,
       this.useJsonp = false;
     }
 
+    RequestBuilder.prototype.asDelete = function asDelete() {
+      return this._addTransformer(function (client, processor, message) {
+        message.method = 'DELETE';
+      });
+    };
+
+    RequestBuilder.prototype.asGet = function asGet() {
+      return this._addTransformer(function (client, processor, message) {
+        message.method = 'GET';
+      });
+    };
+
+    RequestBuilder.prototype.asHead = function asHead() {
+      return this._addTransformer(function (client, processor, message) {
+        message.method = 'HEAD';
+      });
+    };
+
+    RequestBuilder.prototype.asOptions = function asOptions() {
+      return this._addTransformer(function (client, processor, message) {
+        message.method = 'OPTIONS';
+      });
+    };
+
+    RequestBuilder.prototype.asPatch = function asPatch() {
+      return this._addTransformer(function (client, processor, message) {
+        message.method = 'PATCH';
+      });
+    };
+
+    RequestBuilder.prototype.asPost = function asPost() {
+      return this._addTransformer(function (client, processor, message) {
+        message.method = 'POST';
+      });
+    };
+
+    RequestBuilder.prototype.asPut = function asPut() {
+      return this._addTransformer(function (client, processor, message) {
+        message.method = 'PUT';
+      });
+    };
+
+    RequestBuilder.prototype.asJsonp = function asJsonp(callbackParameterName) {
+      this.useJsonp = true;
+      return this._addTransformer(function (client, processor, message) {
+        message.callbackParameterName = callbackParameterName;
+      });
+    };
+
+    RequestBuilder.prototype.withUrl = function withUrl(url) {
+      return this._addTransformer(function (client, processor, message) {
+        message.url = url;
+      });
+    };
+
+    RequestBuilder.prototype.withContent = function withContent(content) {
+      return this._addTransformer(function (client, processor, message) {
+        message.content = content;
+      });
+    };
+
+    RequestBuilder.prototype.withBaseUrl = function withBaseUrl(baseUrl) {
+      return this._addTransformer(function (client, processor, message) {
+        message.baseUrl = baseUrl;
+      });
+    };
+
+    RequestBuilder.prototype.withParams = function withParams(params) {
+      return this._addTransformer(function (client, processor, message) {
+        message.params = params;
+      });
+    };
+
+    RequestBuilder.prototype.withResponseType = function withResponseType(responseType) {
+      return this._addTransformer(function (client, processor, message) {
+        message.responseType = responseType;
+      });
+    };
+
+    RequestBuilder.prototype.withTimeout = function withTimeout(timeout) {
+      return this._addTransformer(function (client, processor, message) {
+        message.timeout = timeout;
+      });
+    };
+
+    RequestBuilder.prototype.withHeader = function withHeader(key, value) {
+      return this._addTransformer(function (client, processor, message) {
+        message.headers.add(key, value);
+      });
+    };
+
+    RequestBuilder.prototype.withCredentials = function withCredentials(value) {
+      return this._addTransformer(function (client, processor, message) {
+        message.withCredentials = value;
+      });
+    };
+
+    RequestBuilder.prototype.withLogin = function withLogin(user, password) {
+      return this._addTransformer(function (client, processor, message) {
+        message.user = user;message.password = password;
+      });
+    };
+
+    RequestBuilder.prototype.withReviver = function withReviver(reviver) {
+      return this._addTransformer(function (client, processor, message) {
+        message.reviver = reviver;
+      });
+    };
+
+    RequestBuilder.prototype.withReplacer = function withReplacer(replacer) {
+      return this._addTransformer(function (client, processor, message) {
+        message.replacer = replacer;
+      });
+    };
+
+    RequestBuilder.prototype.withProgressCallback = function withProgressCallback(progressCallback) {
+      return this._addTransformer(function (client, processor, message) {
+        message.progressCallback = progressCallback;
+      });
+    };
+
+    RequestBuilder.prototype.withCallbackParameterName = function withCallbackParameterName(callbackParameterName) {
+      return this._addTransformer(function (client, processor, message) {
+        message.callbackParameterName = callbackParameterName;
+      });
+    };
+
+    RequestBuilder.prototype.withInterceptor = function withInterceptor(interceptor) {
+      return this._addTransformer(function (client, processor, message) {
+        message.interceptors = message.interceptors || [];
+        message.interceptors.unshift(interceptor);
+      });
+    };
+
+    RequestBuilder.prototype.skipContentProcessing = function skipContentProcessing() {
+      return this._addTransformer(function (client, processor, message) {
+        message.skipContentProcessing = true;
+      });
+    };
+
+    RequestBuilder.prototype._addTransformer = function _addTransformer(fn) {
+      this.transformers.push(fn);
+      return this;
+    };
+
     RequestBuilder.addHelper = function addHelper(name, fn) {
       RequestBuilder.prototype[name] = function () {
-        this.transformers.push(fn.apply(this, arguments));
-        return this;
+        return this._addTransformer(fn.apply(this, arguments));
       };
     };
 
@@ -511,140 +668,6 @@ define(['exports', 'core-js', 'aurelia-path', 'aurelia-pal'], function (exports,
   })();
 
   exports.RequestBuilder = RequestBuilder;
-
-  RequestBuilder.addHelper('asDelete', function () {
-    return function (client, processor, message) {
-      message.method = 'DELETE';
-    };
-  });
-
-  RequestBuilder.addHelper('asGet', function () {
-    return function (client, processor, message) {
-      message.method = 'GET';
-    };
-  });
-
-  RequestBuilder.addHelper('asHead', function () {
-    return function (client, processor, message) {
-      message.method = 'HEAD';
-    };
-  });
-
-  RequestBuilder.addHelper('asOptions', function () {
-    return function (client, processor, message) {
-      message.method = 'OPTIONS';
-    };
-  });
-
-  RequestBuilder.addHelper('asPatch', function () {
-    return function (client, processor, message) {
-      message.method = 'PATCH';
-    };
-  });
-
-  RequestBuilder.addHelper('asPost', function () {
-    return function (client, processor, message) {
-      message.method = 'POST';
-    };
-  });
-
-  RequestBuilder.addHelper('asPut', function () {
-    return function (client, processor, message) {
-      message.method = 'PUT';
-    };
-  });
-
-  RequestBuilder.addHelper('asJsonp', function (callbackParameterName) {
-    this.useJsonp = true;
-    return function (client, processor, message) {
-      message.callbackParameterName = callbackParameterName;
-    };
-  });
-
-  RequestBuilder.addHelper('withUrl', function (url) {
-    return function (client, processor, message) {
-      message.url = url;
-    };
-  });
-
-  RequestBuilder.addHelper('withContent', function (content) {
-    return function (client, processor, message) {
-      message.content = content;
-    };
-  });
-
-  RequestBuilder.addHelper('withBaseUrl', function (baseUrl) {
-    return function (client, processor, message) {
-      message.baseUrl = baseUrl;
-    };
-  });
-
-  RequestBuilder.addHelper('withParams', function (params) {
-    return function (client, processor, message) {
-      message.params = params;
-    };
-  });
-
-  RequestBuilder.addHelper('withResponseType', function (responseType) {
-    return function (client, processor, message) {
-      message.responseType = responseType;
-    };
-  });
-
-  RequestBuilder.addHelper('withTimeout', function (timeout) {
-    return function (client, processor, message) {
-      message.timeout = timeout;
-    };
-  });
-
-  RequestBuilder.addHelper('withHeader', function (key, value) {
-    return function (client, processor, message) {
-      message.headers.add(key, value);
-    };
-  });
-
-  RequestBuilder.addHelper('withCredentials', function (value) {
-    return function (client, processor, message) {
-      message.withCredentials = value;
-    };
-  });
-
-  RequestBuilder.addHelper('withReviver', function (reviver) {
-    return function (client, processor, message) {
-      message.reviver = reviver;
-    };
-  });
-
-  RequestBuilder.addHelper('withReplacer', function (replacer) {
-    return function (client, processor, message) {
-      message.replacer = replacer;
-    };
-  });
-
-  RequestBuilder.addHelper('withProgressCallback', function (progressCallback) {
-    return function (client, processor, message) {
-      message.progressCallback = progressCallback;
-    };
-  });
-
-  RequestBuilder.addHelper('withCallbackParameterName', function (callbackParameterName) {
-    return function (client, processor, message) {
-      message.callbackParameterName = callbackParameterName;
-    };
-  });
-
-  RequestBuilder.addHelper('withInterceptor', function (interceptor) {
-    return function (client, processor, message) {
-      message.interceptors = message.interceptors || [];
-      message.interceptors.unshift(interceptor);
-    };
-  });
-
-  RequestBuilder.addHelper('skipContentProcessing', function () {
-    return function (client, processor, message) {
-      message.skipContentProcessing = true;
-    };
-  });
 
   function trackRequestStart(client, processor) {
     client.pendingRequests.push(processor);

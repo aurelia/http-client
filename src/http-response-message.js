@@ -1,8 +1,53 @@
 import {Headers} from './headers';
 import {RequestMessage} from './request-message';
 
+/**
+* Represents a responce message from an HTTP or JSONP request.
+*/
 export class HttpResponseMessage {
-  constructor(requestMessage: RequestMessage, xhr: XHR, responseType: string, reviver: Function) {
+  /**
+  * The request message that resulted in this response.
+  */
+  requestMessage: RequestMessage;
+
+  /**
+  * The status code of the response.
+  */
+  statusCode: string;
+
+  /**
+  * The raw response.
+  */
+  response: any;
+
+  /**
+  * The success status of the request based on status code.
+  */
+  isSuccess: boolean;
+
+  /**
+  * The status text.
+  */
+  statusText: string;
+
+  /**
+  * A reviver function to use in transforming the content.
+  */
+  reviver: (key: string, value: any) => any;
+
+  /**
+  * The mime type of the response.
+  */
+  mimeType: string;
+
+  /**
+  * Creates an instance of HttpResponseMessage.
+  * @param requestMessage The request message that resulted in this response.
+  * @param xhr The XHR instance that made the request.
+  * @param responseType The type of the response.
+  * @param reviver A reviver function to use in transforming the content.
+  */
+  constructor(requestMessage: RequestMessage, xhr: XHR, responseType: string, reviver: (key: string, value: any) => any) {
     this.requestMessage = requestMessage;
     this.statusCode = xhr.status;
     this.response = xhr.response || xhr.responseText;
@@ -32,6 +77,10 @@ export class HttpResponseMessage {
     this.responseType = responseType;
   }
 
+  /**
+  * Gets the content of the response.
+  * @return the response content.
+  */
   get content(): any {
     try {
       if (this._content !== undefined) {

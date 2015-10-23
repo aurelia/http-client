@@ -6,7 +6,15 @@ import {
   callbackParameterNameTransformer
 } from './xhr-transformers';
 
+/**
+* Represents an JSONP request message.
+*/
 export class JSONPRequestMessage extends RequestMessage {
+  /**
+  * Creates an instance of JSONPRequestMessage.
+  * @param url The url to submit the request to.
+  * @param callbackParameterName The name of the callback parameter that the api expects.
+  */
   constructor(url: string, callbackParameterName: string) {
     super('JSONP', url);
     this.responseType = 'jsonp';
@@ -71,7 +79,11 @@ class JSONPXHR {
   setRequestHeader() {}
 }
 
-export function createJSONPRequestMessageProcessor() {
+/**
+* Creates a RequestMessageProcessor for handling JSONP request messages.
+* @return A processor instance for JSONP request messages.
+*/
+export function createJSONPRequestMessageProcessor(): RequestMessageProcessor {
   return new RequestMessageProcessor(JSONPXHR, [
     timeoutTransformer,
     callbackParameterNameTransformer

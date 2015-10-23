@@ -13,35 +13,86 @@ function applyXhrTransformers(xhrTransformers, client, processor, message, xhr) 
   }
 }
 
+/**
+ * Creates an XHR implementation.
+ */
 interface XHRConstructor {
 	//new():XHR;
 }
 
+/**
+ * Represents an XHR.
+ */
 interface XHR {
+  /**
+  * The status code of the response.
+  */
   status: number;
+  /**
+  * The status text.
+  */
   statusText: string;
+  /**
+  * The raw response.
+  */
   response: any;
+  /**
+  * The raw response text.
+  */
   responseText: string;
+  /**
+  * The load callback.
+  */
   onload: Function;
+  /**
+  * The timeout callback.
+  */
   ontimeout: Function;
+  /**
+  * The error callback.
+  */
   onerror: Function;
+  /**
+  * The abort callback.
+  */
   onabort: Function;
+  /**
+  * Aborts the request.
+  */
   abort(): void;
+  /**
+  * Opens the XHR channel.
+  */
   open(method: string, url: string, isAsync: boolean, user?: string, password?: string): void;
+  /**
+  * Sends the request.
+  */
   send(content? : any): void;
 }
 
+/**
+ * Represents an XHR transformer.
+ */
 interface XHRTransformer {
   (client: HttpClient, processor: RequestMessageProcessor, message: RequestMessage, xhr: XHR): void;
 }
 
+/**
+ * Processes request messages.
+ */
 export class RequestMessageProcessor {
+  /**
+   * Creates an instance of RequestMessageProcessor.
+   */
   constructor(xhrType: XHRConstructor, xhrTransformers: XHRTransformer[]) {
     this.XHRType = xhrType;
     this.xhrTransformers = xhrTransformers;
     this.isAborted = false;
   }
 
+  /**
+   * Aborts the request.
+   */
   abort(): void {
     // The logic here is if the xhr object is not set then there is nothing to abort so the intent was carried out
     // Also test if the XHR is UNSENT - if not, it will be aborted in the process() phase
@@ -52,7 +103,13 @@ export class RequestMessageProcessor {
     this.isAborted = true;
   }
 
-  process(client, requestMessage: RequestMessage): Promise<HttpResponseMessage> {
+  /**
+   * Processes the request.
+   * @param client The HttpClient making the request.
+   * @param requestMessage The message to process.
+   * @return A promise for an HttpResponseMessage.
+   */
+  process(client: HttpClient, requestMessage: RequestMessage): Promise<HttpResponseMessage> {
     let promise = new Promise((resolve, reject) => {
       let xhr = this.xhr = new this.XHRType();
 

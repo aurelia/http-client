@@ -29,6 +29,9 @@ function trackRequestEnd(client: HttpClient, processor: RequestMessageProcessor)
 * The main HTTP client object.
 */
 export class HttpClient {
+  /**
+  * Creates an instance of HttpClient.
+  */
   constructor() {
     this.requestTransformers = [];
     this.requestProcessorFactories = new Map();
