@@ -135,6 +135,12 @@ RequestBuilder.addHelper('withCredentials', function(value) {
   };
 });
 
+RequestBuilder.addHelper('withLogin', function(user, password) {
+  return function(client, processor, message) {
+    message.user = user; message.password = password;
+  };
+});
+
 RequestBuilder.addHelper('withReviver', function(reviver) {
   return function(client, processor, message) {
     message.reviver = reviver;

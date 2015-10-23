@@ -62,7 +62,7 @@ describe("Request message processor", () => {
     // promise only resolves
     it("should call xhr.open with the method, full url and ajax set to true", (done) => {
       reqProcessor.process(client, message).then(() => {
-        expect(openSpy).toHaveBeenCalledWith(message.method, message.url, true);
+        expect(openSpy).toHaveBeenCalledWith(message.method, message.url, true, undefined, undefined);
         done();
       });
       reqProcessor.xhr.fakeResponse();

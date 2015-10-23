@@ -27,7 +27,7 @@ interface XHR {
   onerror: Function;
   onabort: Function;
   abort(): void;
-  open(method: string, url: string, isAsync: boolean): void;
+  open(method: string, url: string, isAsync: boolean, user?: string, password?: string): void;
   send(content? : any): void;
 }
 
@@ -98,7 +98,7 @@ export class RequestMessageProcessor {
             // before XHR is actually sent we abort() instead send()
             this.xhr.abort();
           } else {
-            this.xhr.open(message.method, message.buildFullUrl(), true);
+            this.xhr.open(message.method, message.buildFullUrl(), true, message.user, message.password);
             applyXhrTransformers(this.xhrTransformers, client, this, message, this.xhr);
             this.xhr.send(message.content);
           }
