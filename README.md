@@ -23,6 +23,10 @@ This library is used directly by applications only.
 
 This library can be used in the **browser** only.
 
+## Documentaion
+
+[English](https://github.com/aurelia/documentation/blob/master/English/docs.md#http-client), [Japanese](https://github.com/aurelia/documentation/blob/master/Japanese/docs.md#http-client), [Spanish](https://github.com/aurelia/documentation/blob/master/Spanish/docs.md#http-client)
+
 ## Building The Code
 
 To build the code, follow these steps.
