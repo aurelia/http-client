@@ -642,7 +642,7 @@ declare module 'aurelia-http-client' {
     /**
        * Sends an HTTP PUT request.
        * @param url The target URL.
-       * @param url The request payload.
+       * @param content The request payload.
        * @return A cancellable promise object.
        */
     put(url: string, content: any): Promise<HttpResponseMessage>;
@@ -650,7 +650,7 @@ declare module 'aurelia-http-client' {
     /**
        * Sends an HTTP PATCH request.
        * @param url The target URL.
-       * @param url The request payload.
+       * @param content The request payload.
        * @return A cancellable promise object.
        */
     patch(url: string, content: any): Promise<HttpResponseMessage>;
@@ -658,7 +658,7 @@ declare module 'aurelia-http-client' {
     /**
        * Sends an HTTP POST request.
        * @param url The target URL.
-       * @param url The request payload.
+       * @param content The request payload.
        * @return A cancellable promise object.
        */
     post(url: string, content: any): Promise<HttpResponseMessage>;

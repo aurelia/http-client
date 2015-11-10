@@ -783,7 +783,7 @@
                   "kindString": "Parameter",
                   "flags": {},
                   "comment": {
-                    "shortText": "The request payload."
+                    "text": "The target URL."
                   },
                   "type": {
                     "type": "instrinct",
@@ -796,6 +796,9 @@
                   "kind": 32768,
                   "kindString": "Parameter",
                   "flags": {},
+                  "comment": {
+                    "text": "The request payload."
+                  },
                   "type": {
                     "type": "instrinct",
                     "name": "any"
@@ -843,7 +846,7 @@
                   "kindString": "Parameter",
                   "flags": {},
                   "comment": {
-                    "shortText": "The request payload."
+                    "text": "The target URL."
                   },
                   "type": {
                     "type": "instrinct",
@@ -856,6 +859,9 @@
                   "kind": 32768,
                   "kindString": "Parameter",
                   "flags": {},
+                  "comment": {
+                    "text": "The request payload."
+                  },
                   "type": {
                     "type": "instrinct",
                     "name": "any"
@@ -903,7 +909,7 @@
                   "kindString": "Parameter",
                   "flags": {},
                   "comment": {
-                    "shortText": "The request payload."
+                    "text": "The target URL."
                   },
                   "type": {
                     "type": "instrinct",
@@ -916,6 +922,9 @@
                   "kind": 32768,
                   "kindString": "Parameter",
                   "flags": {},
+                  "comment": {
+                    "text": "The request payload."
+                  },
                   "type": {
                     "type": "instrinct",
                     "name": "any"

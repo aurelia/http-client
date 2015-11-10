@@ -15,13 +15,13 @@ System.config({
 
   map: {
     "aurelia-pal": "github:aurelia/pal@0.3.0",
-    "aurelia-pal-browser": "github:aurelia/pal-browser@0.2.0",
+    "aurelia-pal-browser": "github:aurelia/pal-browser@0.3.0",
     "aurelia-path": "github:aurelia/path@0.11.0",
     "babel": "npm:babel-core@5.1.13",
     "babel-runtime": "npm:babel-runtime@5.1.13",
     "core-js": "npm:core-js@1.2.6",
-    "github:aurelia/pal-browser@0.2.0": {
-      "aurelia-pal": "github:aurelia/pal@0.2.0"
+    "github:aurelia/pal-browser@0.3.0": {
+      "aurelia-pal": "github:aurelia/pal@0.3.0"
     },
     "github:jspm/nodelibs-assert@0.1.0": {
       "assert": "npm:assert@1.3.0"

@@ -1,3 +1,12 @@
+## 0.13.0 (2015-11-09)
+
+
+#### Features
+
+* **headers:** case-insensitve has ([494918d5](http://github.com/aurelia/http-client/commit/494918d54784ee0c214e21f60546c17a533f9bcf), closes [#92](http://github.com/aurelia/http-client/issues/92))
+* **request-builder:** enable opening xhr with login info ([a9adff68](http://github.com/aurelia/http-client/commit/a9adff68a58813bd24c2f35b465929a2bc469ebc), closes [#52](http://github.com/aurelia/http-client/issues/52))
+
+
 ## 0.12.0 (2015-10-13)
 
 
