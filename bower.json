@@ -17,8 +17,8 @@
     "url": "http://github.com/aurelia/http-client"
   },
   "dependencies": {
-    "aurelia-pal": "@^0.2.0",
-    "aurelia-path": "^0.10.0",
+    "aurelia-pal": "^0.3.0",
+    "aurelia-path": "^0.11.0",
     "core-js": "zloirock/core-js"
   }
 }
