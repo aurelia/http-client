@@ -3976,6 +3976,9 @@
               "kind": 4096,
               "kindString": "Call signature",
               "flags": {},
+              "comment": {
+                "shortText": "Aborts the request."
+              },
               "type": {
                 "type": "instrinct",
                 "name": "void"
@@ -3998,6 +4001,9 @@
               "kind": 4096,
               "kindString": "Call signature",
               "flags": {},
+              "comment": {
+                "shortText": "Opens the XHR channel."
+              },
               "parameters": [
                 {
                   "id": 17,
@@ -4081,6 +4087,9 @@
               "kind": 4096,
               "kindString": "Call signature",
               "flags": {},
+              "comment": {
+                "shortText": "Sends the request."
+              },
               "parameters": [
                 {
                   "id": 24,

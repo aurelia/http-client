@@ -54,8 +54,20 @@ declare module 'aurelia-http-client' {
       * The abort callback.
       */
     onabort: Function;
+    
+    /**
+      * Aborts the request.
+      */
     abort(): void;
+    
+    /**
+      * Opens the XHR channel.
+      */
     open(method: string, url: string, isAsync: boolean, user?: string, password?: string): void;
+    
+    /**
+      * Sends the request.
+      */
     send(content?: any): void;
   }
   
