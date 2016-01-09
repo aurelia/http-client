@@ -250,6 +250,11 @@ declare module 'aurelia-http-client' {
     mimeType: string;
     
     /**
+      * The headers received with the response.
+      */
+    headers: Headers;
+    
+    /**
       * Creates an instance of HttpResponseMessage.
       * @param requestMessage The request message that resulted in this response.
       * @param xhr The XHR instance that made the request.

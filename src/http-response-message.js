@@ -39,7 +39,7 @@ export class HttpResponseMessage {
   * The mime type of the response.
   */
   mimeType: string;
-  
+
   /**
   * The headers received with the response.
   */

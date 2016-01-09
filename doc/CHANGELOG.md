@@ -1,3 +1,10 @@
+### 1.0.0-beta.1.0.1 (2016-01-08)
+
+#### Bug Fixes
+
+* **http-client:** declare headers property ([e64dba37](http://github.com/aurelia/http-client/commit/e64dba37c9539091fcc0e71a07e49aec60dda53f))
+
+
 ### 1.0.0-beta.1 (2015-11-16)
 
 
