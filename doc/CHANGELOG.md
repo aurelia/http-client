@@ -1,3 +1,11 @@
+## 1.0.0-beta.1.1.0 (2016-01-29)
+
+
+#### Features
+
+* **package:** update metadata for jspm; core-js; deps ([9b0e4272](http://github.com/aurelia/http-client/commit/9b0e4272ac4b784642d49aba87f206a949023868))
+
+
 ### 1.0.0-beta.1.0.1 (2016-01-08)
 
 #### Bug Fixes
