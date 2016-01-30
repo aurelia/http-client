@@ -222,7 +222,7 @@ declare module 'aurelia-http-client' {
     /**
       * The status code of the response.
       */
-    statusCode: string;
+    statusCode: number;
     
     /**
       * The raw response.
@@ -679,5 +679,7 @@ declare module 'aurelia-http-client' {
        * @return A cancellable promise object.
        */
     post(url: string, content: any): Promise<HttpResponseMessage>;
+    
+    isRequesting: boolean;
   }
 }
