@@ -13,7 +13,7 @@ export class HttpResponseMessage {
   /**
   * The status code of the response.
   */
-  statusCode: string;
+  statusCode: number;
 
   /**
   * The raw response.

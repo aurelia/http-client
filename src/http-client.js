@@ -30,6 +30,11 @@ function trackRequestEnd(client: HttpClient, processor: RequestMessageProcessor)
 */
 export class HttpClient {
   /**
+  * Indicates whether or not the client is in the process of requesting resources.
+  */
+  isRequesting: boolean = false;
+
+  /**
   * Creates an instance of HttpClient.
   */
   constructor() {
@@ -38,7 +43,6 @@ export class HttpClient {
     this.requestProcessorFactories.set(HttpRequestMessage, createHttpRequestMessageProcessor);
     this.requestProcessorFactories.set(JSONPRequestMessage, createJSONPRequestMessageProcessor);
     this.pendingRequests = [];
-    this.isRequesting = false;
   }
 
   /**
