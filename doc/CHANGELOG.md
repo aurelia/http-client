@@ -1,3 +1,11 @@
+### 1.0.0-beta.1.1.1 (2016-02-08)
+
+
+#### Bug Fixes
+
+* **http-response:** status code type ([2afe081e](http://github.com/aurelia/http-client/commit/2afe081e36bfbaedab1541291cfd4ea492b69ca8), closes [#114](http://github.com/aurelia/http-client/issues/114))
+
+
 ## 1.0.0-beta.1.1.0 (2016-01-29)
 
 

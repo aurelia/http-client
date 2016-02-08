@@ -222,7 +222,7 @@ declare module 'aurelia-http-client' {
     /**
       * The status code of the response.
       */
-    statusCode: string;
+    statusCode: number;
     
     /**
       * The raw response.
@@ -595,6 +595,11 @@ declare module 'aurelia-http-client' {
   * The main HTTP client object.
   */
   export class HttpClient {
+    
+    /**
+      * Indicates whether or not the client is in the process of requesting resources.
+      */
+    isRequesting: boolean;
     
     /**
       * Creates an instance of HttpClient.

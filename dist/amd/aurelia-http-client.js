@@ -694,12 +694,13 @@ define(['exports', 'core-js', 'aurelia-path', 'aurelia-pal'], function (exports,
     function HttpClient() {
       _classCallCheck(this, HttpClient);
 
+      this.isRequesting = false;
+
       this.requestTransformers = [];
       this.requestProcessorFactories = new Map();
       this.requestProcessorFactories.set(HttpRequestMessage, createHttpRequestMessageProcessor);
       this.requestProcessorFactories.set(JSONPRequestMessage, createJSONPRequestMessageProcessor);
       this.pendingRequests = [];
-      this.isRequesting = false;
     }
 
     HttpClient.prototype.configure = function configure(fn) {
