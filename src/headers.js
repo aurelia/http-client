@@ -54,7 +54,7 @@ export class Headers {
   }
 
   /**
-  * Configures an XMR object with the headers.
+  * Configures an XHR object with the headers.
   * @param xhr The XHRT instance to configure.
   */
   configureXHR(xhr : XHR): void {
