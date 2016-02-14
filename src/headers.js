@@ -55,7 +55,7 @@ export class Headers {
 
   /**
   * Configures an XHR object with the headers.
-  * @param xhr The XHRT instance to configure.
+  * @param xhr The XHR instance to configure.
   */
   configureXHR(xhr : XHR): void {
     let headers = this.headers;
