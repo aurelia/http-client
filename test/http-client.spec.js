@@ -1,13 +1,11 @@
+import './setup';
 import {HttpClient} from '../src/http-client';
 import {HttpRequestMessage} from '../src/http-request-message';
 import {HttpResponseMessage} from '../src/http-response-message';
 import {Headers} from '../src/headers';
-import {initialize} from 'aurelia-pal-browser';
 
 describe('http client', () => {
   var baseUrl = "http://example.com/";
-
-  beforeAll(() => initialize());
 
   beforeEach(() => {
     jasmine.Ajax.install();

@@ -1,10 +1,8 @@
+import './setup';
 import * as XhrTransforms from '../src/xhr-transformers';
 import {Headers} from '../src/headers';
-import {initialize} from 'aurelia-pal-browser';
 
 describe('transformers', () => {
-  beforeAll(() => initialize());
-
   it("timeout should set the xhr timeout to the message timeout if defined in the message", () => {
     let xhr = {};
 

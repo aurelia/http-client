@@ -1,3 +1,4 @@
+import './setup';
 import {HttpRequestMessage, createHttpRequestMessageProcessor} from '../src/http-request-message';
 import {Headers} from '../src/headers';
 import {RequestMessageProcessor} from '../src/request-message-processor';
@@ -9,11 +10,8 @@ import {
   headerTransformer,
   contentTransformer
   } from '../src/xhr-transformers';
-import {initialize} from 'aurelia-pal-browser';
 
 describe("http-request-message", () => {
-  beforeAll(() => initialize());
-
   it("should have a constructor that takes in the method, url, content and headers", () => {
     let method = {}, url = {}, content = {}, headers = {};
     let httpRequestMessage = new HttpRequestMessage(method, url, content, headers);

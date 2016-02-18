@@ -1,12 +1,10 @@
+import './setup';
 import {RequestMessageProcessor} from '../src/request-message-processor';
 import {HttpResponseMessage} from '../src/http-response-message';
 import {RequestMessage} from '../src/request-message';
-import {initialize} from 'aurelia-pal-browser';
 import {PLATFORM} from 'aurelia-pal';
 
 describe("Request message processor", () => {
-  beforeAll(() => initialize());
-
   it("constructor() correctly setup the xhrType and the xhrTransformers", () => {
     var xhrType = {};
     var xhrTransformers = {};
