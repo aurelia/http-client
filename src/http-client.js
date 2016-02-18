@@ -1,5 +1,4 @@
 /*eslint no-unused-vars:0*/
-import 'core-js';
 import {DOM} from 'aurelia-pal';
 import {RequestMessage} from './request-message';
 import {RequestBuilder} from './request-builder';

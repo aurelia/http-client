@@ -1,6 +1,5 @@
 /*eslint no-unused-vars:0*/
 import {PLATFORM} from 'aurelia-pal';
-import 'core-js';
 import {RequestMessage} from './request-message';
 import {HttpResponseMessage} from './http-response-message';
 

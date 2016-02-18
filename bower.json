@@ -18,7 +18,6 @@
   },
   "dependencies": {
     "aurelia-pal": "^1.0.0-beta.1.1.1",
-    "aurelia-path": "^1.0.0-beta.1.1.0",
-    "core-js": "zloirock/core-js"
+    "aurelia-path": "^1.0.0-beta.1.1.0"
   }
 }
