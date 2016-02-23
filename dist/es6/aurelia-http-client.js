@@ -33,7 +33,7 @@ export class Headers {
   }
 
   /**
-  * Clears the headers.
+  * Clear the headers.
   */
   clear(): void {
     this.headers = {};
