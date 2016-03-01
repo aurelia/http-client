@@ -1,5 +1,4 @@
 declare module 'aurelia-http-client' {
-  import 'core-js';
   import { join, buildQueryString }  from 'aurelia-path';
   import { PLATFORM, DOM }  from 'aurelia-pal';
   
@@ -75,6 +74,7 @@ declare module 'aurelia-http-client' {
    * Represents an XHR transformer.
    */
   export interface XHRTransformer {
+    (client: HttpClient, processor: RequestMessageProcessor, message: RequestMessage, xhr: XHR): void;
   }
   
   /**
@@ -107,6 +107,7 @@ declare module 'aurelia-http-client' {
    * Transforms a request.
    */
   export interface RequestTransformer {
+    (client: HttpClient, processor: RequestMessageProcessor, message: RequestMessage): void;
   }
   
   /**
@@ -393,6 +394,11 @@ declare module 'aurelia-http-client' {
   * Represents an HTTP request message.
   */
   export class HttpRequestMessage extends RequestMessage {
+    
+    /**
+      * A replacer function to use in transforming the content.
+      */
+    replacer: ((key: string, value: any) => any);
     
     /**
       * Creates an instance of HttpRequestMessage.

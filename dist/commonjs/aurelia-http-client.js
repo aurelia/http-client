@@ -18,8 +18,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== 'function' 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-require('core-js');
-
 var _aureliaPath = require('aurelia-path');
 
 var _aureliaPal = require('aurelia-pal');

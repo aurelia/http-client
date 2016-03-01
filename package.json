@@ -1,6 +1,6 @@
 {
   "name": "aurelia-http-client",
-  "version": "1.0.0-beta.1.1.1",
+  "version": "1.0.0-beta.1.1.2",
   "description": "A simple, restful, message-based wrapper around XMLHttpRequest.",
   "keywords": [
     "aurelia",
@@ -28,11 +28,11 @@
     },
     "peerDependencies": {
       "aurelia-pal": "^1.0.0-beta.1.1.1",
-      "aurelia-path": "^1.0.0-beta.1.1.0"
+      "aurelia-path": "^1.0.0-beta.1.1.1"
     },
     "dependencies": {
       "aurelia-pal": "^1.0.0-beta.1.1.1",
-      "aurelia-path": "^1.0.0-beta.1.1.0"
+      "aurelia-path": "^1.0.0-beta.1.1.1"
     },
     "devDependencies": {
       "aurelia-pal-browser": "^1.0.0-beta.1.1.2",
@@ -42,8 +42,8 @@
     }
   },
   "dependencies": {
-    "aurelia-pal": "^1.0.0-beta.1",
-    "aurelia-path": "^1.0.0-beta.1"
+    "aurelia-pal": "^1.0.0-beta.1.1.1",
+    "aurelia-path": "^1.0.0-beta.1.1.1"
   },
   "devDependencies": {
     "aurelia-tools": "^0.1.12",

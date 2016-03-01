@@ -1,4 +1,3 @@
-import 'core-js';
 import {join,buildQueryString} from 'aurelia-path';
 import {PLATFORM,DOM} from 'aurelia-pal';
 
@@ -710,6 +709,12 @@ export function createJSONPRequestMessageProcessor(): RequestMessageProcessor {
 * Represents an HTTP request message.
 */
 export class HttpRequestMessage extends RequestMessage {
+
+  /**
+  * A replacer function to use in transforming the content.
+  */
+  replacer: (key: string, value: any) => any;
+
   /**
   * Creates an instance of HttpRequestMessage.
   * @param method The http method.

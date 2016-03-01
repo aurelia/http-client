@@ -14,12 +14,12 @@ import {
 * Represents an HTTP request message.
 */
 export class HttpRequestMessage extends RequestMessage {
-  
+
   /**
   * A replacer function to use in transforming the content.
   */
   replacer: (key: string, value: any) => any;
-  
+
   /**
   * Creates an instance of HttpRequestMessage.
   * @param method The http method.

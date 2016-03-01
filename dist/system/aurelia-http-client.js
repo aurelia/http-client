@@ -1,4 +1,4 @@
-System.register(['core-js', 'aurelia-path', 'aurelia-pal'], function (_export) {
+System.register(['aurelia-path', 'aurelia-pal'], function (_export) {
   'use strict';
 
   var join, buildQueryString, PLATFORM, DOM, Headers, RequestMessage, HttpResponseMessage, mimeTypes, RequestMessageProcessor, JSONPRequestMessage, JSONPXHR, HttpRequestMessage, RequestBuilder, HttpClient;
@@ -140,7 +140,7 @@ System.register(['core-js', 'aurelia-path', 'aurelia-pal'], function (_export) {
   }
 
   return {
-    setters: [function (_coreJs) {}, function (_aureliaPath) {
+    setters: [function (_aureliaPath) {
       join = _aureliaPath.join;
       buildQueryString = _aureliaPath.buildQueryString;
     }, function (_aureliaPal) {

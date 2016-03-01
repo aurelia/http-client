@@ -16,7 +16,7 @@ System.config({
   map: {
     "aurelia-pal": "npm:aurelia-pal@1.0.0-beta.1.1.1",
     "aurelia-pal-browser": "npm:aurelia-pal-browser@1.0.0-beta.1.1.2",
-    "aurelia-path": "npm:aurelia-path@1.0.0-beta.1.1.0",
+    "aurelia-path": "npm:aurelia-path@1.0.0-beta.1.1.1",
     "babel": "npm:babel-core@5.8.34",
     "babel-runtime": "npm:babel-runtime@5.8.34",
     "core-js": "npm:core-js@2.0.3",

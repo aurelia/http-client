@@ -1,3 +1,12 @@
+### 1.0.0-beta.1.1.2 (2016-03-01)
+
+
+#### Bug Fixes
+
+* **all:** remove core-js dependency ([9fbd7413](http://github.com/aurelia/http-client/commit/9fbd7413058b53c2b98e51b952e869ca0b1c4b26))
+* **http-client:** declare replacer property ([0080eaae](http://github.com/aurelia/http-client/commit/0080eaae426073a065bbf5f3d87b05f225c2a65c))
+
+
 ### 1.0.0-beta.1.1.1 (2016-02-08)
 
 
