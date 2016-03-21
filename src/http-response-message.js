@@ -2,7 +2,7 @@ import {Headers} from './headers';
 import {RequestMessage} from './request-message';
 
 /**
-* Represents a responce message from an HTTP or JSONP request.
+* Represents a response message from an HTTP or JSONP request.
 */
 export class HttpResponseMessage {
   /**
