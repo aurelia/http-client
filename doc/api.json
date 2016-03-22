@@ -338,7 +338,7 @@
       ]
     },
     {
-      "id": 237,
+      "id": 226,
       "name": "HttpClient",
       "kind": 128,
       "kindString": "Class",
@@ -350,7 +350,7 @@
       },
       "children": [
         {
-          "id": 239,
+          "id": 228,
           "name": "constructor",
           "kind": 512,
           "kindString": "Constructor",
@@ -362,7 +362,7 @@
           },
           "signatures": [
             {
-              "id": 240,
+              "id": 229,
               "name": "new HttpClient",
               "kind": 16384,
               "kindString": "Constructor signature",
@@ -373,14 +373,14 @@
               "type": {
                 "type": "reference",
                 "name": "HttpClient",
-                "id": 237,
+                "id": 226,
                 "moduleName": "\"aurelia-http-client\""
               }
             }
           ]
         },
         {
-          "id": 238,
+          "id": 227,
           "name": "isRequesting",
           "kind": 1024,
           "kindString": "Property",
@@ -396,7 +396,7 @@
           }
         },
         {
-          "id": 241,
+          "id": 230,
           "name": "configure",
           "kind": 2048,
           "kindString": "Method",
@@ -405,7 +405,7 @@
           },
           "signatures": [
             {
-              "id": 242,
+              "id": 231,
               "name": "configure",
               "kind": 4096,
               "kindString": "Call signature",
@@ -415,7 +415,7 @@
               },
               "parameters": [
                 {
-                  "id": 243,
+                  "id": 232,
                   "name": "fn",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -426,21 +426,21 @@
                   "type": {
                     "type": "reflection",
                     "declaration": {
-                      "id": 244,
+                      "id": 233,
                       "name": "__type",
                       "kind": 65536,
                       "kindString": "Type literal",
                       "flags": {},
                       "signatures": [
                         {
-                          "id": 245,
+                          "id": 234,
                           "name": "__call",
                           "kind": 4096,
                           "kindString": "Call signature",
                           "flags": {},
                           "parameters": [
                             {
-                              "id": 246,
+                              "id": 235,
                               "name": "builder",
                               "kind": 32768,
                               "kindString": "Parameter",
@@ -448,7 +448,7 @@
                               "type": {
                                 "type": "reference",
                                 "name": "RequestBuilder",
-                                "id": 154
+                                "id": 143
                               }
                             }
                           ],
@@ -465,14 +465,14 @@
               "type": {
                 "type": "reference",
                 "name": "HttpClient",
-                "id": 237,
+                "id": 226,
                 "moduleName": "\"aurelia-http-client\""
               }
             }
           ]
         },
         {
-          "id": 247,
+          "id": 236,
           "name": "createRequest",
           "kind": 2048,
           "kindString": "Method",
@@ -481,7 +481,7 @@
           },
           "signatures": [
             {
-              "id": 248,
+              "id": 237,
               "name": "createRequest",
               "kind": 4096,
               "kindString": "Call signature",
@@ -491,7 +491,7 @@
               },
               "parameters": [
                 {
-                  "id": 249,
+                  "id": 238,
                   "name": "url",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -508,14 +508,14 @@
               "type": {
                 "type": "reference",
                 "name": "RequestBuilder",
-                "id": 154,
+                "id": 143,
                 "moduleName": "\"aurelia-http-client\""
               }
             }
           ]
         },
         {
-          "id": 254,
+          "id": 243,
           "name": "delete",
           "kind": 2048,
           "kindString": "Method",
@@ -524,7 +524,7 @@
           },
           "signatures": [
             {
-              "id": 255,
+              "id": 244,
               "name": "delete",
               "kind": 4096,
               "kindString": "Call signature",
@@ -535,7 +535,7 @@
               },
               "parameters": [
                 {
-                  "id": 256,
+                  "id": 245,
                   "name": "url",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -564,7 +564,7 @@
           ]
         },
         {
-          "id": 257,
+          "id": 246,
           "name": "get",
           "kind": 2048,
           "kindString": "Method",
@@ -573,7 +573,7 @@
           },
           "signatures": [
             {
-              "id": 258,
+              "id": 247,
               "name": "get",
               "kind": 4096,
               "kindString": "Call signature",
@@ -584,7 +584,7 @@
               },
               "parameters": [
                 {
-                  "id": 259,
+                  "id": 248,
                   "name": "url",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -613,7 +613,7 @@
           ]
         },
         {
-          "id": 260,
+          "id": 249,
           "name": "head",
           "kind": 2048,
           "kindString": "Method",
@@ -622,7 +622,7 @@
           },
           "signatures": [
             {
-              "id": 261,
+              "id": 250,
               "name": "head",
               "kind": 4096,
               "kindString": "Call signature",
@@ -633,7 +633,118 @@
               },
               "parameters": [
                 {
-                  "id": 262,
+                  "id": 251,
+                  "name": "url",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {},
+                  "comment": {
+                    "text": "The target URL."
+                  },
+                  "type": {
+                    "type": "instrinct",
+                    "name": "string"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "name": "Promise",
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "name": "HttpResponseMessage",
+                    "id": 77
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": 252,
+          "name": "jsonp",
+          "kind": 2048,
+          "kindString": "Method",
+          "flags": {
+            "isExported": true
+          },
+          "signatures": [
+            {
+              "id": 253,
+              "name": "jsonp",
+              "kind": 4096,
+              "kindString": "Call signature",
+              "flags": {},
+              "comment": {
+                "shortText": "Sends a JSONP request.",
+                "returns": "A cancellable promise object.\n"
+              },
+              "parameters": [
+                {
+                  "id": 254,
+                  "name": "url",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {},
+                  "comment": {
+                    "text": "The target URL."
+                  },
+                  "type": {
+                    "type": "instrinct",
+                    "name": "string"
+                  }
+                },
+                {
+                  "id": 255,
+                  "name": "callbackParameterName",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {
+                    "isOptional": true
+                  },
+                  "type": {
+                    "type": "instrinct",
+                    "name": "string"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "name": "Promise",
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "name": "HttpResponseMessage",
+                    "id": 77
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": 256,
+          "name": "options",
+          "kind": 2048,
+          "kindString": "Method",
+          "flags": {
+            "isExported": true
+          },
+          "signatures": [
+            {
+              "id": 257,
+              "name": "options",
+              "kind": 4096,
+              "kindString": "Call signature",
+              "flags": {},
+              "comment": {
+                "shortText": "Sends an HTTP OPTIONS request.",
+                "returns": "A cancellable promise object.\n"
+              },
+              "parameters": [
+                {
+                  "id": 258,
                   "name": "url",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -663,7 +774,7 @@
         },
         {
           "id": 263,
-          "name": "jsonp",
+          "name": "patch",
           "kind": 2048,
           "kindString": "Method",
           "flags": {
@@ -672,12 +783,12 @@
           "signatures": [
             {
               "id": 264,
-              "name": "jsonp",
+              "name": "patch",
               "kind": 4096,
               "kindString": "Call signature",
               "flags": {},
               "comment": {
-                "shortText": "Sends a JSONP request.",
+                "shortText": "Sends an HTTP PATCH request.",
                 "returns": "A cancellable promise object.\n"
               },
               "parameters": [
@@ -697,15 +808,16 @@
                 },
                 {
                   "id": 266,
-                  "name": "callbackParameterName",
+                  "name": "content",
                   "kind": 32768,
                   "kindString": "Parameter",
-                  "flags": {
-                    "isOptional": true
+                  "flags": {},
+                  "comment": {
+                    "text": "The request payload."
                   },
                   "type": {
                     "type": "instrinct",
-                    "name": "string"
+                    "name": "any"
                   }
                 }
               ],
@@ -725,7 +837,7 @@
         },
         {
           "id": 267,
-          "name": "options",
+          "name": "post",
           "kind": 2048,
           "kindString": "Method",
           "flags": {
@@ -734,12 +846,12 @@
           "signatures": [
             {
               "id": 268,
-              "name": "options",
+              "name": "post",
               "kind": 4096,
               "kindString": "Call signature",
               "flags": {},
               "comment": {
-                "shortText": "Sends an HTTP OPTIONS request.",
+                "shortText": "Sends an HTTP POST request.",
                 "returns": "A cancellable promise object.\n"
               },
               "parameters": [
@@ -756,58 +868,9 @@
                     "type": "instrinct",
                     "name": "string"
                   }
-                }
-              ],
-              "type": {
-                "type": "reference",
-                "name": "Promise",
-                "typeArguments": [
-                  {
-                    "type": "reference",
-                    "name": "HttpResponseMessage",
-                    "id": 77
-                  }
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "id": 274,
-          "name": "patch",
-          "kind": 2048,
-          "kindString": "Method",
-          "flags": {
-            "isExported": true
-          },
-          "signatures": [
-            {
-              "id": 275,
-              "name": "patch",
-              "kind": 4096,
-              "kindString": "Call signature",
-              "flags": {},
-              "comment": {
-                "shortText": "Sends an HTTP PATCH request.",
-                "returns": "A cancellable promise object.\n"
-              },
-              "parameters": [
-                {
-                  "id": 276,
-                  "name": "url",
-                  "kind": 32768,
-                  "kindString": "Parameter",
-                  "flags": {},
-                  "comment": {
-                    "text": "The target URL."
-                  },
-                  "type": {
-                    "type": "instrinct",
-                    "name": "string"
-                  }
                 },
                 {
-                  "id": 277,
+                  "id": 270,
                   "name": "content",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -836,70 +899,7 @@
           ]
         },
         {
-          "id": 278,
-          "name": "post",
-          "kind": 2048,
-          "kindString": "Method",
-          "flags": {
-            "isExported": true
-          },
-          "signatures": [
-            {
-              "id": 279,
-              "name": "post",
-              "kind": 4096,
-              "kindString": "Call signature",
-              "flags": {},
-              "comment": {
-                "shortText": "Sends an HTTP POST request.",
-                "returns": "A cancellable promise object.\n"
-              },
-              "parameters": [
-                {
-                  "id": 280,
-                  "name": "url",
-                  "kind": 32768,
-                  "kindString": "Parameter",
-                  "flags": {},
-                  "comment": {
-                    "text": "The target URL."
-                  },
-                  "type": {
-                    "type": "instrinct",
-                    "name": "string"
-                  }
-                },
-                {
-                  "id": 281,
-                  "name": "content",
-                  "kind": 32768,
-                  "kindString": "Parameter",
-                  "flags": {},
-                  "comment": {
-                    "text": "The request payload."
-                  },
-                  "type": {
-                    "type": "instrinct",
-                    "name": "any"
-                  }
-                }
-              ],
-              "type": {
-                "type": "reference",
-                "name": "Promise",
-                "typeArguments": [
-                  {
-                    "type": "reference",
-                    "name": "HttpResponseMessage",
-                    "id": 77
-                  }
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "id": 270,
+          "id": 259,
           "name": "put",
           "kind": 2048,
           "kindString": "Method",
@@ -908,7 +908,7 @@
           },
           "signatures": [
             {
-              "id": 271,
+              "id": 260,
               "name": "put",
               "kind": 4096,
               "kindString": "Call signature",
@@ -919,7 +919,7 @@
               },
               "parameters": [
                 {
-                  "id": 272,
+                  "id": 261,
                   "name": "url",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -933,7 +933,7 @@
                   }
                 },
                 {
-                  "id": 273,
+                  "id": 262,
                   "name": "content",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -962,7 +962,7 @@
           ]
         },
         {
-          "id": 250,
+          "id": 239,
           "name": "send",
           "kind": 2048,
           "kindString": "Method",
@@ -971,7 +971,7 @@
           },
           "signatures": [
             {
-              "id": 251,
+              "id": 240,
               "name": "send",
               "kind": 4096,
               "kindString": "Call signature",
@@ -982,7 +982,7 @@
               },
               "parameters": [
                 {
-                  "id": 252,
+                  "id": 241,
                   "name": "requestMessage",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -995,7 +995,7 @@
                   }
                 },
                 {
-                  "id": 253,
+                  "id": 242,
                   "name": "transformers",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -1036,37 +1036,37 @@
           "title": "Constructors",
           "kind": 512,
           "children": [
-            239
+            228
           ]
         },
         {
           "title": "Properties",
           "kind": 1024,
           "children": [
-            238
+            227
           ]
         },
         {
           "title": "Methods",
           "kind": 2048,
           "children": [
-            241,
-            247,
-            254,
-            257,
-            260,
+            230,
+            236,
+            243,
+            246,
+            249,
+            252,
+            256,
             263,
             267,
-            274,
-            278,
-            270,
-            250
+            259,
+            239
           ]
         }
       ]
     },
     {
-      "id": 135,
+      "id": 124,
       "name": "HttpRequestMessage",
       "kind": 128,
       "kindString": "Class",
@@ -1078,7 +1078,7 @@
       },
       "children": [
         {
-          "id": 141,
+          "id": 130,
           "name": "constructor",
           "kind": 512,
           "kindString": "Constructor",
@@ -1090,7 +1090,7 @@
           },
           "signatures": [
             {
-              "id": 142,
+              "id": 131,
               "name": "new HttpRequestMessage",
               "kind": 16384,
               "kindString": "Constructor signature",
@@ -1100,7 +1100,7 @@
               },
               "parameters": [
                 {
-                  "id": 143,
+                  "id": 132,
                   "name": "method",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -1114,7 +1114,7 @@
                   }
                 },
                 {
-                  "id": 144,
+                  "id": 133,
                   "name": "url",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -1128,7 +1128,7 @@
                   }
                 },
                 {
-                  "id": 145,
+                  "id": 134,
                   "name": "content",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -1142,7 +1142,7 @@
                   }
                 },
                 {
-                  "id": 146,
+                  "id": 135,
                   "name": "headers",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -1163,7 +1163,7 @@
               "type": {
                 "type": "reference",
                 "name": "HttpRequestMessage",
-                "id": 135,
+                "id": 124,
                 "moduleName": "\"aurelia-http-client\""
               },
               "overwrites": {
@@ -1180,7 +1180,7 @@
           }
         },
         {
-          "id": 151,
+          "id": 140,
           "name": "baseUrl",
           "kind": 1024,
           "kindString": "Property",
@@ -1201,7 +1201,7 @@
           }
         },
         {
-          "id": 149,
+          "id": 138,
           "name": "content",
           "kind": 1024,
           "kindString": "Property",
@@ -1222,7 +1222,7 @@
           }
         },
         {
-          "id": 150,
+          "id": 139,
           "name": "headers",
           "kind": 1024,
           "kindString": "Property",
@@ -1245,7 +1245,7 @@
           }
         },
         {
-          "id": 147,
+          "id": 136,
           "name": "method",
           "kind": 1024,
           "kindString": "Property",
@@ -1266,7 +1266,7 @@
           }
         },
         {
-          "id": 136,
+          "id": 125,
           "name": "replacer",
           "kind": 1024,
           "kindString": "Property",
@@ -1279,21 +1279,21 @@
           "type": {
             "type": "reflection",
             "declaration": {
-              "id": 137,
+              "id": 126,
               "name": "__type",
               "kind": 65536,
               "kindString": "Type literal",
               "flags": {},
               "signatures": [
                 {
-                  "id": 138,
+                  "id": 127,
                   "name": "__call",
                   "kind": 4096,
                   "kindString": "Call signature",
                   "flags": {},
                   "parameters": [
                     {
-                      "id": 139,
+                      "id": 128,
                       "name": "key",
                       "kind": 32768,
                       "kindString": "Parameter",
@@ -1304,7 +1304,7 @@
                       }
                     },
                     {
-                      "id": 140,
+                      "id": 129,
                       "name": "value",
                       "kind": 32768,
                       "kindString": "Parameter",
@@ -1325,7 +1325,7 @@
           }
         },
         {
-          "id": 148,
+          "id": 137,
           "name": "url",
           "kind": 1024,
           "kindString": "Property",
@@ -1346,7 +1346,7 @@
           }
         },
         {
-          "id": 152,
+          "id": 141,
           "name": "buildFullUrl",
           "kind": 2048,
           "kindString": "Method",
@@ -1355,7 +1355,7 @@
           },
           "signatures": [
             {
-              "id": 153,
+              "id": 142,
               "name": "buildFullUrl",
               "kind": 4096,
               "kindString": "Call signature",
@@ -1387,26 +1387,26 @@
           "title": "Constructors",
           "kind": 512,
           "children": [
-            141
+            130
           ]
         },
         {
           "title": "Properties",
           "kind": 1024,
           "children": [
-            151,
-            149,
-            150,
-            147,
+            140,
+            138,
+            139,
             136,
-            148
+            125,
+            137
           ]
         },
         {
           "title": "Methods",
           "kind": 2048,
           "children": [
-            152
+            141
           ]
         }
       ],
@@ -1427,7 +1427,7 @@
         "isExported": true
       },
       "comment": {
-        "shortText": "Represents a responce message from an HTTP or JSONP request."
+        "shortText": "Represents a response message from an HTTP or JSONP request."
       },
       "children": [
         {
@@ -2050,132 +2050,7 @@
       ]
     },
     {
-      "id": 124,
-      "name": "JSONPXHR",
-      "kind": 128,
-      "kindString": "Class",
-      "flags": {},
-      "children": [
-        {
-          "id": 131,
-          "name": "abort",
-          "kind": 2048,
-          "kindString": "Method",
-          "flags": {},
-          "signatures": [
-            {
-              "id": 132,
-              "name": "abort",
-              "kind": 4096,
-              "kindString": "Call signature",
-              "flags": {},
-              "type": {
-                "type": "instrinct",
-                "name": "void"
-              }
-            }
-          ]
-        },
-        {
-          "id": 125,
-          "name": "open",
-          "kind": 2048,
-          "kindString": "Method",
-          "flags": {},
-          "signatures": [
-            {
-              "id": 126,
-              "name": "open",
-              "kind": 4096,
-              "kindString": "Call signature",
-              "flags": {},
-              "parameters": [
-                {
-                  "id": 127,
-                  "name": "method",
-                  "kind": 32768,
-                  "kindString": "Parameter",
-                  "flags": {},
-                  "type": {
-                    "type": "instrinct",
-                    "name": "string"
-                  }
-                },
-                {
-                  "id": 128,
-                  "name": "url",
-                  "kind": 32768,
-                  "kindString": "Parameter",
-                  "flags": {},
-                  "type": {
-                    "type": "instrinct",
-                    "name": "string"
-                  }
-                }
-              ],
-              "type": {
-                "type": "instrinct",
-                "name": "void"
-              }
-            }
-          ]
-        },
-        {
-          "id": 129,
-          "name": "send",
-          "kind": 2048,
-          "kindString": "Method",
-          "flags": {},
-          "signatures": [
-            {
-              "id": 130,
-              "name": "send",
-              "kind": 4096,
-              "kindString": "Call signature",
-              "flags": {},
-              "type": {
-                "type": "instrinct",
-                "name": "void"
-              }
-            }
-          ]
-        },
-        {
-          "id": 133,
-          "name": "setRequestHeader",
-          "kind": 2048,
-          "kindString": "Method",
-          "flags": {},
-          "signatures": [
-            {
-              "id": 134,
-              "name": "setRequestHeader",
-              "kind": 4096,
-              "kindString": "Call signature",
-              "flags": {},
-              "type": {
-                "type": "instrinct",
-                "name": "any"
-              }
-            }
-          ]
-        }
-      ],
-      "groups": [
-        {
-          "title": "Methods",
-          "kind": 2048,
-          "children": [
-            131,
-            125,
-            129,
-            133
-          ]
-        }
-      ]
-    },
-    {
-      "id": 154,
+      "id": 143,
       "name": "RequestBuilder",
       "kind": 128,
       "kindString": "Class",
@@ -2187,7 +2062,7 @@
       },
       "children": [
         {
-          "id": 155,
+          "id": 144,
           "name": "constructor",
           "kind": 512,
           "kindString": "Constructor",
@@ -2199,7 +2074,7 @@
           },
           "signatures": [
             {
-              "id": 156,
+              "id": 145,
               "name": "new RequestBuilder",
               "kind": 16384,
               "kindString": "Constructor signature",
@@ -2209,7 +2084,7 @@
               },
               "parameters": [
                 {
-                  "id": 157,
+                  "id": 146,
                   "name": "client",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -2220,7 +2095,7 @@
                   "type": {
                     "type": "reference",
                     "name": "HttpClient",
-                    "id": 237,
+                    "id": 226,
                     "moduleName": "\"aurelia-http-client\""
                   }
                 }
@@ -2228,14 +2103,14 @@
               "type": {
                 "type": "reference",
                 "name": "RequestBuilder",
-                "id": 154,
+                "id": 143,
                 "moduleName": "\"aurelia-http-client\""
               }
             }
           ]
         },
         {
-          "id": 158,
+          "id": 147,
           "name": "asDelete",
           "kind": 2048,
           "kindString": "Method",
@@ -2244,7 +2119,7 @@
           },
           "signatures": [
             {
-              "id": 159,
+              "id": 148,
               "name": "asDelete",
               "kind": 4096,
               "kindString": "Call signature",
@@ -2256,14 +2131,14 @@
               "type": {
                 "type": "reference",
                 "name": "RequestBuilder",
-                "id": 154,
+                "id": 143,
                 "moduleName": "\"aurelia-http-client\""
               }
             }
           ]
         },
         {
-          "id": 160,
+          "id": 149,
           "name": "asGet",
           "kind": 2048,
           "kindString": "Method",
@@ -2272,7 +2147,7 @@
           },
           "signatures": [
             {
-              "id": 161,
+              "id": 150,
               "name": "asGet",
               "kind": 4096,
               "kindString": "Call signature",
@@ -2284,14 +2159,14 @@
               "type": {
                 "type": "reference",
                 "name": "RequestBuilder",
-                "id": 154,
+                "id": 143,
                 "moduleName": "\"aurelia-http-client\""
               }
             }
           ]
         },
         {
-          "id": 162,
+          "id": 151,
           "name": "asHead",
           "kind": 2048,
           "kindString": "Method",
@@ -2300,7 +2175,7 @@
           },
           "signatures": [
             {
-              "id": 163,
+              "id": 152,
               "name": "asHead",
               "kind": 4096,
               "kindString": "Call signature",
@@ -2312,14 +2187,14 @@
               "type": {
                 "type": "reference",
                 "name": "RequestBuilder",
-                "id": 154,
+                "id": 143,
                 "moduleName": "\"aurelia-http-client\""
               }
             }
           ]
         },
         {
-          "id": 172,
+          "id": 161,
           "name": "asJsonp",
           "kind": 2048,
           "kindString": "Method",
@@ -2328,7 +2203,7 @@
           },
           "signatures": [
             {
-              "id": 173,
+              "id": 162,
               "name": "asJsonp",
               "kind": 4096,
               "kindString": "Call signature",
@@ -2339,7 +2214,7 @@
               },
               "parameters": [
                 {
-                  "id": 174,
+                  "id": 163,
                   "name": "callbackParameterName",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -2356,14 +2231,14 @@
               "type": {
                 "type": "reference",
                 "name": "RequestBuilder",
-                "id": 154,
+                "id": 143,
                 "moduleName": "\"aurelia-http-client\""
               }
             }
           ]
         },
         {
-          "id": 164,
+          "id": 153,
           "name": "asOptions",
           "kind": 2048,
           "kindString": "Method",
@@ -2372,7 +2247,7 @@
           },
           "signatures": [
             {
-              "id": 165,
+              "id": 154,
               "name": "asOptions",
               "kind": 4096,
               "kindString": "Call signature",
@@ -2384,14 +2259,14 @@
               "type": {
                 "type": "reference",
                 "name": "RequestBuilder",
-                "id": 154,
+                "id": 143,
                 "moduleName": "\"aurelia-http-client\""
               }
             }
           ]
         },
         {
-          "id": 166,
+          "id": 155,
           "name": "asPatch",
           "kind": 2048,
           "kindString": "Method",
@@ -2400,7 +2275,7 @@
           },
           "signatures": [
             {
-              "id": 167,
+              "id": 156,
               "name": "asPatch",
               "kind": 4096,
               "kindString": "Call signature",
@@ -2412,14 +2287,14 @@
               "type": {
                 "type": "reference",
                 "name": "RequestBuilder",
-                "id": 154,
+                "id": 143,
                 "moduleName": "\"aurelia-http-client\""
               }
             }
           ]
         },
         {
-          "id": 168,
+          "id": 157,
           "name": "asPost",
           "kind": 2048,
           "kindString": "Method",
@@ -2428,7 +2303,7 @@
           },
           "signatures": [
             {
-              "id": 169,
+              "id": 158,
               "name": "asPost",
               "kind": 4096,
               "kindString": "Call signature",
@@ -2440,14 +2315,14 @@
               "type": {
                 "type": "reference",
                 "name": "RequestBuilder",
-                "id": 154,
+                "id": 143,
                 "moduleName": "\"aurelia-http-client\""
               }
             }
           ]
         },
         {
-          "id": 170,
+          "id": 159,
           "name": "asPut",
           "kind": 2048,
           "kindString": "Method",
@@ -2456,7 +2331,7 @@
           },
           "signatures": [
             {
-              "id": 171,
+              "id": 160,
               "name": "asPut",
               "kind": 4096,
               "kindString": "Call signature",
@@ -2468,14 +2343,14 @@
               "type": {
                 "type": "reference",
                 "name": "RequestBuilder",
-                "id": 154,
+                "id": 143,
                 "moduleName": "\"aurelia-http-client\""
               }
             }
           ]
         },
         {
-          "id": 235,
+          "id": 224,
           "name": "send",
           "kind": 2048,
           "kindString": "Method",
@@ -2484,7 +2359,7 @@
           },
           "signatures": [
             {
-              "id": 236,
+              "id": 225,
               "name": "send",
               "kind": 4096,
               "kindString": "Call signature",
@@ -2508,7 +2383,7 @@
           ]
         },
         {
-          "id": 227,
+          "id": 216,
           "name": "skipContentProcessing",
           "kind": 2048,
           "kindString": "Method",
@@ -2517,7 +2392,7 @@
           },
           "signatures": [
             {
-              "id": 228,
+              "id": 217,
               "name": "skipContentProcessing",
               "kind": 4096,
               "kindString": "Call signature",
@@ -2529,14 +2404,14 @@
               "type": {
                 "type": "reference",
                 "name": "RequestBuilder",
-                "id": 154,
+                "id": 143,
                 "moduleName": "\"aurelia-http-client\""
               }
             }
           ]
         },
         {
-          "id": 181,
+          "id": 170,
           "name": "withBaseUrl",
           "kind": 2048,
           "kindString": "Method",
@@ -2545,7 +2420,7 @@
           },
           "signatures": [
             {
-              "id": 182,
+              "id": 171,
               "name": "withBaseUrl",
               "kind": 4096,
               "kindString": "Call signature",
@@ -2556,7 +2431,7 @@
               },
               "parameters": [
                 {
-                  "id": 183,
+                  "id": 172,
                   "name": "baseUrl",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -2573,14 +2448,14 @@
               "type": {
                 "type": "reference",
                 "name": "RequestBuilder",
-                "id": 154,
+                "id": 143,
                 "moduleName": "\"aurelia-http-client\""
               }
             }
           ]
         },
         {
-          "id": 221,
+          "id": 210,
           "name": "withCallbackParameterName",
           "kind": 2048,
           "kindString": "Method",
@@ -2589,7 +2464,7 @@
           },
           "signatures": [
             {
-              "id": 222,
+              "id": 211,
               "name": "withCallbackParameterName",
               "kind": 4096,
               "kindString": "Call signature",
@@ -2600,7 +2475,7 @@
               },
               "parameters": [
                 {
-                  "id": 223,
+                  "id": 212,
                   "name": "callbackParameterName",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -2617,14 +2492,14 @@
               "type": {
                 "type": "reference",
                 "name": "RequestBuilder",
-                "id": 154,
+                "id": 143,
                 "moduleName": "\"aurelia-http-client\""
               }
             }
           ]
         },
         {
-          "id": 178,
+          "id": 167,
           "name": "withContent",
           "kind": 2048,
           "kindString": "Method",
@@ -2633,7 +2508,7 @@
           },
           "signatures": [
             {
-              "id": 179,
+              "id": 168,
               "name": "withContent",
               "kind": 4096,
               "kindString": "Call signature",
@@ -2644,7 +2519,7 @@
               },
               "parameters": [
                 {
-                  "id": 180,
+                  "id": 169,
                   "name": "content",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -2658,14 +2533,14 @@
               "type": {
                 "type": "reference",
                 "name": "RequestBuilder",
-                "id": 154,
+                "id": 143,
                 "moduleName": "\"aurelia-http-client\""
               }
             }
           ]
         },
         {
-          "id": 197,
+          "id": 186,
           "name": "withCredentials",
           "kind": 2048,
           "kindString": "Method",
@@ -2674,7 +2549,7 @@
           },
           "signatures": [
             {
-              "id": 198,
+              "id": 187,
               "name": "withCredentials",
               "kind": 4096,
               "kindString": "Call signature",
@@ -2685,7 +2560,7 @@
               },
               "parameters": [
                 {
-                  "id": 199,
+                  "id": 188,
                   "name": "value",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -2702,14 +2577,14 @@
               "type": {
                 "type": "reference",
                 "name": "RequestBuilder",
-                "id": 154,
+                "id": 143,
                 "moduleName": "\"aurelia-http-client\""
               }
             }
           ]
         },
         {
-          "id": 193,
+          "id": 182,
           "name": "withHeader",
           "kind": 2048,
           "kindString": "Method",
@@ -2718,7 +2593,7 @@
           },
           "signatures": [
             {
-              "id": 194,
+              "id": 183,
               "name": "withHeader",
               "kind": 4096,
               "kindString": "Call signature",
@@ -2729,7 +2604,7 @@
               },
               "parameters": [
                 {
-                  "id": 195,
+                  "id": 184,
                   "name": "key",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -2743,7 +2618,7 @@
                   }
                 },
                 {
-                  "id": 196,
+                  "id": 185,
                   "name": "value",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -2760,14 +2635,14 @@
               "type": {
                 "type": "reference",
                 "name": "RequestBuilder",
-                "id": 154,
+                "id": 143,
                 "moduleName": "\"aurelia-http-client\""
               }
             }
           ]
         },
         {
-          "id": 224,
+          "id": 213,
           "name": "withInterceptor",
           "kind": 2048,
           "kindString": "Method",
@@ -2776,7 +2651,7 @@
           },
           "signatures": [
             {
-              "id": 225,
+              "id": 214,
               "name": "withInterceptor",
               "kind": 4096,
               "kindString": "Call signature",
@@ -2787,7 +2662,7 @@
               },
               "parameters": [
                 {
-                  "id": 226,
+                  "id": 215,
                   "name": "interceptor",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -2806,14 +2681,14 @@
               "type": {
                 "type": "reference",
                 "name": "RequestBuilder",
-                "id": 154,
+                "id": 143,
                 "moduleName": "\"aurelia-http-client\""
               }
             }
           ]
         },
         {
-          "id": 200,
+          "id": 189,
           "name": "withLogin",
           "kind": 2048,
           "kindString": "Method",
@@ -2822,7 +2697,7 @@
           },
           "signatures": [
             {
-              "id": 201,
+              "id": 190,
               "name": "withLogin",
               "kind": 4096,
               "kindString": "Call signature",
@@ -2833,7 +2708,7 @@
               },
               "parameters": [
                 {
-                  "id": 202,
+                  "id": 191,
                   "name": "user",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -2847,7 +2722,7 @@
                   }
                 },
                 {
-                  "id": 203,
+                  "id": 192,
                   "name": "password",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -2864,14 +2739,14 @@
               "type": {
                 "type": "reference",
                 "name": "RequestBuilder",
-                "id": 154,
+                "id": 143,
                 "moduleName": "\"aurelia-http-client\""
               }
             }
           ]
         },
         {
-          "id": 184,
+          "id": 173,
           "name": "withParams",
           "kind": 2048,
           "kindString": "Method",
@@ -2880,7 +2755,7 @@
           },
           "signatures": [
             {
-              "id": 185,
+              "id": 174,
               "name": "withParams",
               "kind": 4096,
               "kindString": "Call signature",
@@ -2891,7 +2766,7 @@
               },
               "parameters": [
                 {
-                  "id": 186,
+                  "id": 175,
                   "name": "params",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -2908,14 +2783,14 @@
               "type": {
                 "type": "reference",
                 "name": "RequestBuilder",
-                "id": 154,
+                "id": 143,
                 "moduleName": "\"aurelia-http-client\""
               }
             }
           ]
         },
         {
-          "id": 218,
+          "id": 207,
           "name": "withProgressCallback",
           "kind": 2048,
           "kindString": "Method",
@@ -2924,7 +2799,7 @@
           },
           "signatures": [
             {
-              "id": 219,
+              "id": 208,
               "name": "withProgressCallback",
               "kind": 4096,
               "kindString": "Call signature",
@@ -2935,7 +2810,7 @@
               },
               "parameters": [
                 {
-                  "id": 220,
+                  "id": 209,
                   "name": "progressCallback",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -2952,14 +2827,14 @@
               "type": {
                 "type": "reference",
                 "name": "RequestBuilder",
-                "id": 154,
+                "id": 143,
                 "moduleName": "\"aurelia-http-client\""
               }
             }
           ]
         },
         {
-          "id": 211,
+          "id": 200,
           "name": "withReplacer",
           "kind": 2048,
           "kindString": "Method",
@@ -2968,7 +2843,7 @@
           },
           "signatures": [
             {
-              "id": 212,
+              "id": 201,
               "name": "withReplacer",
               "kind": 4096,
               "kindString": "Call signature",
@@ -2979,7 +2854,7 @@
               },
               "parameters": [
                 {
-                  "id": 213,
+                  "id": 202,
                   "name": "replacer",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -2990,21 +2865,21 @@
                   "type": {
                     "type": "reflection",
                     "declaration": {
-                      "id": 214,
+                      "id": 203,
                       "name": "__type",
                       "kind": 65536,
                       "kindString": "Type literal",
                       "flags": {},
                       "signatures": [
                         {
-                          "id": 215,
+                          "id": 204,
                           "name": "__call",
                           "kind": 4096,
                           "kindString": "Call signature",
                           "flags": {},
                           "parameters": [
                             {
-                              "id": 216,
+                              "id": 205,
                               "name": "key",
                               "kind": 32768,
                               "kindString": "Parameter",
@@ -3015,7 +2890,7 @@
                               }
                             },
                             {
-                              "id": 217,
+                              "id": 206,
                               "name": "value",
                               "kind": 32768,
                               "kindString": "Parameter",
@@ -3039,14 +2914,14 @@
               "type": {
                 "type": "reference",
                 "name": "RequestBuilder",
-                "id": 154,
+                "id": 143,
                 "moduleName": "\"aurelia-http-client\""
               }
             }
           ]
         },
         {
-          "id": 187,
+          "id": 176,
           "name": "withResponseType",
           "kind": 2048,
           "kindString": "Method",
@@ -3055,7 +2930,7 @@
           },
           "signatures": [
             {
-              "id": 188,
+              "id": 177,
               "name": "withResponseType",
               "kind": 4096,
               "kindString": "Call signature",
@@ -3066,7 +2941,7 @@
               },
               "parameters": [
                 {
-                  "id": 189,
+                  "id": 178,
                   "name": "responseType",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -3083,14 +2958,14 @@
               "type": {
                 "type": "reference",
                 "name": "RequestBuilder",
-                "id": 154,
+                "id": 143,
                 "moduleName": "\"aurelia-http-client\""
               }
             }
           ]
         },
         {
-          "id": 204,
+          "id": 193,
           "name": "withReviver",
           "kind": 2048,
           "kindString": "Method",
@@ -3099,7 +2974,7 @@
           },
           "signatures": [
             {
-              "id": 205,
+              "id": 194,
               "name": "withReviver",
               "kind": 4096,
               "kindString": "Call signature",
@@ -3110,7 +2985,7 @@
               },
               "parameters": [
                 {
-                  "id": 206,
+                  "id": 195,
                   "name": "reviver",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -3121,21 +2996,21 @@
                   "type": {
                     "type": "reflection",
                     "declaration": {
-                      "id": 207,
+                      "id": 196,
                       "name": "__type",
                       "kind": 65536,
                       "kindString": "Type literal",
                       "flags": {},
                       "signatures": [
                         {
-                          "id": 208,
+                          "id": 197,
                           "name": "__call",
                           "kind": 4096,
                           "kindString": "Call signature",
                           "flags": {},
                           "parameters": [
                             {
-                              "id": 209,
+                              "id": 198,
                               "name": "key",
                               "kind": 32768,
                               "kindString": "Parameter",
@@ -3146,7 +3021,7 @@
                               }
                             },
                             {
-                              "id": 210,
+                              "id": 199,
                               "name": "value",
                               "kind": 32768,
                               "kindString": "Parameter",
@@ -3170,14 +3045,14 @@
               "type": {
                 "type": "reference",
                 "name": "RequestBuilder",
-                "id": 154,
+                "id": 143,
                 "moduleName": "\"aurelia-http-client\""
               }
             }
           ]
         },
         {
-          "id": 190,
+          "id": 179,
           "name": "withTimeout",
           "kind": 2048,
           "kindString": "Method",
@@ -3186,7 +3061,7 @@
           },
           "signatures": [
             {
-              "id": 191,
+              "id": 180,
               "name": "withTimeout",
               "kind": 4096,
               "kindString": "Call signature",
@@ -3197,7 +3072,7 @@
               },
               "parameters": [
                 {
-                  "id": 192,
+                  "id": 181,
                   "name": "timeout",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -3214,14 +3089,14 @@
               "type": {
                 "type": "reference",
                 "name": "RequestBuilder",
-                "id": 154,
+                "id": 143,
                 "moduleName": "\"aurelia-http-client\""
               }
             }
           ]
         },
         {
-          "id": 175,
+          "id": 164,
           "name": "withUrl",
           "kind": 2048,
           "kindString": "Method",
@@ -3230,7 +3105,7 @@
           },
           "signatures": [
             {
-              "id": 176,
+              "id": 165,
               "name": "withUrl",
               "kind": 4096,
               "kindString": "Call signature",
@@ -3241,7 +3116,7 @@
               },
               "parameters": [
                 {
-                  "id": 177,
+                  "id": 166,
                   "name": "url",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -3258,14 +3133,14 @@
               "type": {
                 "type": "reference",
                 "name": "RequestBuilder",
-                "id": 154,
+                "id": 143,
                 "moduleName": "\"aurelia-http-client\""
               }
             }
           ]
         },
         {
-          "id": 229,
+          "id": 218,
           "name": "addHelper",
           "kind": 2048,
           "kindString": "Method",
@@ -3275,7 +3150,7 @@
           },
           "signatures": [
             {
-              "id": 230,
+              "id": 219,
               "name": "addHelper",
               "kind": 4096,
               "kindString": "Call signature",
@@ -3285,7 +3160,7 @@
               },
               "parameters": [
                 {
-                  "id": 231,
+                  "id": 220,
                   "name": "name",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -3299,7 +3174,7 @@
                   }
                 },
                 {
-                  "id": 232,
+                  "id": 221,
                   "name": "fn",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -3310,14 +3185,14 @@
                   "type": {
                     "type": "reflection",
                     "declaration": {
-                      "id": 233,
+                      "id": 222,
                       "name": "__type",
                       "kind": 65536,
                       "kindString": "Type literal",
                       "flags": {},
                       "signatures": [
                         {
-                          "id": 234,
+                          "id": 223,
                           "name": "__call",
                           "kind": 4096,
                           "kindString": "Call signature",
@@ -3346,38 +3221,38 @@
           "title": "Constructors",
           "kind": 512,
           "children": [
-            155
+            144
           ]
         },
         {
           "title": "Methods",
           "kind": 2048,
           "children": [
-            158,
-            160,
-            162,
-            172,
-            164,
-            166,
-            168,
-            170,
-            235,
-            227,
-            181,
-            221,
-            178,
-            197,
-            193,
+            147,
+            149,
+            151,
+            161,
+            153,
+            155,
+            157,
+            159,
             224,
+            216,
+            170,
+            210,
+            167,
+            186,
+            182,
+            213,
+            189,
+            173,
+            207,
             200,
-            184,
-            218,
-            211,
-            187,
-            204,
-            190,
-            175,
-            229
+            176,
+            193,
+            179,
+            164,
+            218
           ]
         }
       ]
@@ -3631,7 +3506,7 @@
         {
           "type": "reference",
           "name": "HttpRequestMessage",
-          "id": 135
+          "id": 124
         }
       ]
     },
@@ -3763,7 +3638,7 @@
                   "type": {
                     "type": "reference",
                     "name": "HttpClient",
-                    "id": 237,
+                    "id": 226,
                     "moduleName": "\"aurelia-http-client\""
                   }
                 },
@@ -3942,7 +3817,7 @@
               "type": {
                 "type": "reference",
                 "name": "HttpClient",
-                "id": 237
+                "id": 226
               }
             },
             {
@@ -4338,7 +4213,7 @@
               "type": {
                 "type": "reference",
                 "name": "HttpClient",
-                "id": 237
+                "id": 226
               }
             },
             {
@@ -4386,7 +4261,7 @@
       ]
     },
     {
-      "id": 282,
+      "id": 271,
       "name": "mimeTypes",
       "kind": 32,
       "kindString": "Variable",
@@ -4408,7 +4283,7 @@
       }
     },
     {
-      "id": 289,
+      "id": 278,
       "name": "callbackParameterNameTransformer",
       "kind": 64,
       "kindString": "Function",
@@ -4417,7 +4292,7 @@
       },
       "signatures": [
         {
-          "id": 290,
+          "id": 279,
           "name": "callbackParameterNameTransformer",
           "kind": 4096,
           "kindString": "Call signature",
@@ -4427,7 +4302,7 @@
           },
           "parameters": [
             {
-              "id": 291,
+              "id": 280,
               "name": "client",
               "kind": 32768,
               "kindString": "Parameter",
@@ -4438,12 +4313,12 @@
               "type": {
                 "type": "reference",
                 "name": "HttpClient",
-                "id": 237,
+                "id": 226,
                 "moduleName": "\"aurelia-http-client\""
               }
             },
             {
-              "id": 292,
+              "id": 281,
               "name": "processor",
               "kind": 32768,
               "kindString": "Parameter",
@@ -4459,7 +4334,7 @@
               }
             },
             {
-              "id": 293,
+              "id": 282,
               "name": "message",
               "kind": 32768,
               "kindString": "Parameter",
@@ -4475,7 +4350,7 @@
               }
             },
             {
-              "id": 294,
+              "id": 283,
               "name": "xhr",
               "kind": 32768,
               "kindString": "Parameter",
@@ -4499,7 +4374,7 @@
       ]
     },
     {
-      "id": 319,
+      "id": 308,
       "name": "contentTransformer",
       "kind": 64,
       "kindString": "Function",
@@ -4508,7 +4383,7 @@
       },
       "signatures": [
         {
-          "id": 320,
+          "id": 309,
           "name": "contentTransformer",
           "kind": 4096,
           "kindString": "Call signature",
@@ -4518,7 +4393,7 @@
           },
           "parameters": [
             {
-              "id": 321,
+              "id": 310,
               "name": "client",
               "kind": 32768,
               "kindString": "Parameter",
@@ -4529,12 +4404,12 @@
               "type": {
                 "type": "reference",
                 "name": "HttpClient",
-                "id": 237,
+                "id": 226,
                 "moduleName": "\"aurelia-http-client\""
               }
             },
             {
-              "id": 322,
+              "id": 311,
               "name": "processor",
               "kind": 32768,
               "kindString": "Parameter",
@@ -4550,7 +4425,7 @@
               }
             },
             {
-              "id": 323,
+              "id": 312,
               "name": "message",
               "kind": 32768,
               "kindString": "Parameter",
@@ -4566,7 +4441,7 @@
               }
             },
             {
-              "id": 324,
+              "id": 313,
               "name": "xhr",
               "kind": 32768,
               "kindString": "Parameter",
@@ -4590,7 +4465,7 @@
       ]
     },
     {
-      "id": 327,
+      "id": 316,
       "name": "createHttpRequestMessageProcessor",
       "kind": 64,
       "kindString": "Function",
@@ -4599,7 +4474,7 @@
       },
       "signatures": [
         {
-          "id": 328,
+          "id": 317,
           "name": "createHttpRequestMessageProcessor",
           "kind": 4096,
           "kindString": "Call signature",
@@ -4618,7 +4493,7 @@
       ]
     },
     {
-      "id": 325,
+      "id": 314,
       "name": "createJSONPRequestMessageProcessor",
       "kind": 64,
       "kindString": "Function",
@@ -4627,7 +4502,7 @@
       },
       "signatures": [
         {
-          "id": 326,
+          "id": 315,
           "name": "createJSONPRequestMessageProcessor",
           "kind": 4096,
           "kindString": "Call signature",
@@ -4646,7 +4521,7 @@
       ]
     },
     {
-      "id": 295,
+      "id": 284,
       "name": "credentialsTransformer",
       "kind": 64,
       "kindString": "Function",
@@ -4655,7 +4530,7 @@
       },
       "signatures": [
         {
-          "id": 296,
+          "id": 285,
           "name": "credentialsTransformer",
           "kind": 4096,
           "kindString": "Call signature",
@@ -4665,7 +4540,7 @@
           },
           "parameters": [
             {
-              "id": 297,
+              "id": 286,
               "name": "client",
               "kind": 32768,
               "kindString": "Parameter",
@@ -4676,12 +4551,12 @@
               "type": {
                 "type": "reference",
                 "name": "HttpClient",
-                "id": 237,
+                "id": 226,
                 "moduleName": "\"aurelia-http-client\""
               }
             },
             {
-              "id": 298,
+              "id": 287,
               "name": "processor",
               "kind": 32768,
               "kindString": "Parameter",
@@ -4697,7 +4572,7 @@
               }
             },
             {
-              "id": 299,
+              "id": 288,
               "name": "message",
               "kind": 32768,
               "kindString": "Parameter",
@@ -4713,7 +4588,7 @@
               }
             },
             {
-              "id": 300,
+              "id": 289,
               "name": "xhr",
               "kind": 32768,
               "kindString": "Parameter",
@@ -4737,7 +4612,7 @@
       ]
     },
     {
-      "id": 313,
+      "id": 302,
       "name": "headerTransformer",
       "kind": 64,
       "kindString": "Function",
@@ -4746,7 +4621,7 @@
       },
       "signatures": [
         {
-          "id": 314,
+          "id": 303,
           "name": "headerTransformer",
           "kind": 4096,
           "kindString": "Call signature",
@@ -4756,7 +4631,7 @@
           },
           "parameters": [
             {
-              "id": 315,
+              "id": 304,
               "name": "client",
               "kind": 32768,
               "kindString": "Parameter",
@@ -4767,12 +4642,12 @@
               "type": {
                 "type": "reference",
                 "name": "HttpClient",
-                "id": 237,
+                "id": 226,
                 "moduleName": "\"aurelia-http-client\""
               }
             },
             {
-              "id": 316,
+              "id": 305,
               "name": "processor",
               "kind": 32768,
               "kindString": "Parameter",
@@ -4788,7 +4663,7 @@
               }
             },
             {
-              "id": 317,
+              "id": 306,
               "name": "message",
               "kind": 32768,
               "kindString": "Parameter",
@@ -4804,7 +4679,7 @@
               }
             },
             {
-              "id": 318,
+              "id": 307,
               "name": "xhr",
               "kind": 32768,
               "kindString": "Parameter",
@@ -4828,7 +4703,7 @@
       ]
     },
     {
-      "id": 301,
+      "id": 290,
       "name": "progressTransformer",
       "kind": 64,
       "kindString": "Function",
@@ -4837,7 +4712,7 @@
       },
       "signatures": [
         {
-          "id": 302,
+          "id": 291,
           "name": "progressTransformer",
           "kind": 4096,
           "kindString": "Call signature",
@@ -4847,7 +4722,7 @@
           },
           "parameters": [
             {
-              "id": 303,
+              "id": 292,
               "name": "client",
               "kind": 32768,
               "kindString": "Parameter",
@@ -4858,12 +4733,12 @@
               "type": {
                 "type": "reference",
                 "name": "HttpClient",
-                "id": 237,
+                "id": 226,
                 "moduleName": "\"aurelia-http-client\""
               }
             },
             {
-              "id": 304,
+              "id": 293,
               "name": "processor",
               "kind": 32768,
               "kindString": "Parameter",
@@ -4879,7 +4754,7 @@
               }
             },
             {
-              "id": 305,
+              "id": 294,
               "name": "message",
               "kind": 32768,
               "kindString": "Parameter",
@@ -4895,7 +4770,7 @@
               }
             },
             {
-              "id": 306,
+              "id": 295,
               "name": "xhr",
               "kind": 32768,
               "kindString": "Parameter",
@@ -4919,7 +4794,7 @@
       ]
     },
     {
-      "id": 307,
+      "id": 296,
       "name": "responseTypeTransformer",
       "kind": 64,
       "kindString": "Function",
@@ -4928,7 +4803,7 @@
       },
       "signatures": [
         {
-          "id": 308,
+          "id": 297,
           "name": "responseTypeTransformer",
           "kind": 4096,
           "kindString": "Call signature",
@@ -4938,7 +4813,7 @@
           },
           "parameters": [
             {
-              "id": 309,
+              "id": 298,
               "name": "client",
               "kind": 32768,
               "kindString": "Parameter",
@@ -4949,12 +4824,12 @@
               "type": {
                 "type": "reference",
                 "name": "HttpClient",
-                "id": 237,
+                "id": 226,
                 "moduleName": "\"aurelia-http-client\""
               }
             },
             {
-              "id": 310,
+              "id": 299,
               "name": "processor",
               "kind": 32768,
               "kindString": "Parameter",
@@ -4970,7 +4845,7 @@
               }
             },
             {
-              "id": 311,
+              "id": 300,
               "name": "message",
               "kind": 32768,
               "kindString": "Parameter",
@@ -4986,7 +4861,7 @@
               }
             },
             {
-              "id": 312,
+              "id": 301,
               "name": "xhr",
               "kind": 32768,
               "kindString": "Parameter",
@@ -5010,7 +4885,7 @@
       ]
     },
     {
-      "id": 283,
+      "id": 272,
       "name": "timeoutTransformer",
       "kind": 64,
       "kindString": "Function",
@@ -5019,7 +4894,7 @@
       },
       "signatures": [
         {
-          "id": 284,
+          "id": 273,
           "name": "timeoutTransformer",
           "kind": 4096,
           "kindString": "Call signature",
@@ -5029,7 +4904,7 @@
           },
           "parameters": [
             {
-              "id": 285,
+              "id": 274,
               "name": "client",
               "kind": 32768,
               "kindString": "Parameter",
@@ -5040,12 +4915,12 @@
               "type": {
                 "type": "reference",
                 "name": "HttpClient",
-                "id": 237,
+                "id": 226,
                 "moduleName": "\"aurelia-http-client\""
               }
             },
             {
-              "id": 286,
+              "id": 275,
               "name": "processor",
               "kind": 32768,
               "kindString": "Parameter",
@@ -5061,7 +4936,7 @@
               }
             },
             {
-              "id": 287,
+              "id": 276,
               "name": "message",
               "kind": 32768,
               "kindString": "Parameter",
@@ -5077,7 +4952,7 @@
               }
             },
             {
-              "id": 288,
+              "id": 277,
               "name": "xhr",
               "kind": 32768,
               "kindString": "Parameter",
@@ -5107,12 +4982,11 @@
       "kind": 128,
       "children": [
         41,
-        237,
-        135,
+        226,
+        124,
         77,
         112,
-        124,
-        154,
+        143,
         63,
         101
       ]
@@ -5132,22 +5006,22 @@
       "title": "Variables",
       "kind": 32,
       "children": [
-        282
+        271
       ]
     },
     {
       "title": "Functions",
       "kind": 64,
       "children": [
-        289,
-        319,
-        327,
-        325,
-        295,
-        313,
-        301,
-        307,
-        283
+        278,
+        308,
+        316,
+        314,
+        284,
+        302,
+        290,
+        296,
+        272
       ]
     }
   ]

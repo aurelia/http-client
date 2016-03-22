@@ -1,14 +1,21 @@
 declare module 'aurelia-http-client' {
-  import { join, buildQueryString }  from 'aurelia-path';
-  import { PLATFORM, DOM }  from 'aurelia-pal';
+  import {
+    join,
+    buildQueryString
+  } from 'aurelia-path';
+  import {
+    PLATFORM,
+    DOM
+  } from 'aurelia-pal';
   
   /**
    * Creates an XHR implementation.
    */
   export interface XHRConstructor {
+  
   }
   
-  // new():XHR;
+  //new():XHR;
   /**
    * Represents an XHR.
    */
@@ -73,6 +80,9 @@ declare module 'aurelia-http-client' {
   /**
    * Represents an XHR transformer.
    */
+  /**
+   * Represents an XHR transformer.
+   */
   export interface XHRTransformer {
     (client: HttpClient, processor: RequestMessageProcessor, message: RequestMessage, xhr: XHR): void;
   }
@@ -103,6 +113,9 @@ declare module 'aurelia-http-client' {
     requestError?: Function;
   }
   
+  /**
+   * Transforms a request.
+   */
   /**
    * Transforms a request.
    */
@@ -211,7 +224,7 @@ declare module 'aurelia-http-client' {
   }
   
   /**
-  * Represents a responce message from an HTTP or JSONP request.
+  * Represents a response message from an HTTP or JSONP request.
   */
   export class HttpResponseMessage {
     
@@ -278,6 +291,9 @@ declare module 'aurelia-http-client' {
    */
   export let mimeTypes: any;
   
+  /**
+   * Processes request messages.
+   */
   /**
    * Processes request messages.
    */
@@ -377,12 +393,6 @@ declare module 'aurelia-http-client' {
       */
     constructor(url: string, callbackParameterName: string);
   }
-  class JSONPXHR {
-    open(method: string, url: string): void;
-    send(): void;
-    abort(): void;
-    setRequestHeader(): any;
-  }
   
   /**
   * Creates a RequestMessageProcessor for handling JSONP request messages.
@@ -410,13 +420,16 @@ declare module 'aurelia-http-client' {
     constructor(method: string, url: string, content: any, headers?: Headers);
   }
   
-  // text, arraybuffer, blob, document
+  //text, arraybuffer, blob, document
   /**
   * Creates a RequestMessageProcessor for handling HTTP request messages.
   * @return A processor instance for HTTP request messages.
   */
   export function createHttpRequestMessageProcessor(): RequestMessageProcessor;
   
+  /**
+   * A builder class allowing fluent composition of HTTP requests.
+   */
   /**
    * A builder class allowing fluent composition of HTTP requests.
    */

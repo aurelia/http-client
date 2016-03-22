@@ -1,121 +1,45 @@
-System.register(['aurelia-path', 'aurelia-pal'], function (_export) {
-  'use strict';
+'use strict';
 
-  var join, buildQueryString, PLATFORM, DOM, Headers, RequestMessage, HttpResponseMessage, mimeTypes, RequestMessageProcessor, JSONPRequestMessage, JSONPXHR, HttpRequestMessage, RequestBuilder, HttpClient;
+System.register(['aurelia-path', 'aurelia-pal'], function (_export, _context) {
+  var join, buildQueryString, PLATFORM, DOM, _createClass, Headers, RequestMessage, HttpResponseMessage, mimeTypes, RequestMessageProcessor, JSONPRequestMessage, JSONPXHR, HttpRequestMessage, RequestBuilder, HttpClient;
 
-  var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+  function _possibleConstructorReturn(self, call) {
+    if (!self) {
+      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }
 
-  _export('timeoutTransformer', timeoutTransformer);
+    return call && (typeof call === "object" || typeof call === "function") ? call : self;
+  }
 
-  _export('callbackParameterNameTransformer', callbackParameterNameTransformer);
+  function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+      throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }
 
-  _export('credentialsTransformer', credentialsTransformer);
+    subClass.prototype = Object.create(superClass && superClass.prototype, {
+      constructor: {
+        value: subClass,
+        enumerable: false,
+        writable: true,
+        configurable: true
+      }
+    });
+    if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+  }
 
-  _export('progressTransformer', progressTransformer);
-
-  _export('responseTypeTransformer', responseTypeTransformer);
-
-  _export('headerTransformer', headerTransformer);
-
-  _export('contentTransformer', contentTransformer);
-
-  _export('createJSONPRequestMessageProcessor', createJSONPRequestMessageProcessor);
-
-  _export('createHttpRequestMessageProcessor', createHttpRequestMessageProcessor);
-
-  function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
 
   function applyXhrTransformers(xhrTransformers, client, processor, message, xhr) {
-    var i = undefined;
-    var ii = undefined;
+    var i = void 0;
+    var ii = void 0;
 
     for (i = 0, ii = xhrTransformers.length; i < ii; ++i) {
       xhrTransformers[i](client, processor, message, xhr);
     }
-  }
-
-  function timeoutTransformer(client, processor, message, xhr) {
-    if (message.timeout !== undefined) {
-      xhr.timeout = message.timeout;
-    }
-  }
-
-  function callbackParameterNameTransformer(client, processor, message, xhr) {
-    if (message.callbackParameterName !== undefined) {
-      xhr.callbackParameterName = message.callbackParameterName;
-    }
-  }
-
-  function credentialsTransformer(client, processor, message, xhr) {
-    if (message.withCredentials !== undefined) {
-      xhr.withCredentials = message.withCredentials;
-    }
-  }
-
-  function progressTransformer(client, processor, message, xhr) {
-    if (message.progressCallback) {
-      xhr.upload.onprogress = message.progressCallback;
-    }
-  }
-
-  function responseTypeTransformer(client, processor, message, xhr) {
-    var responseType = message.responseType;
-
-    if (responseType === 'json') {
-      responseType = 'text';
-    }
-
-    xhr.responseType = responseType;
-  }
-
-  function headerTransformer(client, processor, message, xhr) {
-    message.headers.configureXHR(xhr);
-  }
-
-  function contentTransformer(client, processor, message, xhr) {
-    if (message.skipContentProcessing) {
-      return;
-    }
-
-    if (PLATFORM.global.FormData && message.content instanceof FormData) {
-      return;
-    }
-
-    if (PLATFORM.global.Blob && message.content instanceof Blob) {
-      return;
-    }
-
-    if (PLATFORM.global.ArrayBufferView && message.content instanceof ArrayBufferView) {
-      return;
-    }
-
-    if (message.content instanceof Document) {
-      return;
-    }
-
-    if (typeof message.content === 'string') {
-      return;
-    }
-
-    if (message.content === null || message.content === undefined) {
-      return;
-    }
-
-    message.content = JSON.stringify(message.content, message.replacer);
-
-    if (!message.headers.has('Content-Type')) {
-      message.headers.add('Content-Type', 'application/json');
-    }
-  }
-
-  function createJSONPRequestMessageProcessor() {
-    return new RequestMessageProcessor(JSONPXHR, [timeoutTransformer, callbackParameterNameTransformer]);
-  }
-
-  function createHttpRequestMessageProcessor() {
-    return new RequestMessageProcessor(PLATFORM.XMLHttpRequest, [timeoutTransformer, credentialsTransformer, progressTransformer, responseTypeTransformer, contentTransformer, headerTransformer]);
   }
 
   function trackRequestStart(client, processor) {
@@ -148,7 +72,25 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export) {
       DOM = _aureliaPal.DOM;
     }],
     execute: function () {
-      Headers = (function () {
+      _createClass = function () {
+        function defineProperties(target, props) {
+          for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];
+            descriptor.enumerable = descriptor.enumerable || false;
+            descriptor.configurable = true;
+            if ("value" in descriptor) descriptor.writable = true;
+            Object.defineProperty(target, descriptor.key, descriptor);
+          }
+        }
+
+        return function (Constructor, protoProps, staticProps) {
+          if (protoProps) defineProperties(Constructor.prototype, protoProps);
+          if (staticProps) defineProperties(Constructor, staticProps);
+          return Constructor;
+        };
+      }();
+
+      _export('Headers', Headers = function () {
         function Headers() {
           var headers = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
@@ -212,11 +154,11 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export) {
         };
 
         return Headers;
-      })();
+      }());
 
       _export('Headers', Headers);
 
-      RequestMessage = (function () {
+      _export('RequestMessage', RequestMessage = function () {
         function RequestMessage(method, url, content, headers) {
           _classCallCheck(this, RequestMessage);
 
@@ -240,11 +182,11 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export) {
         };
 
         return RequestMessage;
-      })();
+      }());
 
       _export('RequestMessage', RequestMessage);
 
-      HttpResponseMessage = (function () {
+      _export('HttpResponseMessage', HttpResponseMessage = function () {
         function HttpResponseMessage(requestMessage, xhr, responseType, reviver) {
           _classCallCheck(this, HttpResponseMessage);
 
@@ -266,7 +208,7 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export) {
             this.headers = new Headers();
           }
 
-          var contentType = undefined;
+          var contentType = void 0;
           if (this.headers && this.headers.headers) contentType = this.headers.headers['Content-Type'];
           if (contentType) {
             this.mimeType = responseType = contentType.split(';')[0].trim();
@@ -313,11 +255,11 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export) {
         }]);
 
         return HttpResponseMessage;
-      })();
+      }());
 
       _export('HttpResponseMessage', HttpResponseMessage);
 
-      mimeTypes = {
+      _export('mimeTypes', mimeTypes = {
         'text/html': 'html',
         'text/javascript': 'js',
         'application/javascript': 'js',
@@ -338,11 +280,11 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export) {
         'text/scss': 'scss',
         'text/sass': 'sass',
         'text/plain': 'txt'
-      };
+      });
 
       _export('mimeTypes', mimeTypes);
 
-      RequestMessageProcessor = (function () {
+      _export('RequestMessageProcessor', RequestMessageProcessor = function () {
         function RequestMessageProcessor(xhrType, xhrTransformers) {
           _classCallCheck(this, RequestMessageProcessor);
 
@@ -438,27 +380,117 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export) {
         };
 
         return RequestMessageProcessor;
-      })();
+      }());
 
       _export('RequestMessageProcessor', RequestMessageProcessor);
 
-      JSONPRequestMessage = (function (_RequestMessage) {
+      function timeoutTransformer(client, processor, message, xhr) {
+        if (message.timeout !== undefined) {
+          xhr.timeout = message.timeout;
+        }
+      }
+
+      _export('timeoutTransformer', timeoutTransformer);
+
+      function callbackParameterNameTransformer(client, processor, message, xhr) {
+        if (message.callbackParameterName !== undefined) {
+          xhr.callbackParameterName = message.callbackParameterName;
+        }
+      }
+
+      _export('callbackParameterNameTransformer', callbackParameterNameTransformer);
+
+      function credentialsTransformer(client, processor, message, xhr) {
+        if (message.withCredentials !== undefined) {
+          xhr.withCredentials = message.withCredentials;
+        }
+      }
+
+      _export('credentialsTransformer', credentialsTransformer);
+
+      function progressTransformer(client, processor, message, xhr) {
+        if (message.progressCallback) {
+          xhr.upload.onprogress = message.progressCallback;
+        }
+      }
+
+      _export('progressTransformer', progressTransformer);
+
+      function responseTypeTransformer(client, processor, message, xhr) {
+        var responseType = message.responseType;
+
+        if (responseType === 'json') {
+          responseType = 'text';
+        }
+
+        xhr.responseType = responseType;
+      }
+
+      _export('responseTypeTransformer', responseTypeTransformer);
+
+      function headerTransformer(client, processor, message, xhr) {
+        message.headers.configureXHR(xhr);
+      }
+
+      _export('headerTransformer', headerTransformer);
+
+      function contentTransformer(client, processor, message, xhr) {
+        if (message.skipContentProcessing) {
+          return;
+        }
+
+        if (PLATFORM.global.FormData && message.content instanceof FormData) {
+          return;
+        }
+
+        if (PLATFORM.global.Blob && message.content instanceof Blob) {
+          return;
+        }
+
+        if (PLATFORM.global.ArrayBufferView && message.content instanceof ArrayBufferView) {
+          return;
+        }
+
+        if (message.content instanceof Document) {
+          return;
+        }
+
+        if (typeof message.content === 'string') {
+          return;
+        }
+
+        if (message.content === null || message.content === undefined) {
+          return;
+        }
+
+        message.content = JSON.stringify(message.content, message.replacer);
+
+        if (!message.headers.has('Content-Type')) {
+          message.headers.add('Content-Type', 'application/json');
+        }
+      }
+
+      _export('contentTransformer', contentTransformer);
+
+      _export('JSONPRequestMessage', JSONPRequestMessage = function (_RequestMessage) {
         _inherits(JSONPRequestMessage, _RequestMessage);
 
         function JSONPRequestMessage(url, callbackParameterName) {
           _classCallCheck(this, JSONPRequestMessage);
 
-          _RequestMessage.call(this, 'JSONP', url);
-          this.responseType = 'jsonp';
-          this.callbackParameterName = callbackParameterName;
+          var _this2 = _possibleConstructorReturn(this, _RequestMessage.call(this, 'JSONP', url));
+
+          _this2.responseType = 'jsonp';
+          _this2.callbackParameterName = callbackParameterName;
+          return _this2;
         }
 
         return JSONPRequestMessage;
-      })(RequestMessage);
+      }(RequestMessage));
 
       _export('JSONPRequestMessage', JSONPRequestMessage);
 
-      JSONPXHR = (function () {
+      JSONPXHR = function () {
         function JSONPXHR() {
           _classCallCheck(this, JSONPXHR);
         }
@@ -470,7 +502,7 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export) {
         };
 
         JSONPXHR.prototype.send = function send() {
-          var _this2 = this;
+          var _this3 = this;
 
           var url = this.url + (this.url.indexOf('?') >= 0 ? '&' : '?') + encodeURIComponent(this.callbackParameterName) + '=' + this.callbackName;
           var script = DOM.createElement('script');
@@ -479,23 +511,23 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export) {
           script.onerror = function (e) {
             cleanUp();
 
-            _this2.status = 0;
-            _this2.onerror(new Error('error'));
+            _this3.status = 0;
+            _this3.onerror(new Error('error'));
           };
 
           var cleanUp = function cleanUp() {
-            delete PLATFORM.global[_this2.callbackName];
+            delete PLATFORM.global[_this3.callbackName];
             DOM.removeNode(script);
           };
 
           PLATFORM.global[this.callbackName] = function (data) {
             cleanUp();
 
-            if (_this2.status === undefined) {
-              _this2.status = 200;
-              _this2.statusText = 'OK';
-              _this2.response = data;
-              _this2.onload(_this2);
+            if (_this3.status === undefined) {
+              _this3.status = 200;
+              _this3.statusText = 'OK';
+              _this3.response = data;
+              _this3.onload(_this3);
             }
           };
 
@@ -503,9 +535,9 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export) {
 
           if (this.timeout !== undefined) {
             setTimeout(function () {
-              if (_this2.status === undefined) {
-                _this2.status = 0;
-                _this2.ontimeout(new Error('timeout'));
+              if (_this3.status === undefined) {
+                _this3.status = 0;
+                _this3.ontimeout(new Error('timeout'));
               }
             }, this.timeout);
           }
@@ -521,24 +553,37 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export) {
         JSONPXHR.prototype.setRequestHeader = function setRequestHeader() {};
 
         return JSONPXHR;
-      })();
+      }();
 
-      HttpRequestMessage = (function (_RequestMessage2) {
+      function createJSONPRequestMessageProcessor() {
+        return new RequestMessageProcessor(JSONPXHR, [timeoutTransformer, callbackParameterNameTransformer]);
+      }
+
+      _export('createJSONPRequestMessageProcessor', createJSONPRequestMessageProcessor);
+
+      _export('HttpRequestMessage', HttpRequestMessage = function (_RequestMessage2) {
         _inherits(HttpRequestMessage, _RequestMessage2);
 
         function HttpRequestMessage(method, url, content, headers) {
           _classCallCheck(this, HttpRequestMessage);
 
-          _RequestMessage2.call(this, method, url, content, headers);
-          this.responseType = 'json';
+          var _this4 = _possibleConstructorReturn(this, _RequestMessage2.call(this, method, url, content, headers));
+
+          _this4.responseType = 'json';return _this4;
         }
 
         return HttpRequestMessage;
-      })(RequestMessage);
+      }(RequestMessage));
 
       _export('HttpRequestMessage', HttpRequestMessage);
 
-      RequestBuilder = (function () {
+      function createHttpRequestMessageProcessor() {
+        return new RequestMessageProcessor(PLATFORM.XMLHttpRequest, [timeoutTransformer, credentialsTransformer, progressTransformer, responseTypeTransformer, contentTransformer, headerTransformer]);
+      }
+
+      _export('createHttpRequestMessageProcessor', createHttpRequestMessageProcessor);
+
+      _export('RequestBuilder', RequestBuilder = function () {
         function RequestBuilder(client) {
           _classCallCheck(this, RequestBuilder);
 
@@ -704,11 +749,11 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export) {
         };
 
         return RequestBuilder;
-      })();
+      }());
 
       _export('RequestBuilder', RequestBuilder);
 
-      HttpClient = (function () {
+      _export('HttpClient', HttpClient = function () {
         function HttpClient() {
           _classCallCheck(this, HttpClient);
 
@@ -739,13 +784,13 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export) {
         };
 
         HttpClient.prototype.send = function send(requestMessage, transformers) {
-          var _this3 = this;
+          var _this5 = this;
 
           var createProcessor = this.requestProcessorFactories.get(requestMessage.constructor);
-          var processor = undefined;
-          var promise = undefined;
-          var i = undefined;
-          var ii = undefined;
+          var processor = void 0;
+          var promise = void 0;
+          var i = void 0;
+          var ii = void 0;
 
           if (!createProcessor) {
             throw new Error('No request message processor factory for ' + requestMessage.constructor + '.');
@@ -758,14 +803,14 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export) {
 
           promise = Promise.resolve(requestMessage).then(function (message) {
             for (i = 0, ii = transformers.length; i < ii; ++i) {
-              transformers[i](_this3, processor, message);
+              transformers[i](_this5, processor, message);
             }
 
-            return processor.process(_this3, message).then(function (response) {
-              trackRequestEnd(_this3, processor);
+            return processor.process(_this5, message).then(function (response) {
+              trackRequestEnd(_this5, processor);
               return response;
-            })['catch'](function (response) {
-              trackRequestEnd(_this3, processor);
+            }).catch(function (response) {
+              trackRequestEnd(_this5, processor);
               throw response;
             });
           });
@@ -777,7 +822,7 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export) {
           return promise;
         };
 
-        HttpClient.prototype['delete'] = function _delete(url) {
+        HttpClient.prototype.delete = function _delete(url) {
           return this.createRequest(url).asDelete().send();
         };
 
@@ -812,7 +857,7 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export) {
         };
 
         return HttpClient;
-      })();
+      }());
 
       _export('HttpClient', HttpClient);
     }

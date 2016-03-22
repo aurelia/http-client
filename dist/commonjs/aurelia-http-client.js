@@ -1,8 +1,11 @@
 'use strict';
 
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.HttpClient = exports.RequestBuilder = exports.HttpRequestMessage = exports.JSONPRequestMessage = exports.RequestMessageProcessor = exports.mimeTypes = exports.HttpResponseMessage = exports.RequestMessage = exports.Headers = undefined;
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 exports.timeoutTransformer = timeoutTransformer;
 exports.callbackParameterNameTransformer = callbackParameterNameTransformer;
@@ -14,15 +17,17 @@ exports.contentTransformer = contentTransformer;
 exports.createJSONPRequestMessageProcessor = createJSONPRequestMessageProcessor;
 exports.createHttpRequestMessageProcessor = createHttpRequestMessageProcessor;
 
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
 var _aureliaPath = require('aurelia-path');
 
 var _aureliaPal = require('aurelia-pal');
 
-var Headers = (function () {
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Headers = exports.Headers = function () {
   function Headers() {
     var headers = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
@@ -86,11 +91,9 @@ var Headers = (function () {
   };
 
   return Headers;
-})();
+}();
 
-exports.Headers = Headers;
-
-var RequestMessage = (function () {
+var RequestMessage = exports.RequestMessage = function () {
   function RequestMessage(method, url, content, headers) {
     _classCallCheck(this, RequestMessage);
 
@@ -103,10 +106,10 @@ var RequestMessage = (function () {
 
   RequestMessage.prototype.buildFullUrl = function buildFullUrl() {
     var absoluteUrl = /^([a-z][a-z0-9+\-.]*:)?\/\//i;
-    var url = absoluteUrl.test(this.url) ? this.url : _aureliaPath.join(this.baseUrl, this.url);
+    var url = absoluteUrl.test(this.url) ? this.url : (0, _aureliaPath.join)(this.baseUrl, this.url);
 
     if (this.params) {
-      var qs = _aureliaPath.buildQueryString(this.params);
+      var qs = (0, _aureliaPath.buildQueryString)(this.params);
       url = qs ? url + '?' + qs : url;
     }
 
@@ -114,11 +117,9 @@ var RequestMessage = (function () {
   };
 
   return RequestMessage;
-})();
+}();
 
-exports.RequestMessage = RequestMessage;
-
-var HttpResponseMessage = (function () {
+var HttpResponseMessage = exports.HttpResponseMessage = function () {
   function HttpResponseMessage(requestMessage, xhr, responseType, reviver) {
     _classCallCheck(this, HttpResponseMessage);
 
@@ -140,7 +141,7 @@ var HttpResponseMessage = (function () {
       this.headers = new Headers();
     }
 
-    var contentType = undefined;
+    var contentType = void 0;
     if (this.headers && this.headers.headers) contentType = this.headers.headers['Content-Type'];
     if (contentType) {
       this.mimeType = responseType = contentType.split(';')[0].trim();
@@ -187,10 +188,9 @@ var HttpResponseMessage = (function () {
   }]);
 
   return HttpResponseMessage;
-})();
+}();
 
-exports.HttpResponseMessage = HttpResponseMessage;
-var mimeTypes = {
+var mimeTypes = exports.mimeTypes = {
   'text/html': 'html',
   'text/javascript': 'js',
   'application/javascript': 'js',
@@ -213,18 +213,16 @@ var mimeTypes = {
   'text/plain': 'txt'
 };
 
-exports.mimeTypes = mimeTypes;
-
 function applyXhrTransformers(xhrTransformers, client, processor, message, xhr) {
-  var i = undefined;
-  var ii = undefined;
+  var i = void 0;
+  var ii = void 0;
 
   for (i = 0, ii = xhrTransformers.length; i < ii; ++i) {
     xhrTransformers[i](client, processor, message, xhr);
   }
 }
 
-var RequestMessageProcessor = (function () {
+var RequestMessageProcessor = exports.RequestMessageProcessor = function () {
   function RequestMessageProcessor(xhrType, xhrTransformers) {
     _classCallCheck(this, RequestMessageProcessor);
 
@@ -320,9 +318,7 @@ var RequestMessageProcessor = (function () {
   };
 
   return RequestMessageProcessor;
-})();
-
-exports.RequestMessageProcessor = RequestMessageProcessor;
+}();
 
 function timeoutTransformer(client, processor, message, xhr) {
   if (message.timeout !== undefined) {
@@ -398,23 +394,23 @@ function contentTransformer(client, processor, message, xhr) {
   }
 }
 
-var JSONPRequestMessage = (function (_RequestMessage) {
+var JSONPRequestMessage = exports.JSONPRequestMessage = function (_RequestMessage) {
   _inherits(JSONPRequestMessage, _RequestMessage);
 
   function JSONPRequestMessage(url, callbackParameterName) {
     _classCallCheck(this, JSONPRequestMessage);
 
-    _RequestMessage.call(this, 'JSONP', url);
-    this.responseType = 'jsonp';
-    this.callbackParameterName = callbackParameterName;
+    var _this2 = _possibleConstructorReturn(this, _RequestMessage.call(this, 'JSONP', url));
+
+    _this2.responseType = 'jsonp';
+    _this2.callbackParameterName = callbackParameterName;
+    return _this2;
   }
 
   return JSONPRequestMessage;
-})(RequestMessage);
+}(RequestMessage);
 
-exports.JSONPRequestMessage = JSONPRequestMessage;
-
-var JSONPXHR = (function () {
+var JSONPXHR = function () {
   function JSONPXHR() {
     _classCallCheck(this, JSONPXHR);
   }
@@ -426,7 +422,7 @@ var JSONPXHR = (function () {
   };
 
   JSONPXHR.prototype.send = function send() {
-    var _this2 = this;
+    var _this3 = this;
 
     var url = this.url + (this.url.indexOf('?') >= 0 ? '&' : '?') + encodeURIComponent(this.callbackParameterName) + '=' + this.callbackName;
     var script = _aureliaPal.DOM.createElement('script');
@@ -435,23 +431,23 @@ var JSONPXHR = (function () {
     script.onerror = function (e) {
       cleanUp();
 
-      _this2.status = 0;
-      _this2.onerror(new Error('error'));
+      _this3.status = 0;
+      _this3.onerror(new Error('error'));
     };
 
     var cleanUp = function cleanUp() {
-      delete _aureliaPal.PLATFORM.global[_this2.callbackName];
+      delete _aureliaPal.PLATFORM.global[_this3.callbackName];
       _aureliaPal.DOM.removeNode(script);
     };
 
     _aureliaPal.PLATFORM.global[this.callbackName] = function (data) {
       cleanUp();
 
-      if (_this2.status === undefined) {
-        _this2.status = 200;
-        _this2.statusText = 'OK';
-        _this2.response = data;
-        _this2.onload(_this2);
+      if (_this3.status === undefined) {
+        _this3.status = 200;
+        _this3.statusText = 'OK';
+        _this3.response = data;
+        _this3.onload(_this3);
       }
     };
 
@@ -459,9 +455,9 @@ var JSONPXHR = (function () {
 
     if (this.timeout !== undefined) {
       setTimeout(function () {
-        if (_this2.status === undefined) {
-          _this2.status = 0;
-          _this2.ontimeout(new Error('timeout'));
+        if (_this3.status === undefined) {
+          _this3.status = 0;
+          _this3.ontimeout(new Error('timeout'));
         }
       }, this.timeout);
     }
@@ -477,32 +473,31 @@ var JSONPXHR = (function () {
   JSONPXHR.prototype.setRequestHeader = function setRequestHeader() {};
 
   return JSONPXHR;
-})();
+}();
 
 function createJSONPRequestMessageProcessor() {
   return new RequestMessageProcessor(JSONPXHR, [timeoutTransformer, callbackParameterNameTransformer]);
 }
 
-var HttpRequestMessage = (function (_RequestMessage2) {
+var HttpRequestMessage = exports.HttpRequestMessage = function (_RequestMessage2) {
   _inherits(HttpRequestMessage, _RequestMessage2);
 
   function HttpRequestMessage(method, url, content, headers) {
     _classCallCheck(this, HttpRequestMessage);
 
-    _RequestMessage2.call(this, method, url, content, headers);
-    this.responseType = 'json';
+    var _this4 = _possibleConstructorReturn(this, _RequestMessage2.call(this, method, url, content, headers));
+
+    _this4.responseType = 'json';return _this4;
   }
 
   return HttpRequestMessage;
-})(RequestMessage);
-
-exports.HttpRequestMessage = HttpRequestMessage;
+}(RequestMessage);
 
 function createHttpRequestMessageProcessor() {
   return new RequestMessageProcessor(_aureliaPal.PLATFORM.XMLHttpRequest, [timeoutTransformer, credentialsTransformer, progressTransformer, responseTypeTransformer, contentTransformer, headerTransformer]);
 }
 
-var RequestBuilder = (function () {
+var RequestBuilder = exports.RequestBuilder = function () {
   function RequestBuilder(client) {
     _classCallCheck(this, RequestBuilder);
 
@@ -668,9 +663,7 @@ var RequestBuilder = (function () {
   };
 
   return RequestBuilder;
-})();
-
-exports.RequestBuilder = RequestBuilder;
+}();
 
 function trackRequestStart(client, processor) {
   client.pendingRequests.push(processor);
@@ -693,7 +686,7 @@ function trackRequestEnd(client, processor) {
   }
 }
 
-var HttpClient = (function () {
+var HttpClient = exports.HttpClient = function () {
   function HttpClient() {
     _classCallCheck(this, HttpClient);
 
@@ -724,13 +717,13 @@ var HttpClient = (function () {
   };
 
   HttpClient.prototype.send = function send(requestMessage, transformers) {
-    var _this3 = this;
+    var _this5 = this;
 
     var createProcessor = this.requestProcessorFactories.get(requestMessage.constructor);
-    var processor = undefined;
-    var promise = undefined;
-    var i = undefined;
-    var ii = undefined;
+    var processor = void 0;
+    var promise = void 0;
+    var i = void 0;
+    var ii = void 0;
 
     if (!createProcessor) {
       throw new Error('No request message processor factory for ' + requestMessage.constructor + '.');
@@ -743,14 +736,14 @@ var HttpClient = (function () {
 
     promise = Promise.resolve(requestMessage).then(function (message) {
       for (i = 0, ii = transformers.length; i < ii; ++i) {
-        transformers[i](_this3, processor, message);
+        transformers[i](_this5, processor, message);
       }
 
-      return processor.process(_this3, message).then(function (response) {
-        trackRequestEnd(_this3, processor);
+      return processor.process(_this5, message).then(function (response) {
+        trackRequestEnd(_this5, processor);
         return response;
-      })['catch'](function (response) {
-        trackRequestEnd(_this3, processor);
+      }).catch(function (response) {
+        trackRequestEnd(_this5, processor);
         throw response;
       });
     });
@@ -762,7 +755,7 @@ var HttpClient = (function () {
     return promise;
   };
 
-  HttpClient.prototype['delete'] = function _delete(url) {
+  HttpClient.prototype.delete = function _delete(url) {
     return this.createRequest(url).asDelete().send();
   };
 
@@ -797,6 +790,4 @@ var HttpClient = (function () {
   };
 
   return HttpClient;
-})();
-
-exports.HttpClient = HttpClient;
+}();
