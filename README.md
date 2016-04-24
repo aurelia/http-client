@@ -7,17 +7,9 @@ This library is part of the [Aurelia](http://www.aurelia.io/) platform and conta
 
 > To keep up to date on [Aurelia](http://www.aurelia.io/), please visit and subscribe to [the official blog](http://blog.durandal.io/). If you have questions, we invite you to [join us on Gitter](https://gitter.im/aurelia/discuss). If you would like to have deeper insight into our development process, please install the [ZenHub](https://zenhub.io) Chrome Extension and visit any of our repository's boards. You can get an overview of all Aurelia work by visiting [the framework board](https://github.com/aurelia/framework#boards).
 
-## Polyfills
+## Documentation
 
-* Depending on target browser(s), [core-js](https://github.com/zloirock/core-js) may be required for `Promise` support.
-
-## Dependencies
-
-* [aurelia-path](https://github.com/aurelia/path)
-
-## Used By
-
-This library is used directly by applications only.
+If possible, prefer to use the `aurelia-fetch-client` instead of this library. Documentation on this library and the Fetch client can be found in the `doc` folder of the `fetch-client` repository.
 
 ## Platform Support
 
