@@ -8,6 +8,8 @@
     "ajax"
   ],
   "homepage": "http://aurelia.io",
+  "main": "dist/commonjs/aurelia-http-client.js",
+  "moduleType": "node",
   "license": "MIT",
   "authors": [
     "Rob Eisenberg <rob@bluespire.com> (http://robeisenberg.com/)"
