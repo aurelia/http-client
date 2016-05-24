@@ -1,6 +1,8 @@
 'use strict';
 
 System.register(['aurelia-path', 'aurelia-pal'], function (_export, _context) {
+  "use strict";
+
   var join, buildQueryString, PLATFORM, DOM, _createClass, Headers, RequestMessage, HttpResponseMessage, mimeTypes, RequestMessageProcessor, JSONPRequestMessage, JSONPXHR, HttpRequestMessage, RequestBuilder, HttpClient;
 
   function _possibleConstructorReturn(self, call) {
@@ -175,7 +177,7 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export, _context) {
 
           if (this.params) {
             var qs = buildQueryString(this.params);
-            url = qs ? url + '?' + qs : url;
+            url = qs ? url + (this.url.indexOf('?') < 0 ? '?' : '&') + qs : url;
           }
 
           return url;

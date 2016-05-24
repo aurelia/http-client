@@ -146,7 +146,7 @@ define(['exports', 'aurelia-path', 'aurelia-pal'], function (exports, _aureliaPa
 
       if (this.params) {
         var qs = (0, _aureliaPath.buildQueryString)(this.params);
-        url = qs ? url + '?' + qs : url;
+        url = qs ? url + (this.url.indexOf('?') < 0 ? '?' : '&') + qs : url;
       }
 
       return url;

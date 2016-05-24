@@ -153,7 +153,7 @@ export class RequestMessage {
 
     if (this.params) {
       let qs = buildQueryString(this.params);
-      url = qs ? `${url}?${qs}` : url;
+      url = qs ? url + (this.url.indexOf('?') < 0 ? '?' : '&') + qs : url;
     }
 
     return url;
