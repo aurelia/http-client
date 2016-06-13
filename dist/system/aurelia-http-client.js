@@ -29,11 +29,7 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export, _context) {
     if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
   }
 
-  function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  }
+  
 
   function applyXhrTransformers(xhrTransformers, client, processor, message, xhr) {
     var i = void 0;
@@ -96,7 +92,7 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export, _context) {
         function Headers() {
           var headers = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-          _classCallCheck(this, Headers);
+          
 
           this.headers = headers;
         }
@@ -162,7 +158,7 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export, _context) {
 
       _export('RequestMessage', RequestMessage = function () {
         function RequestMessage(method, url, content, headers) {
-          _classCallCheck(this, RequestMessage);
+          
 
           this.method = method;
           this.url = url;
@@ -190,7 +186,7 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export, _context) {
 
       _export('HttpResponseMessage', HttpResponseMessage = function () {
         function HttpResponseMessage(requestMessage, xhr, responseType, reviver) {
-          _classCallCheck(this, HttpResponseMessage);
+          
 
           this.requestMessage = requestMessage;
           this.statusCode = xhr.status;
@@ -288,7 +284,7 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export, _context) {
 
       _export('RequestMessageProcessor', RequestMessageProcessor = function () {
         function RequestMessageProcessor(xhrType, xhrTransformers) {
-          _classCallCheck(this, RequestMessageProcessor);
+          
 
           this.XHRType = xhrType;
           this.xhrTransformers = xhrTransformers;
@@ -478,7 +474,7 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export, _context) {
         _inherits(JSONPRequestMessage, _RequestMessage);
 
         function JSONPRequestMessage(url, callbackParameterName) {
-          _classCallCheck(this, JSONPRequestMessage);
+          
 
           var _this2 = _possibleConstructorReturn(this, _RequestMessage.call(this, 'JSONP', url));
 
@@ -494,7 +490,7 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export, _context) {
 
       JSONPXHR = function () {
         function JSONPXHR() {
-          _classCallCheck(this, JSONPXHR);
+          
         }
 
         JSONPXHR.prototype.open = function open(method, url) {
@@ -567,7 +563,7 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export, _context) {
         _inherits(HttpRequestMessage, _RequestMessage2);
 
         function HttpRequestMessage(method, url, content, headers) {
-          _classCallCheck(this, HttpRequestMessage);
+          
 
           var _this4 = _possibleConstructorReturn(this, _RequestMessage2.call(this, method, url, content, headers));
 
@@ -587,7 +583,7 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export, _context) {
 
       _export('RequestBuilder', RequestBuilder = function () {
         function RequestBuilder(client) {
-          _classCallCheck(this, RequestBuilder);
+          
 
           this.client = client;
           this.transformers = client.requestTransformers.slice(0);
@@ -757,7 +753,7 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export, _context) {
 
       _export('HttpClient', HttpClient = function () {
         function HttpClient() {
-          _classCallCheck(this, HttpClient);
+          
 
           this.isRequesting = false;
 
