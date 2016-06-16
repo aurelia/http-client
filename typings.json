@@ -1,0 +1,4 @@
+{
+  "name": "aurelia-http-client",
+  "main": "dist/aurelia-http-client.d.ts"
+}
