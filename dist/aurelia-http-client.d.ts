@@ -594,7 +594,6 @@ export declare class RequestBuilder {
   	 * @return The chainable RequestBuilder to use in further configuration of the request.
   	 */
   skipContentProcessing(): RequestBuilder;
-  _addTransformer(fn?: any): any;
   
   /**
      * Adds a user-defined request transformer to the RequestBuilder.
