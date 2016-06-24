@@ -38,7 +38,7 @@ export class HttpRequestMessage extends RequestMessage {
 * @return A processor instance for HTTP request messages.
 */
 export function createHttpRequestMessageProcessor(): RequestMessageProcessor {
-  return new RequestMessageProcessor(PLATFORM.XMLHttpRequest, [
+  return new RequestMessageProcessor(PLATFORM.global.XMLHttpRequest, [
     timeoutTransformer,
     credentialsTransformer,
     progressTransformer,
