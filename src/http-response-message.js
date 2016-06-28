@@ -92,8 +92,8 @@ export class HttpResponseMessage {
         return this._content;
       }
 
-      if (this.response === undefined || this.response === null) {
-        this._content = this.response;
+      if (this.response === undefined || this.response === null || this.response === '') {
+        this._content = null;
         return this._content;
       }
 
