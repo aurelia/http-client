@@ -11,7 +11,7 @@ This library is part of the [Aurelia](http://www.aurelia.io/) platform and conta
 
 ## Documentation
 
-If possible, prefer to use the `aurelia-fetch-client` instead of this library. You can read documentation on the fetch client [here](http://aurelia.io/docs.html#/aurelia/fetch-client/1.0.0-beta.1.2.2/doc/article/http-services) along with documentation on this library. If you would like to help improve this documentation, the source for these docs can be found in the `aurelia-fetch-client` repo's doc folder.
+If possible, prefer to use the `aurelia-fetch-client` instead of this library. You can read documentation on the fetch client [here](http://aurelia.io/hub.html#/doc/article/aurelia/fetch-client/latest/http-services/2) along with documentation on this library. If you would like to help improve this documentation, the source for these docs can be found in the `aurelia-fetch-client` repo's doc folder.
 
 ## Platform Support
 
