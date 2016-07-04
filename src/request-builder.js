@@ -9,19 +9,19 @@ interface Interceptor {
 	/**
 	 * Intercepts the response.
 	 */
-	response?(message: HttpResponseMessage): HttpResponseMessage | Promise<HttpResponseMessage>;
+	response?: (message: HttpResponseMessage) => HttpResponseMessage | Promise<HttpResponseMessage>;
 	/**
 	 * Intercepts a response error.
 	 */
-	responseError?(error: Error): HttpResponseMessage | Promise<HttpResponseMessage>;
+	responseError?: (error: Error) => HttpResponseMessage | Promise<HttpResponseMessage>;
 	/**
 	 * Intercepts the request.
 	 */
-	request?(message: RequestMessage): RequestMessage | Promise<RequestMessage>;
+	request?: (message: RequestMessage) => RequestMessage | Promise<RequestMessage>;
 	/**
 	 * Intercepts a request error.
 	 */
-	requestError?(error: Error): HttpResponseMessage | Promise<HttpResponseMessage>;
+	requestError?: (error: Error) => HttpResponseMessage | Promise<HttpResponseMessage>;
 }
 
 /**
