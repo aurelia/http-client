@@ -750,19 +750,19 @@ interface Interceptor {
 	/**
 	 * Intercepts the response.
 	 */
-	response?: Function;
+	response?: (message: HttpResponseMessage) => HttpResponseMessage | Promise<HttpResponseMessage>;
 	/**
 	 * Intercepts a response error.
 	 */
-	responseError?: Function;
+	responseError?: (error: Error) => HttpResponseMessage | Promise<HttpResponseMessage>;
 	/**
 	 * Intercepts the request.
 	 */
-	request?: Function;
+	request?: (message: RequestMessage) => RequestMessage | Promise<RequestMessage>;
 	/**
 	 * Intercepts a request error.
 	 */
-	requestError?: Function;
+	requestError?: (error: Error) => HttpResponseMessage | Promise<HttpResponseMessage>;
 }
 
 /**
