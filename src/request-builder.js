@@ -13,7 +13,7 @@ interface Interceptor {
 	/**
 	 * Intercepts a response error.
 	 */
-	responseError?: (error: Error) => HttpResponseMessage | Promise<HttpResponseMessage>;
+	responseError?: (error: HttpResponseMessage) => HttpResponseMessage | Promise<HttpResponseMessage>;
 	/**
 	 * Intercepts the request.
 	 */
@@ -21,7 +21,7 @@ interface Interceptor {
 	/**
 	 * Intercepts a request error.
 	 */
-	requestError?: (error: Error) => HttpResponseMessage | Promise<HttpResponseMessage>;
+	requestError?: (error: Error) => RequestMessage | Promise<RequestMessage>;
 }
 
 /**
