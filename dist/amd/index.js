@@ -5,7 +5,7 @@ define(['exports', './aurelia-http-client'], function (exports, _aureliaHttpClie
     value: true
   });
   Object.keys(_aureliaHttpClient).forEach(function (key) {
-    if (key === "default") return;
+    if (key === "default" || key === "__esModule") return;
     Object.defineProperty(exports, key, {
       enumerable: true,
       get: function () {

@@ -286,7 +286,11 @@ var RequestMessageProcessor = exports.RequestMessageProcessor = function () {
         } else {
           _this.xhr.open(message.method, message.buildFullUrl(), true, message.user, message.password);
           applyXhrTransformers(_this.xhrTransformers, client, _this, message, _this.xhr);
-          _this.xhr.send(message.content);
+          if (typeof message.content === 'undefined') {
+            _this.xhr.send();
+          } else {
+            _this.xhr.send(message.content);
+          }
         }
 
         return promise;

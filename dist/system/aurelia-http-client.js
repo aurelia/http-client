@@ -40,6 +40,106 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export, _context) {
     }
   }
 
+  function timeoutTransformer(client, processor, message, xhr) {
+    if (message.timeout !== undefined) {
+      xhr.timeout = message.timeout;
+    }
+  }
+
+  _export('timeoutTransformer', timeoutTransformer);
+
+  function callbackParameterNameTransformer(client, processor, message, xhr) {
+    if (message.callbackParameterName !== undefined) {
+      xhr.callbackParameterName = message.callbackParameterName;
+    }
+  }
+
+  _export('callbackParameterNameTransformer', callbackParameterNameTransformer);
+
+  function credentialsTransformer(client, processor, message, xhr) {
+    if (message.withCredentials !== undefined) {
+      xhr.withCredentials = message.withCredentials;
+    }
+  }
+
+  _export('credentialsTransformer', credentialsTransformer);
+
+  function progressTransformer(client, processor, message, xhr) {
+    if (message.progressCallback) {
+      xhr.upload.onprogress = message.progressCallback;
+    }
+  }
+
+  _export('progressTransformer', progressTransformer);
+
+  function responseTypeTransformer(client, processor, message, xhr) {
+    var responseType = message.responseType;
+
+    if (responseType === 'json') {
+      responseType = 'text';
+    }
+
+    xhr.responseType = responseType;
+  }
+
+  _export('responseTypeTransformer', responseTypeTransformer);
+
+  function headerTransformer(client, processor, message, xhr) {
+    message.headers.configureXHR(xhr);
+  }
+
+  _export('headerTransformer', headerTransformer);
+
+  function contentTransformer(client, processor, message, xhr) {
+    if (message.skipContentProcessing) {
+      return;
+    }
+
+    if (PLATFORM.global.FormData && message.content instanceof FormData) {
+      return;
+    }
+
+    if (PLATFORM.global.Blob && message.content instanceof Blob) {
+      return;
+    }
+
+    if (PLATFORM.global.ArrayBufferView && message.content instanceof ArrayBufferView) {
+      return;
+    }
+
+    if (message.content instanceof Document) {
+      return;
+    }
+
+    if (typeof message.content === 'string') {
+      return;
+    }
+
+    if (message.content === null || message.content === undefined) {
+      return;
+    }
+
+    message.content = JSON.stringify(message.content, message.replacer);
+
+    if (!message.headers.has('Content-Type')) {
+      message.headers.add('Content-Type', 'application/json');
+    }
+  }
+
+  _export('contentTransformer', contentTransformer);
+
+  function createJSONPRequestMessageProcessor() {
+    return new RequestMessageProcessor(JSONPXHR, [timeoutTransformer, callbackParameterNameTransformer]);
+  }
+
+  _export('createJSONPRequestMessageProcessor', createJSONPRequestMessageProcessor);
+
+  function createHttpRequestMessageProcessor() {
+    return new RequestMessageProcessor(PLATFORM.XMLHttpRequest, [timeoutTransformer, credentialsTransformer, progressTransformer, responseTypeTransformer, contentTransformer, headerTransformer]);
+  }
+
+  _export('createHttpRequestMessageProcessor', createHttpRequestMessageProcessor);
+
   function trackRequestStart(client, processor) {
     client.pendingRequests.push(processor);
     client.isRequesting = true;
@@ -346,7 +446,11 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export, _context) {
               } else {
                 _this.xhr.open(message.method, message.buildFullUrl(), true, message.user, message.password);
                 applyXhrTransformers(_this.xhrTransformers, client, _this, message, _this.xhr);
-                _this.xhr.send(message.content);
+                if (typeof message.content === 'undefined') {
+                  _this.xhr.send();
+                } else {
+                  _this.xhr.send(message.content);
+                }
               }
 
               return promise;
@@ -381,94 +485,6 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export, _context) {
       }());
 
       _export('RequestMessageProcessor', RequestMessageProcessor);
-
-      function timeoutTransformer(client, processor, message, xhr) {
-        if (message.timeout !== undefined) {
-          xhr.timeout = message.timeout;
-        }
-      }
-
-      _export('timeoutTransformer', timeoutTransformer);
-
-      function callbackParameterNameTransformer(client, processor, message, xhr) {
-        if (message.callbackParameterName !== undefined) {
-          xhr.callbackParameterName = message.callbackParameterName;
-        }
-      }
-
-      _export('callbackParameterNameTransformer', callbackParameterNameTransformer);
-
-      function credentialsTransformer(client, processor, message, xhr) {
-        if (message.withCredentials !== undefined) {
-          xhr.withCredentials = message.withCredentials;
-        }
-      }
-
-      _export('credentialsTransformer', credentialsTransformer);
-
-      function progressTransformer(client, processor, message, xhr) {
-        if (message.progressCallback) {
-          xhr.upload.onprogress = message.progressCallback;
-        }
-      }
-
-      _export('progressTransformer', progressTransformer);
-
-      function responseTypeTransformer(client, processor, message, xhr) {
-        var responseType = message.responseType;
-
-        if (responseType === 'json') {
-          responseType = 'text';
-        }
-
-        xhr.responseType = responseType;
-      }
-
-      _export('responseTypeTransformer', responseTypeTransformer);
-
-      function headerTransformer(client, processor, message, xhr) {
-        message.headers.configureXHR(xhr);
-      }
-
-      _export('headerTransformer', headerTransformer);
-
-      function contentTransformer(client, processor, message, xhr) {
-        if (message.skipContentProcessing) {
-          return;
-        }
-
-        if (PLATFORM.global.FormData && message.content instanceof FormData) {
-          return;
-        }
-
-        if (PLATFORM.global.Blob && message.content instanceof Blob) {
-          return;
-        }
-
-        if (PLATFORM.global.ArrayBufferView && message.content instanceof ArrayBufferView) {
-          return;
-        }
-
-        if (message.content instanceof Document) {
-          return;
-        }
-
-        if (typeof message.content === 'string') {
-          return;
-        }
-
-        if (message.content === null || message.content === undefined) {
-          return;
-        }
-
-        message.content = JSON.stringify(message.content, message.replacer);
-
-        if (!message.headers.has('Content-Type')) {
-          message.headers.add('Content-Type', 'application/json');
-        }
-      }
-
-      _export('contentTransformer', contentTransformer);
 
       _export('JSONPRequestMessage', JSONPRequestMessage = function (_RequestMessage) {
         _inherits(JSONPRequestMessage, _RequestMessage);
@@ -553,12 +569,6 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export, _context) {
         return JSONPXHR;
       }();
 
-      function createJSONPRequestMessageProcessor() {
-        return new RequestMessageProcessor(JSONPXHR, [timeoutTransformer, callbackParameterNameTransformer]);
-      }
-
-      _export('createJSONPRequestMessageProcessor', createJSONPRequestMessageProcessor);
-
       _export('HttpRequestMessage', HttpRequestMessage = function (_RequestMessage2) {
         _inherits(HttpRequestMessage, _RequestMessage2);
 
@@ -574,12 +584,6 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export, _context) {
       }(RequestMessage));
 
       _export('HttpRequestMessage', HttpRequestMessage);
-
-      function createHttpRequestMessageProcessor() {
-        return new RequestMessageProcessor(PLATFORM.XMLHttpRequest, [timeoutTransformer, credentialsTransformer, progressTransformer, responseTypeTransformer, contentTransformer, headerTransformer]);
-      }
-
-      _export('createHttpRequestMessageProcessor', createHttpRequestMessageProcessor);
 
       _export('RequestBuilder', RequestBuilder = function () {
         function RequestBuilder(client) {

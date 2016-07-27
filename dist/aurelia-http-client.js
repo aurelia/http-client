@@ -461,7 +461,13 @@ export class RequestMessageProcessor {
           } else {
             this.xhr.open(message.method, message.buildFullUrl(), true, message.user, message.password);
             applyXhrTransformers(this.xhrTransformers, client, this, message, this.xhr);
-            this.xhr.send(message.content);
+            if (typeof message.content === 'undefined') {
+              // IE serializes undefined as "undefined"
+              // some servers reject such requests because of unexpected payload, e.g. in case of DELETE requests
+              this.xhr.send();
+            } else {
+              this.xhr.send(message.content);
+            }
           }
 
           return promise;
@@ -754,7 +760,7 @@ interface Interceptor {
 	/**
 	 * Intercepts a response error.
 	 */
-	responseError?: (error: Error) => HttpResponseMessage | Promise<HttpResponseMessage>;
+	responseError?: (error: HttpResponseMessage) => HttpResponseMessage | Promise<HttpResponseMessage>;
 	/**
 	 * Intercepts the request.
 	 */
@@ -762,7 +768,7 @@ interface Interceptor {
 	/**
 	 * Intercepts a request error.
 	 */
-	requestError?: (error: Error) => HttpResponseMessage | Promise<HttpResponseMessage>;
+	requestError?: (error: Error) => RequestMessage | Promise<RequestMessage>;
 }
 
 /**
