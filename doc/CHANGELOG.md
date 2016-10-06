@@ -1,3 +1,13 @@
+<a name="1.0.1"></a>
+## [1.0.1](https://github.com/aurelia/http-client/compare/1.0.0...v1.0.1) (2016-10-06)
+
+
+### Bug Fixes
+
+* Add responseType field in HttpResponseMessage ([2c0f437](https://github.com/aurelia/http-client/commit/2c0f437)), closes [#149](https://github.com/aurelia/http-client/issues/149)
+
+
+
 <a name="1.0.0"></a>
 # [1.0.0](https://github.com/aurelia/http-client/compare/1.0.0-rc.1.0.1...v1.0.0) (2016-07-27)
 

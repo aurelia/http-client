@@ -243,6 +243,11 @@ export declare class HttpResponseMessage {
   response: any;
   
   /**
+    * The type of the response.
+    */
+  responseType: string;
+  
+  /**
     * The success status of the request based on status code.
     */
   isSuccess: boolean;
