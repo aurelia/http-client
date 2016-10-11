@@ -6,14 +6,15 @@ describe('headers', () => {
     var headers = new Headers();
     headers.add('Authorization', '123');
 
-    expect(headers.headers['Authorization']).toBe('123');
+    expect(headers.headers.get('authorization').value).toBe('123');
   });
 
   it('can get header value', () => {
     var headers = new Headers();
     headers.add('Authorization', '123');
-
+    // The header should be resolved case insensitively
     expect(headers.get('Authorization')).toBe('123');
+    expect(headers.get('aUtHorIzaTion')).toBe('123');
   });
 
   it('will clear headers on clear', () => {
@@ -21,17 +22,20 @@ describe('headers', () => {
     headers.add('Authorization', '123');
 
     expect(headers.get('Authorization')).toBe('123');
+    expect(headers.headers.size).toBe(1);
 
     headers.clear();
 
     expect(headers.get('Authorization')).toBeUndefined();
-    expect(headers.headers).toEqual({});
+    expect(headers.get('AUthoRIZatioN')).toBeUndefined();
+    expect(headers.headers.size).toBe(0);
   });
 
   it('configureXHR should add the headers', () => {
     var headers = new Headers();
     headers.add('Authorization', '123');
     headers.add('Content-Type', 'application/json');
+    headers.add('ETag', 'some-value');
 
     jasmine.Ajax.withMock(() => {
       var xhr = new XMLHttpRequest();
@@ -40,9 +44,8 @@ describe('headers', () => {
 
       expect(xhr.requestHeaders['Authorization']).toBe('123');
       expect(xhr.requestHeaders['Content-Type']).toBe('application/json');
+      expect(xhr.requestHeaders['ETag']).toBe('some-value');
     });
-
-
   });
 
   describe("parse()", () => {
@@ -66,5 +69,4 @@ describe('headers', () => {
       expect(headers.get('key2')).toBe('key: value');
     });
   });
-
 });
