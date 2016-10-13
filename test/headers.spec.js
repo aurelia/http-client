@@ -6,7 +6,7 @@ describe('headers', () => {
     var headers = new Headers();
     headers.add('Authorization', '123');
 
-    expect(headers.headers.get('authorization').value).toBe('123');
+    expect(headers.headers['authorization'].value).toBe('123');
   });
 
   it('can get header value', () => {
@@ -22,13 +22,13 @@ describe('headers', () => {
     headers.add('Authorization', '123');
 
     expect(headers.get('Authorization')).toBe('123');
-    expect(headers.headers.size).toBe(1);
+    expect(Object.keys(headers.headers).length).toBe(1);
 
     headers.clear();
 
     expect(headers.get('Authorization')).toBeUndefined();
     expect(headers.get('AUthoRIZatioN')).toBeUndefined();
-    expect(headers.headers.size).toBe(0);
+    expect(headers.headers).toEqual({});
   });
 
   it('configureXHR should add the headers', () => {
