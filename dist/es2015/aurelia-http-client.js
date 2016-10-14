@@ -3,15 +3,20 @@ import { PLATFORM, DOM } from 'aurelia-pal';
 
 export let Headers = class Headers {
   constructor(headers = {}) {
-    this.headers = headers;
+    this.headers = {};
+
+    for (let key in headers) {
+      this.headers[key.toLowerCase()] = { key, value: headers[key] };
+    }
   }
 
   add(key, value) {
-    this.headers[key] = value;
+    this.headers[key.toLowerCase()] = { key, value };
   }
 
   get(key) {
-    return this.headers[key];
+    let header = this.headers[key.toLowerCase()];
+    return header ? header.value : undefined;
   }
 
   clear() {
@@ -19,23 +24,14 @@ export let Headers = class Headers {
   }
 
   has(header) {
-    let lowered = header.toLowerCase();
-    let headers = this.headers;
-
-    for (let key in headers) {
-      if (key.toLowerCase() === lowered) {
-        return true;
-      }
-    }
-
-    return false;
+    return this.headers.hasOwnProperty(header.toLowerCase());
   }
 
   configureXHR(xhr) {
-    let headers = this.headers;
-
-    for (let key in headers) {
-      xhr.setRequestHeader(key, headers[key]);
+    for (let name in this.headers) {
+      if (this.headers.hasOwnProperty(name)) {
+        xhr.setRequestHeader(this.headers[name].key, this.headers[name].value);
+      }
     }
   }
 
@@ -97,14 +93,18 @@ export let HttpResponseMessage = class HttpResponseMessage {
       try {
         this.headers = Headers.parse(xhr.getAllResponseHeaders());
       } catch (err) {
-        if (xhr.requestHeaders) this.headers = { headers: xhr.requestHeaders };
+        if (xhr.requestHeaders) this.headers = new Headers(xhr.requestHeaders);
       }
     } else {
       this.headers = new Headers();
     }
 
     let contentType;
-    if (this.headers && this.headers.headers) contentType = this.headers.headers['Content-Type'];
+
+    if (this.headers && this.headers.headers) {
+      contentType = this.headers.get('Content-Type');
+    }
+
     if (contentType) {
       this.mimeType = responseType = contentType.split(';')[0].trim();
       if (mimeTypes.hasOwnProperty(this.mimeType)) responseType = mimeTypes[this.mimeType];

@@ -1,3 +1,9 @@
+## 1.0.2
+
+### Bug Fixes
+
+* **headers:** #152 - Made header treatment case insensitive
+
 <a name="1.0.1"></a>
 ## [1.0.1](https://github.com/aurelia/http-client/compare/1.0.0...v1.0.1) (2016-10-06)
 

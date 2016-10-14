@@ -154,7 +154,7 @@ export declare class Headers {
   
   /**
     * Determines whether or not the indicated header exists in the collection.
-    * @param key The header key to check.
+    * @param header The header key to check.
     * @return True if it exists, false otherwise.
     */
   has(header: string): boolean;

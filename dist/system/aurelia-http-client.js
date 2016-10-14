@@ -194,15 +194,20 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export, _context) {
 
           
 
-          this.headers = headers;
+          this.headers = {};
+
+          for (var _key in headers) {
+            this.headers[_key.toLowerCase()] = { key: _key, value: headers[_key] };
+          }
         }
 
         Headers.prototype.add = function add(key, value) {
-          this.headers[key] = value;
+          this.headers[key.toLowerCase()] = { key: key, value: value };
         };
 
         Headers.prototype.get = function get(key) {
-          return this.headers[key];
+          var header = this.headers[key.toLowerCase()];
+          return header ? header.value : undefined;
         };
 
         Headers.prototype.clear = function clear() {
@@ -210,23 +215,14 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export, _context) {
         };
 
         Headers.prototype.has = function has(header) {
-          var lowered = header.toLowerCase();
-          var headers = this.headers;
-
-          for (var _key in headers) {
-            if (_key.toLowerCase() === lowered) {
-              return true;
-            }
-          }
-
-          return false;
+          return this.headers.hasOwnProperty(header.toLowerCase());
         };
 
         Headers.prototype.configureXHR = function configureXHR(xhr) {
-          var headers = this.headers;
-
-          for (var _key2 in headers) {
-            xhr.setRequestHeader(_key2, headers[_key2]);
+          for (var name in this.headers) {
+            if (this.headers.hasOwnProperty(name)) {
+              xhr.setRequestHeader(this.headers[name].key, this.headers[name].value);
+            }
           }
         };
 
@@ -242,9 +238,9 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export, _context) {
 
             var index = headerPair.indexOf(': ');
             if (index > 0) {
-              var _key3 = headerPair.substring(0, index);
+              var _key2 = headerPair.substring(0, index);
               var val = headerPair.substring(index + 2);
-              headers.add(_key3, val);
+              headers.add(_key2, val);
             }
           }
 
@@ -300,14 +296,18 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export, _context) {
             try {
               this.headers = Headers.parse(xhr.getAllResponseHeaders());
             } catch (err) {
-              if (xhr.requestHeaders) this.headers = { headers: xhr.requestHeaders };
+              if (xhr.requestHeaders) this.headers = new Headers(xhr.requestHeaders);
             }
           } else {
             this.headers = new Headers();
           }
 
           var contentType = void 0;
-          if (this.headers && this.headers.headers) contentType = this.headers.headers['Content-Type'];
+
+          if (this.headers && this.headers.headers) {
+            contentType = this.headers.get('Content-Type');
+          }
+
           if (contentType) {
             this.mimeType = responseType = contentType.split(';')[0].trim();
             if (mimeTypes.hasOwnProperty(this.mimeType)) responseType = mimeTypes[this.mimeType];
