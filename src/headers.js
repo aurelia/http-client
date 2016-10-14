@@ -7,7 +7,11 @@ export class Headers {
   * @param headers A set of key/values to initialize the headers with.
   */
   constructor(headers?: Object = {}) {
-    this.headers = headers;
+    this.headers = {};
+    // Convert object to set with case insensitive keys
+    for (let key in headers) {
+      this.headers[key.toLowerCase()] = {key, value: headers[key]};
+    }
   }
 
   /**
@@ -16,7 +20,7 @@ export class Headers {
   * @param value The header value.
   */
   add(key: string, value: string): void {
-    this.headers[key] = value;
+    this.headers[key.toLowerCase()] = {key, value};
   }
 
   /**
@@ -25,7 +29,8 @@ export class Headers {
   * @return The header value.
   */
   get(key: string): string {
-    return this.headers[key];
+    let header = this.headers[key.toLowerCase()];
+    return header ? header.value : undefined;
   }
 
   /**
@@ -37,31 +42,22 @@ export class Headers {
 
   /**
   * Determines whether or not the indicated header exists in the collection.
-  * @param key The header key to check.
+  * @param header The header key to check.
   * @return True if it exists, false otherwise.
   */
   has(header: string): boolean {
-    let lowered = header.toLowerCase();
-    let headers = this.headers;
-
-    for (let key in headers) {
-      if (key.toLowerCase() === lowered) {
-        return true;
-      }
-    }
-
-    return false;
+    return this.headers.hasOwnProperty(header.toLowerCase());
   }
 
   /**
   * Configures an XMR object with the headers.
   * @param xhr The XHRT instance to configure.
   */
-  configureXHR(xhr : XHR): void {
-    let headers = this.headers;
-
-    for (let key in headers) {
-      xhr.setRequestHeader(key, headers[key]);
+  configureXHR(xhr: XHR): void {
+    for (let name in this.headers) {
+      if (this.headers.hasOwnProperty(name)) {
+        xhr.setRequestHeader(this.headers[name].key, this.headers[name].value);
+      }
     }
   }
 
