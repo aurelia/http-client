@@ -78,8 +78,11 @@ export class HttpResponseMessage {
     }
 
     let contentType;
-    if (this.headers && this.headers.headers)
+
+    if (this.headers && this.headers.headers) {
       contentType = this.headers.get('Content-Type');
+    }
+
     if (contentType) {
       this.mimeType = responseType = contentType.split(';')[0].trim();
       if (mimeTypes.hasOwnProperty(this.mimeType)) responseType = mimeTypes[this.mimeType];
