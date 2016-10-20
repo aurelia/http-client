@@ -109,6 +109,11 @@ describe("HttpResponseMessage", () => {
       expect(httpResponse.content).toBeNull();
     });
 
+    it("will return a blank string if response is blank", () => {
+      let httpResponse = new HttpResponseMessage(null, {response: '',responseText:''});
+      expect(httpResponse.content).toBe('');
+    });
+
     it("will JSON.parse if the response type is 'json'", () => {
       let response = {}, reviver = {}, content = {};
       let parseSpy = spyOn(JSON, 'parse').and.returnValue(content);
