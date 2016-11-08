@@ -141,7 +141,7 @@ export var HttpResponseMessage = function () {
           return this._content;
         }
 
-        if (this.response === undefined || this.response === null) {
+        if (this.response === undefined || this.response === null || this.response === '') {
           this._content = this.response;
           return this._content;
         }

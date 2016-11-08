@@ -324,7 +324,7 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export, _context) {
                 return this._content;
               }
 
-              if (this.response === undefined || this.response === null) {
+              if (this.response === undefined || this.response === null || this.response === '') {
                 this._content = this.response;
                 return this._content;
               }

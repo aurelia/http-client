@@ -1,3 +1,13 @@
+<a name="1.0.3"></a>
+## [1.0.3](https://github.com/aurelia/http-client/compare/1.0.2...v1.0.3) (2016-11-08)
+
+
+### Bug Fixes
+
+* **http-response-message:** handle empty responses ([bae5188](https://github.com/aurelia/http-client/commit/bae5188))
+
+
+
 ## 1.0.2
 
 ### Bug Fixes
