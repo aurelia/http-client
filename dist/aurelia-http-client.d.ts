@@ -277,9 +277,9 @@ export declare class HttpResponseMessage {
     * @param requestMessage The request message that resulted in this response.
     * @param xhr The XHR instance that made the request.
     * @param responseType The type of the response.
-    * @param reviver A reviver function to use in transforming the content.
+    * @param reviver? A reviver function to use in transforming the content.
     */
-  constructor(requestMessage: RequestMessage, xhr: XHR, responseType: string, reviver: ((key: string, value: any) => any));
+  constructor(requestMessage: RequestMessage, xhr: XHR, responseType: string, reviver?: ((key: string, value: any) => any));
   
   /**
     * Gets the content of the response.

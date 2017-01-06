@@ -1,3 +1,10 @@
+<a name="1.0.4"></a>
+## [1.0.4](https://github.com/aurelia/http-client/compare/1.0.3...v1.0.4) (2017-01-06)
+
+### Bug Fixes
+
+* Improve dts files.
+
 <a name="1.0.3"></a>
 ## [1.0.3](https://github.com/aurelia/http-client/compare/1.0.2...v1.0.3) (2016-11-08)
 
