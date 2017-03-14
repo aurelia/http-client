@@ -5,6 +5,7 @@ import {
   timeoutTransformer,
   credentialsTransformer,
   progressTransformer,
+  downloadProgressTransformer,
   responseTypeTransformer,
   headerTransformer,
   contentTransformer
@@ -42,6 +43,7 @@ export function createHttpRequestMessageProcessor(): RequestMessageProcessor {
     timeoutTransformer,
     credentialsTransformer,
     progressTransformer,
+    downloadProgressTransformer,
     responseTypeTransformer,
     contentTransformer,
     headerTransformer
