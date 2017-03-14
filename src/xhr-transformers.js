@@ -40,7 +40,7 @@ export function credentialsTransformer(client: HttpClient, processor: RequestMes
 }
 
 /**
-* Adds an onprogress callback to the request.
+* Adds an upload.onprogress callback to the request.
 * @param client The http client.
 * @param processor The request message processor.
 * @param message The request message.
@@ -49,6 +49,19 @@ export function credentialsTransformer(client: HttpClient, processor: RequestMes
 export function progressTransformer(client: HttpClient, processor: RequestMessageProcessor, message: RequestMessage, xhr: XHR) {
   if (message.progressCallback) {
     xhr.upload.onprogress = message.progressCallback;
+  }
+}
+
+/**
+* Adds an onprogress callback to the request.
+* @param client The http client.
+* @param processor The request message processor.
+* @param message The request message.
+* @param xhr The xhr instance.
+*/
+export function downloadProgressTransformer(client: HttpClient, processor: RequestMessageProcessor, message: RequestMessage, xhr: XHR) {
+  if (message.downloadProgressCallback) {
+    xhr.onprogress = message.downloadProgressCallback;
   }
 }
 
