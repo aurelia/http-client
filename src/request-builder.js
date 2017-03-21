@@ -260,6 +260,16 @@ export class RequestBuilder {
       message.progressCallback = progressCallback;
     });
   }
+	/**
+	 * Sets an download progress callback.
+	 * @param progressCallback The progress callback function.
+	 * @return The chainable RequestBuilder to use in further configuration of the request.
+	 */
+  withDownloadProgressCallback(downloadProgressCallback: Function): RequestBuilder {
+    return this._addTransformer(function(client, processor, message) {
+	  message.downloadProgressCallback = downloadProgressCallback;
+    });
+  }
 
 	/**
 	 * Sets a callback parameter name for JSONP.
