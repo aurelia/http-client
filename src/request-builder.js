@@ -260,6 +260,7 @@ export class RequestBuilder {
       message.progressCallback = progressCallback;
     });
   }
+
 	/**
 	 * Sets an download progress callback.
 	 * @param progressCallback The progress callback function.
@@ -267,7 +268,7 @@ export class RequestBuilder {
 	 */
   withDownloadProgressCallback(downloadProgressCallback: Function): RequestBuilder {
     return this._addTransformer(function(client, processor, message) {
-	  message.downloadProgressCallback = downloadProgressCallback;
+      message.downloadProgressCallback = downloadProgressCallback;
     });
   }
 
