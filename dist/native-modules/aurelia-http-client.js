@@ -330,6 +330,12 @@ export function progressTransformer(client, processor, message, xhr) {
   }
 }
 
+export function downloadProgressTransformer(client, processor, message, xhr) {
+  if (message.downloadProgressCallback) {
+    xhr.onprogress = message.downloadProgressCallback;
+  }
+}
+
 export function responseTypeTransformer(client, processor, message, xhr) {
   var responseType = message.responseType;
 
@@ -480,7 +486,7 @@ export var HttpRequestMessage = function (_RequestMessage2) {
 }(RequestMessage);
 
 export function createHttpRequestMessageProcessor() {
-  return new RequestMessageProcessor(PLATFORM.XMLHttpRequest, [timeoutTransformer, credentialsTransformer, progressTransformer, responseTypeTransformer, contentTransformer, headerTransformer]);
+  return new RequestMessageProcessor(PLATFORM.XMLHttpRequest, [timeoutTransformer, credentialsTransformer, progressTransformer, downloadProgressTransformer, responseTypeTransformer, contentTransformer, headerTransformer]);
 }
 
 export var RequestBuilder = function () {
@@ -610,6 +616,12 @@ export var RequestBuilder = function () {
   RequestBuilder.prototype.withProgressCallback = function withProgressCallback(progressCallback) {
     return this._addTransformer(function (client, processor, message) {
       message.progressCallback = progressCallback;
+    });
+  };
+
+  RequestBuilder.prototype.withDownloadProgressCallback = function withDownloadProgressCallback(downloadProgressCallback) {
+    return this._addTransformer(function (client, processor, message) {
+      message.downloadProgressCallback = downloadProgressCallback;
     });
   };
 

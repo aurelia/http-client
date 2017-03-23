@@ -1,3 +1,14 @@
+<a name="1.1.0"></a>
+# [1.1.0](https://github.com/aurelia/http-client/compare/1.0.4...v1.1.0) (2017-03-23)
+
+
+### Features
+
+* **request-builder:** add download progress callback ([a53869b](https://github.com/aurelia/http-client/commit/a53869b)), closes [#163](https://github.com/aurelia/http-client/issues/163)
+* **request-builder:** add download progress callback ([73165dd](https://github.com/aurelia/http-client/commit/73165dd))
+
+
+
 <a name="1.0.4"></a>
 ## [1.0.4](https://github.com/aurelia/http-client/compare/1.0.3...v1.0.4) (2017-01-06)
 

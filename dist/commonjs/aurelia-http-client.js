@@ -11,6 +11,7 @@ exports.timeoutTransformer = timeoutTransformer;
 exports.callbackParameterNameTransformer = callbackParameterNameTransformer;
 exports.credentialsTransformer = credentialsTransformer;
 exports.progressTransformer = progressTransformer;
+exports.downloadProgressTransformer = downloadProgressTransformer;
 exports.responseTypeTransformer = responseTypeTransformer;
 exports.headerTransformer = headerTransformer;
 exports.contentTransformer = contentTransformer;
@@ -348,6 +349,12 @@ function progressTransformer(client, processor, message, xhr) {
   }
 }
 
+function downloadProgressTransformer(client, processor, message, xhr) {
+  if (message.downloadProgressCallback) {
+    xhr.onprogress = message.downloadProgressCallback;
+  }
+}
+
 function responseTypeTransformer(client, processor, message, xhr) {
   var responseType = message.responseType;
 
@@ -498,7 +505,7 @@ var HttpRequestMessage = exports.HttpRequestMessage = function (_RequestMessage2
 }(RequestMessage);
 
 function createHttpRequestMessageProcessor() {
-  return new RequestMessageProcessor(_aureliaPal.PLATFORM.XMLHttpRequest, [timeoutTransformer, credentialsTransformer, progressTransformer, responseTypeTransformer, contentTransformer, headerTransformer]);
+  return new RequestMessageProcessor(_aureliaPal.PLATFORM.XMLHttpRequest, [timeoutTransformer, credentialsTransformer, progressTransformer, downloadProgressTransformer, responseTypeTransformer, contentTransformer, headerTransformer]);
 }
 
 var RequestBuilder = exports.RequestBuilder = function () {
@@ -628,6 +635,12 @@ var RequestBuilder = exports.RequestBuilder = function () {
   RequestBuilder.prototype.withProgressCallback = function withProgressCallback(progressCallback) {
     return this._addTransformer(function (client, processor, message) {
       message.progressCallback = progressCallback;
+    });
+  };
+
+  RequestBuilder.prototype.withDownloadProgressCallback = function withDownloadProgressCallback(downloadProgressCallback) {
+    return this._addTransformer(function (client, processor, message) {
+      message.downloadProgressCallback = downloadProgressCallback;
     });
   };
 

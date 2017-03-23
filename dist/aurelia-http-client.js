@@ -549,7 +549,7 @@ export function credentialsTransformer(client: HttpClient, processor: RequestMes
 }
 
 /**
-* Adds an onprogress callback to the request.
+* Adds an upload.onprogress callback to the request.
 * @param client The http client.
 * @param processor The request message processor.
 * @param message The request message.
@@ -558,6 +558,19 @@ export function credentialsTransformer(client: HttpClient, processor: RequestMes
 export function progressTransformer(client: HttpClient, processor: RequestMessageProcessor, message: RequestMessage, xhr: XHR) {
   if (message.progressCallback) {
     xhr.upload.onprogress = message.progressCallback;
+  }
+}
+
+/**
+* Adds an onprogress callback to the request.
+* @param client The http client.
+* @param processor The request message processor.
+* @param message The request message.
+* @param xhr The xhr instance.
+*/
+export function downloadProgressTransformer(client: HttpClient, processor: RequestMessageProcessor, message: RequestMessage, xhr: XHR) {
+  if (message.downloadProgressCallback) {
+    xhr.onprogress = message.downloadProgressCallback;
   }
 }
 
@@ -748,6 +761,7 @@ export function createHttpRequestMessageProcessor(): RequestMessageProcessor {
     timeoutTransformer,
     credentialsTransformer,
     progressTransformer,
+    downloadProgressTransformer,
     responseTypeTransformer,
     contentTransformer,
     headerTransformer
@@ -1010,6 +1024,17 @@ export class RequestBuilder {
   withProgressCallback(progressCallback: Function): RequestBuilder {
     return this._addTransformer(function(client, processor, message) {
       message.progressCallback = progressCallback;
+    });
+  }
+
+	/**
+	 * Sets an download progress callback.
+	 * @param progressCallback The progress callback function.
+	 * @return The chainable RequestBuilder to use in further configuration of the request.
+	 */
+  withDownloadProgressCallback(downloadProgressCallback: Function): RequestBuilder {
+    return this._addTransformer(function(client, processor, message) {
+      message.downloadProgressCallback = downloadProgressCallback;
     });
   }
 
