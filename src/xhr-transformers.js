@@ -113,7 +113,7 @@ export function contentTransformer(client: HttpClient, processor: RequestMessage
     return;
   }
 
-  if (PLATFORM.global.ArrayBufferView && message.content instanceof ArrayBufferView) {
+  if (PLATFORM.global.ArrayBuffer && message.content instanceof ArrayBuffer) {
     return;
   }
 
