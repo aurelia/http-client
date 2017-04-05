@@ -1,3 +1,13 @@
+<a name="1.1.1"></a>
+## [1.1.1](https://github.com/aurelia/http-client/compare/1.1.0...v1.1.1) (2017-04-05)
+
+
+### Bug Fixes
+
+* **xhr-transformers:** fix sending ArrayBuffer type ([4d957f8](https://github.com/aurelia/http-client/commit/4d957f8)), closes [#161](https://github.com/aurelia/http-client/issues/161)
+
+
+
 <a name="1.1.0"></a>
 # [1.1.0](https://github.com/aurelia/http-client/compare/1.0.4...v1.1.0) (2017-03-23)
 

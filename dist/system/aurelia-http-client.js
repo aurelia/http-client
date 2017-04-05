@@ -111,7 +111,7 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export, _context) {
       return;
     }
 
-    if (PLATFORM.global.ArrayBufferView && message.content instanceof ArrayBufferView) {
+    if (PLATFORM.global.ArrayBuffer && message.content instanceof ArrayBuffer) {
       return;
     }
 

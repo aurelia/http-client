@@ -414,7 +414,7 @@ define(['exports', 'aurelia-path', 'aurelia-pal'], function (exports, _aureliaPa
       return;
     }
 
-    if (_aureliaPal.PLATFORM.global.ArrayBufferView && message.content instanceof ArrayBufferView) {
+    if (_aureliaPal.PLATFORM.global.ArrayBuffer && message.content instanceof ArrayBuffer) {
       return;
     }
 

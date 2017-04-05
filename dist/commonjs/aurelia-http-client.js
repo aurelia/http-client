@@ -382,7 +382,7 @@ function contentTransformer(client, processor, message, xhr) {
     return;
   }
 
-  if (_aureliaPal.PLATFORM.global.ArrayBufferView && message.content instanceof ArrayBufferView) {
+  if (_aureliaPal.PLATFORM.global.ArrayBuffer && message.content instanceof ArrayBuffer) {
     return;
   }
 
