@@ -120,6 +120,11 @@ export class RequestMessage {
   headers: Headers;
 
   /**
+   * Use tradional style for param serialization.
+   */
+  traditional: boolean;
+
+  /**
   * The base url that the request url is joined with.
   */
   baseUrl: string;
@@ -148,7 +153,7 @@ export class RequestMessage {
     let url = absoluteUrl.test(this.url) ? this.url : join(this.baseUrl, this.url);
 
     if (this.params) {
-      let qs = buildQueryString(this.params);
+      let qs = buildQueryString(this.params, this.traditional);
       url = qs ? url + (this.url.indexOf('?') < 0 ? '?' : '&') + qs : url;
     }
 
@@ -801,6 +806,12 @@ interface RequestTransformer {
  * A builder class allowing fluent composition of HTTP requests.
  */
 export class RequestBuilder {
+
+  /**
+   * The HttpClient instance.
+   */
+  client: HttpClient;
+
 	/**
 	 * Creates an instance of RequestBuilder
 	 * @param client An instance of HttpClient
@@ -931,8 +942,9 @@ export class RequestBuilder {
 	 * @param params The key/value pairs to use to build the query string.
 	 * @return The chainable RequestBuilder to use in further configuration of the request.
 	 */
-  withParams(params: Object): RequestBuilder {
+  withParams(params: Object, traditional ?: boolean): RequestBuilder {
     return this._addTransformer(function(client, processor, message) {
+      message.traditional = traditional;
       message.params = params;
     });
   }
@@ -1171,7 +1183,7 @@ export class HttpClient {
    */
   send(requestMessage: RequestMessage, transformers: Array<RequestTransformer>): Promise<HttpResponseMessage> {
     let createProcessor = this.requestProcessorFactories.get(requestMessage.constructor);
-    let processor;
+    let processor: RequestMessageProcessor;
     let promise;
     let i;
     let ii;
@@ -1191,7 +1203,7 @@ export class HttpClient {
         for (i = 0, ii = transformers.length; i < ii; ++i) {
           transformers[i](this, processor, message);
         }
-
+        
         return processor.process(this, message).then(response => {
           trackRequestEnd(this, processor);
           return response;
@@ -1222,8 +1234,8 @@ export class HttpClient {
    * @param url The target URL.
    * @return {Promise} A cancellable promise object.
    */
-  get(url: string): Promise<HttpResponseMessage> {
-    return this.createRequest(url).asGet().send();
+  get(url: string, params?: Object, traditional?: boolean): Promise<HttpResponseMessage> {
+    return this.createRequest(url).asGet().withParams(params, traditional).send();
   }
 
   /**
