@@ -14,6 +14,7 @@ export declare interface XHRConstructor {
 
 }
 
+//new():XHR;
 /**
  * Represents an XHR.
  */
@@ -199,11 +200,6 @@ export declare class RequestMessage {
     * The headers to send along with the request.
     */
   headers: Headers;
-  
-  /**
-     * Use tradional style for param serialization.
-     */
-  traditional: boolean;
   
   /**
     * The base url that the request url is joined with.
@@ -437,6 +433,7 @@ export declare class HttpRequestMessage extends RequestMessage {
   constructor(method: string, url: string, content: any, headers?: Headers);
 }
 
+//text, arraybuffer, blob, document
 /**
 * Creates a RequestMessageProcessor for handling HTTP request messages.
 * @return A processor instance for HTTP request messages.
@@ -450,11 +447,6 @@ export declare function createHttpRequestMessageProcessor(): RequestMessageProce
  * A builder class allowing fluent composition of HTTP requests.
  */
 export declare class RequestBuilder {
-  
-  /**
-     * The HttpClient instance.
-     */
-  client: HttpClient;
   
   /**
   	 * Creates an instance of RequestBuilder
@@ -537,7 +529,7 @@ export declare class RequestBuilder {
   	 * @param params The key/value pairs to use to build the query string.
   	 * @return The chainable RequestBuilder to use in further configuration of the request.
   	 */
-  withParams(params: Object, traditional?: boolean): RequestBuilder;
+  withParams(params: Object): RequestBuilder;
   
   /**
   	 * Sets the response type.
@@ -685,7 +677,7 @@ export declare class HttpClient {
      * @param url The target URL.
      * @return {Promise} A cancellable promise object.
      */
-  get(url: string, params?: Object, traditional?: boolean): Promise<HttpResponseMessage>;
+  get(url: string): Promise<HttpResponseMessage>;
   
   /**
      * Sends an HTTP HEAD request.

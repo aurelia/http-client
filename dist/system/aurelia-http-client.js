@@ -160,10 +160,12 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export, _context) {
     client.isRequesting = client.pendingRequests.length > 0;
 
     if (!client.isRequesting) {
-      var evt = DOM.createCustomEvent('aurelia-http-client-requests-drained', { bubbles: true, cancelable: true });
-      setTimeout(function () {
-        return DOM.dispatchEvent(evt);
-      }, 1);
+      (function () {
+        var evt = DOM.createCustomEvent('aurelia-http-client-requests-drained', { bubbles: true, cancelable: true });
+        setTimeout(function () {
+          return DOM.dispatchEvent(evt);
+        }, 1);
+      })();
     }
   }
 
@@ -196,7 +198,7 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export, _context) {
 
       _export('Headers', Headers = function () {
         function Headers() {
-          var headers = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+          var headers = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
           
 
@@ -274,7 +276,7 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export, _context) {
           var url = absoluteUrl.test(this.url) ? this.url : join(this.baseUrl, this.url);
 
           if (this.params) {
-            var qs = buildQueryString(this.params, this.traditional);
+            var qs = buildQueryString(this.params);
             url = qs ? url + (this.url.indexOf('?') < 0 ? '?' : '&') + qs : url;
           }
 
@@ -667,9 +669,8 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export, _context) {
           });
         };
 
-        RequestBuilder.prototype.withParams = function withParams(params, traditional) {
+        RequestBuilder.prototype.withParams = function withParams(params) {
           return this._addTransformer(function (client, processor, message) {
-            message.traditional = traditional;
             message.params = params;
           });
         };
@@ -841,8 +842,8 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export, _context) {
           return this.createRequest(url).asDelete().send();
         };
 
-        HttpClient.prototype.get = function get(url, params, traditional) {
-          return this.createRequest(url).asGet().withParams(params, traditional).send();
+        HttpClient.prototype.get = function get(url) {
+          return this.createRequest(url).asGet().send();
         };
 
         HttpClient.prototype.head = function head(url) {
@@ -850,7 +851,7 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export, _context) {
         };
 
         HttpClient.prototype.jsonp = function jsonp(url) {
-          var callbackParameterName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'jsoncallback';
+          var callbackParameterName = arguments.length <= 1 || arguments[1] === undefined ? 'jsoncallback' : arguments[1];
 
           return this.createRequest(url).asJsonp(callbackParameterName).send();
         };

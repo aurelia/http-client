@@ -30,7 +30,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 var Headers = exports.Headers = function () {
   function Headers() {
-    var headers = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var headers = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
     
 
@@ -106,7 +106,7 @@ var RequestMessage = exports.RequestMessage = function () {
     var url = absoluteUrl.test(this.url) ? this.url : (0, _aureliaPath.join)(this.baseUrl, this.url);
 
     if (this.params) {
-      var qs = (0, _aureliaPath.buildQueryString)(this.params, this.traditional);
+      var qs = (0, _aureliaPath.buildQueryString)(this.params);
       url = qs ? url + (this.url.indexOf('?') < 0 ? '?' : '&') + qs : url;
     }
 
@@ -584,9 +584,8 @@ var RequestBuilder = exports.RequestBuilder = function () {
     });
   };
 
-  RequestBuilder.prototype.withParams = function withParams(params, traditional) {
+  RequestBuilder.prototype.withParams = function withParams(params) {
     return this._addTransformer(function (client, processor, message) {
-      message.traditional = traditional;
       message.params = params;
     });
   };
@@ -695,10 +694,12 @@ function trackRequestEnd(client, processor) {
   client.isRequesting = client.pendingRequests.length > 0;
 
   if (!client.isRequesting) {
-    var evt = _aureliaPal.DOM.createCustomEvent('aurelia-http-client-requests-drained', { bubbles: true, cancelable: true });
-    setTimeout(function () {
-      return _aureliaPal.DOM.dispatchEvent(evt);
-    }, 1);
+    (function () {
+      var evt = _aureliaPal.DOM.createCustomEvent('aurelia-http-client-requests-drained', { bubbles: true, cancelable: true });
+      setTimeout(function () {
+        return _aureliaPal.DOM.dispatchEvent(evt);
+      }, 1);
+    })();
   }
 }
 
@@ -775,8 +776,8 @@ var HttpClient = exports.HttpClient = function () {
     return this.createRequest(url).asDelete().send();
   };
 
-  HttpClient.prototype.get = function get(url, params, traditional) {
-    return this.createRequest(url).asGet().withParams(params, traditional).send();
+  HttpClient.prototype.get = function get(url) {
+    return this.createRequest(url).asGet().send();
   };
 
   HttpClient.prototype.head = function head(url) {
@@ -784,7 +785,7 @@ var HttpClient = exports.HttpClient = function () {
   };
 
   HttpClient.prototype.jsonp = function jsonp(url) {
-    var callbackParameterName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'jsoncallback';
+    var callbackParameterName = arguments.length <= 1 || arguments[1] === undefined ? 'jsoncallback' : arguments[1];
 
     return this.createRequest(url).asJsonp(callbackParameterName).send();
   };
