@@ -77,7 +77,7 @@ export class HttpClient {
    */
   send(requestMessage: RequestMessage, transformers: Array<RequestTransformer>): Promise<HttpResponseMessage> {
     let createProcessor = this.requestProcessorFactories.get(requestMessage.constructor);
-    let processor: RequestMessageProcessor;
+    let processor;
     let promise;
     let i;
     let ii;
@@ -97,7 +97,7 @@ export class HttpClient {
         for (i = 0, ii = transformers.length; i < ii; ++i) {
           transformers[i](this, processor, message);
         }
-        
+
         return processor.process(this, message).then(response => {
           trackRequestEnd(this, processor);
           return response;
@@ -128,8 +128,8 @@ export class HttpClient {
    * @param url The target URL.
    * @return {Promise} A cancellable promise object.
    */
-  get(url: string, params?: Object, traditional?: boolean): Promise<HttpResponseMessage> {
-    return this.createRequest(url).asGet().withParams(params, traditional).send();
+  get(url: string): Promise<HttpResponseMessage> {
+    return this.createRequest(url).asGet().send();
   }
 
   /**

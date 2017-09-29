@@ -22,29 +22,6 @@ describe('http client', () => {
   describe('get', () => {
 
     describe('request', () => {
-      it('should make expected request with tradional style', (done) => {
-        var client = new HttpClient().configure(x => x.withBaseUrl(baseUrl));
-
-        jasmine
-          .Ajax
-          .stubRequest('http://example.com/some/cool/path?a=this&a=that')
-          .andReturn({status: 200});
-
-        client.get('some/cool/path', {
-          'a': ['this', 'that']
-        }, true).then(() => {
-          var request = jasmine
-            .Ajax
-            .requests
-            .mostRecent();
-
-          expect(request.url).toBe(`${baseUrl}some/cool/path?a=this&a=that`);
-          expect(request.method).toBe('GET');
-          expect(request.data()).toEqual({});
-
-          done();
-        });
-      });
 
       it('should make expected request', (done) => {
         var client = new HttpClient()

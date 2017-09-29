@@ -1,7 +1,6 @@
 import {HttpRequestMessage} from './http-request-message';
 import {JSONPRequestMessage} from './jsonp-request-message';
 import {HttpResponseMessage} from './http-response-message';
-import {HttpClient} from './http-client';
 
 /**
  * Intercepts requests, responses and errors.
@@ -36,12 +35,6 @@ interface RequestTransformer {
  * A builder class allowing fluent composition of HTTP requests.
  */
 export class RequestBuilder {
-
-  /**
-   * The HttpClient instance.
-   */
-  client: HttpClient;
-
 	/**
 	 * Creates an instance of RequestBuilder
 	 * @param client An instance of HttpClient
@@ -172,9 +165,8 @@ export class RequestBuilder {
 	 * @param params The key/value pairs to use to build the query string.
 	 * @return The chainable RequestBuilder to use in further configuration of the request.
 	 */
-  withParams(params: Object, traditional ?: boolean): RequestBuilder {
+  withParams(params: Object): RequestBuilder {
     return this._addTransformer(function(client, processor, message) {
-      message.traditional = traditional;
       message.params = params;
     });
   }
