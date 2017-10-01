@@ -26,6 +26,11 @@ export class RequestMessage {
   headers: Headers;
 
   /**
+   * Use tradional style for param serialization.
+   */
+  traditional: boolean;
+
+  /**
   * The base url that the request url is joined with.
   */
   baseUrl: string;
@@ -54,7 +59,7 @@ export class RequestMessage {
     let url = absoluteUrl.test(this.url) ? this.url : join(this.baseUrl, this.url);
 
     if (this.params) {
-      let qs = buildQueryString(this.params);
+      let qs = buildQueryString(this.params, this.traditional);
       url = qs ? url + (this.url.indexOf('?') < 0 ? '?' : '&') + qs : url;
     }
 
