@@ -71,7 +71,7 @@ export let RequestMessage = class RequestMessage {
     let url = absoluteUrl.test(this.url) ? this.url : join(this.baseUrl, this.url);
 
     if (this.params) {
-      let qs = buildQueryString(this.params);
+      let qs = buildQueryString(this.params, this.traditional);
       url = qs ? url + (this.url.indexOf('?') < 0 ? '?' : '&') + qs : url;
     }
 
@@ -507,8 +507,9 @@ export let RequestBuilder = class RequestBuilder {
     });
   }
 
-  withParams(params) {
+  withParams(params, traditional) {
     return this._addTransformer(function (client, processor, message) {
+      message.traditional = traditional;
       message.params = params;
     });
   }
@@ -656,7 +657,7 @@ export let HttpClient = class HttpClient {
     let ii;
 
     if (!createProcessor) {
-      throw new Error(`No request message processor factory for ${ requestMessage.constructor }.`);
+      throw new Error(`No request message processor factory for ${requestMessage.constructor}.`);
     }
 
     processor = createProcessor();
@@ -689,8 +690,8 @@ export let HttpClient = class HttpClient {
     return this.createRequest(url).asDelete().send();
   }
 
-  get(url) {
-    return this.createRequest(url).asGet().send();
+  get(url, params, traditional) {
+    return this.createRequest(url).asGet().withParams(params, traditional).send();
   }
 
   head(url) {
