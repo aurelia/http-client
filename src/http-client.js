@@ -97,7 +97,7 @@ export class HttpClient {
         for (i = 0, ii = transformers.length; i < ii; ++i) {
           transformers[i](this, processor, message);
         }
-        
+
         return processor.process(this, message).then(response => {
           trackRequestEnd(this, processor);
           return response;
