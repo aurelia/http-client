@@ -29,7 +29,7 @@
     },
     "peerDependencies": {
       "aurelia-pal": "^1.0.0",
-      "aurelia-path": "^1.0.0"
+      "aurelia-path": "^1.1.1"
     },
     "dependencies": {
       "aurelia-pal": "^1.0.0",
@@ -44,7 +44,7 @@
   },
   "dependencies": {
     "aurelia-pal": "^1.0.0",
-    "aurelia-path": "^1.0.0"
+    "aurelia-path": "^1.1.1"
   },
   "devDependencies": {
     "aurelia-tools": "^0.2.4",
