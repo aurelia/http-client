@@ -691,7 +691,13 @@ export let HttpClient = class HttpClient {
   }
 
   get(url, params, traditional) {
-    return this.createRequest(url).asGet().withParams(params, traditional).send();
+    let req = this.createRequest(url).asGet();
+
+    if (params) {
+      return req.withParams(params, traditional).send();
+    }
+
+    return req.send();
   }
 
   head(url) {

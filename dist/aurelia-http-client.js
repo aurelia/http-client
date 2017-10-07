@@ -1235,7 +1235,13 @@ export class HttpClient {
    * @return {Promise} A cancellable promise object.
    */
   get(url: string, params?: Object, traditional?: boolean): Promise<HttpResponseMessage> {
-    return this.createRequest(url).asGet().withParams(params, traditional).send();
+    let req = this.createRequest(url).asGet();
+
+    if (params) {
+      return req.withParams(params, traditional).send();
+    }
+
+    return req.send();
   }
 
   /**

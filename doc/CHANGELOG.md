@@ -1,3 +1,13 @@
+<a name="1.2.1"></a>
+## [1.2.1](https://github.com/aurelia/http-client/compare/1.2.0...1.2.1) (2017-10-07)
+
+
+### Bug Fixes
+
+* **http-client:** don't call withParams if there are no params ([2cd076a](https://github.com/aurelia/http-client/commit/2cd076a))
+
+
+
 <a name="1.2.0"></a>
 # [1.2.0](https://github.com/aurelia/http-client/compare/1.1.1...1.2.0) (2017-10-01)
 

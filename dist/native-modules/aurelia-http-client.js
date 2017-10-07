@@ -757,7 +757,13 @@ export var HttpClient = function () {
   };
 
   HttpClient.prototype.get = function get(url, params, traditional) {
-    return this.createRequest(url).asGet().withParams(params, traditional).send();
+    var req = this.createRequest(url).asGet();
+
+    if (params) {
+      return req.withParams(params, traditional).send();
+    }
+
+    return req.send();
   };
 
   HttpClient.prototype.head = function head(url) {
