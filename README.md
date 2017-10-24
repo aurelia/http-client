@@ -7,11 +7,11 @@
 
 This library is part of the [Aurelia](http://www.aurelia.io/) platform and contains a simple, restful, message-based wrapper around XMLHttpRequest.
 
-> To keep up to date on [Aurelia](http://www.aurelia.io/), please visit and subscribe to [the official blog](http://blog.aurelia.io/) and [our email list](http://eepurl.com/ces50j). We also invite you to [follow us on twitter](https://twitter.com/aureliaeffect). If you have questions, please [join our community on Gitter](https://gitter.im/aurelia/discuss) or use [stack overflow](http://stackoverflow.com/search?q=aurelia). Documentation can be found [in our developer hub](http://aurelia.io/hub.html). If you would like to have deeper insight into our development process, please install the [ZenHub](https://zenhub.io) Chrome or Firefox Extension and visit any of our repository's boards.
+To keep up to date on [Aurelia](http://www.aurelia.io/), please visit and subscribe to [the official blog](http://blog.aurelia.io/) and [our email list](http://eepurl.com/ces50j). We also invite you to [follow us on twitter](https://twitter.com/aureliaeffect). If you have questions look around our [Discourse forums](https://discourse.aurelia.io/), chat in our [community on Gitter](https://gitter.im/aurelia/discuss) or use [stack overflow](http://stackoverflow.com/search?q=aurelia). Documentation can be found [in our developer hub](http://aurelia.io/docs). If you would like to have deeper insight into our development process, please install the [ZenHub](https://zenhub.io) Chrome or Firefox Extension and visit any of our repository's boards.
 
 ## Documentation
 
-If possible, prefer to use the `aurelia-fetch-client` instead of this library. You can read documentation on the fetch client [here](http://aurelia.io/hub.html#/doc/article/aurelia/fetch-client/latest/http-services/3) along with documentation on this library. If you would like to help improve this documentation, the source for these docs can be found in the `aurelia-fetch-client` repo's doc folder.
+If possible, prefer to use the `aurelia-fetch-client` instead of this library. You can read documentation on the fetch client [here](http://aurelia.io/docs/plugins/http-services#options) along with documentation on this library. If you would like to help improve this documentation, the source for these docs can be found in the `aurelia-fetch-client` repo's doc folder.
 
 ## Platform Support
 
