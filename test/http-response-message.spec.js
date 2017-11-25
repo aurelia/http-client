@@ -62,25 +62,25 @@ describe("HttpResponseMessage", () => {
 
     it("will split the Content-Type using the ; delimeter and use the first part as the mimeType", () => {
       runContentTypeExpectations([
-        {contentType:"text/html; charset=utf-8",mimeType:"text/html",type:"html"},
-        {contentType:"application/atom+xml; type=feed",mimeType:"application/atom+xml",type:"atom"},
-        {contentType:"application/json;   odata=verbose",mimeType:"application/json",type:"json"}
+        {contentType:"text/html; charset=utf-8", mimeType:"text/html", type:"html"},
+        {contentType:"application/atom+xml; type=feed", mimeType:"application/atom+xml", type:"atom"},
+        {contentType:"application/json;   odata=verbose", mimeType:"application/json", type:"json"}
       ]);
     });
 
     it("will use the mimeType as the responseType if there is no alias for it in the mimeTypes map", () => {
       runContentTypeExpectations([
-        {contentType:"text/foo",mimeType:"text/foo",type:"text/foo"},
-        {contentType:"text/foo; charset=utf-8",mimeType:"text/foo",type:"text/foo"}
+        {contentType:"text/foo", mimeType:"text/foo", responseType:"text/foo", type:"foo"},
+        {contentType:"text/foo; charset=utf-8", mimeType:"text/foo", responseType:"text/foo", type:"foo"}
       ]);
     });
 
     it("will set responseType to the responseType specified in the request if no Content-Type header was found, mimeType will be null", () => {
       runContentTypeExpectations([
-        {contentType:undefined,mimeType:null,type:"json",requestType:"json"},
-        {contentType:undefined,mimeType:null,type:"html",requestType:"html"},
-        {contentType:undefined,mimeType:null,type:"text/html",requestType:"text/html"},
-        {contentType:undefined,mimeType:null,type:"something",requestType:"something"}
+        {contentType:undefined, mimeType:null, type:"json", requestType:"json"},
+        {contentType:undefined, mimeType:null, type:"html", requestType:"html"},
+        {contentType:undefined, mimeType:null, type:"text/html", requestType:"text/html"},
+        {contentType:undefined, mimeType:null, type:"something", requestType:"something"}
       ]);
     });
 
@@ -190,7 +190,23 @@ function runContentTypeExpectations(expectations){
 
     jasmine.Ajax.withMock(() => {
       var xhr = new XMLHttpRequest();
+      //begin config mock
+      //headers.configureXHR works only if xhr is in Open state
+      xhr.open('test', 'http://dummy.com', true);
+      //patch getAllResponseHeaders to return requestHeaders 
+      //monkey patch getAllResponseHeaders function : rebuild responseheaders from request headers
+      xhr.getAllResponseHeaders = function () {
+        if (!this.requestHeaders) { return null; }
+
+        var result = [];
+        for (var key in this.requestHeaders) {
+          result.push(key + ': ' + this.requestHeaders[key]);
+        }
+        return result.join('\r\n') + '\r\n';
+      }
+      //end config mock
       headers.configureXHR(xhr);
+
       //check if content-type was correctly set in the xhr headers
       expect(xhr.requestHeaders['Content-Type']).toBe(expectation.contentType);
 
