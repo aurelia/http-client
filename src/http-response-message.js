@@ -66,13 +66,9 @@ export class HttpResponseMessage {
     this.reviver = reviver;
     this.mimeType = null;
 
+
     if (xhr.getAllResponseHeaders) {
-      try {
-        this.headers = Headers.parse(xhr.getAllResponseHeaders());
-      } catch (err) {
-        //if this fails it means the xhr was a mock object so the `requestHeaders` property should be used
-        if (xhr.requestHeaders) this.headers = new Headers(xhr.requestHeaders);
-      }
+      this.headers = Headers.parse(xhr.getAllResponseHeaders());
     } else {
       this.headers = new Headers();
     }
