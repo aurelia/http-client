@@ -32,6 +32,7 @@ paths.files = [
   'xhr-transformers.js',
   'jsonp-request-message.js',
   'http-request-message.js',
+  'error-http-request-message.js',
   'request-builder.js',
   'http-client.js'
 ].map(function(file){
