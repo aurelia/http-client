@@ -2,7 +2,6 @@
 import {PLATFORM} from 'aurelia-pal';
 import {RequestMessage} from './request-message';
 import {HttpResponseMessage} from './http-response-message';
-import {ErrorHttpResponseMessage} from './error-http-response-message';
 
 function applyXhrTransformers(xhrTransformers, client, processor, message, xhr) {
   let i;
@@ -113,29 +112,17 @@ export class RequestMessageProcessor {
     let promise = new Promise((resolve, reject) => {
       let xhr = this.xhr = new this.XHRType();
 
-      let rejectResponse : (resp:HttpResponseMessage) => void;
-
-      if (client.rejectPromiseWithErrorObject) {
-        rejectResponse = (resp:HttpResponseMessage) => {
-          const errorResp = new ErrorHttpResponseMessage(resp);
-          reject(errorResp);
-        };
-      } else {
-        rejectResponse = (resp:HttpResponseMessage) => {
-          reject(resp);
-        };
-      }
       xhr.onload = (e) => {
         let response = new HttpResponseMessage(requestMessage, xhr, requestMessage.responseType, requestMessage.reviver);
         if (response.isSuccess) {
           resolve(response);
         } else {
-          rejectResponse(response);
+          reject(response);
         }
       };
 
       xhr.ontimeout = (e) => {
-        rejectResponse(new HttpResponseMessage(requestMessage, {
+        reject(new HttpResponseMessage(requestMessage, {
           response: e,
           status: xhr.status,
           statusText: xhr.statusText
@@ -143,7 +130,7 @@ export class RequestMessageProcessor {
       };
 
       xhr.onerror = (e) => {
-        rejectResponse(new HttpResponseMessage(requestMessage, {
+        reject(new HttpResponseMessage(requestMessage, {
           response: e,
           status: xhr.status,
           statusText: xhr.statusText
@@ -151,7 +138,7 @@ export class RequestMessageProcessor {
       };
 
       xhr.onabort = (e) => {
-        rejectResponse(new HttpResponseMessage(requestMessage, {
+        reject(new HttpResponseMessage(requestMessage, {
           response: e,
           status: xhr.status,
           statusText: xhr.statusText

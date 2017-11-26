@@ -1,9 +1,8 @@
 import './setup';
-import { HttpClient } from '../src/http-client';
-import { HttpRequestMessage } from '../src/http-request-message';
-import { HttpResponseMessage } from '../src/http-response-message';
-import { ErrorHttpResponseMessage } from '../src/error-http-response-message';
-import { Headers } from '../src/headers';
+import {HttpClient} from '../src/http-client';
+import {HttpRequestMessage} from '../src/http-request-message';
+import {HttpResponseMessage} from '../src/http-response-message';
+import {Headers} from '../src/headers';
 
 describe('http client', () => {
   var baseUrl = "http://example.com/";
@@ -29,7 +28,7 @@ describe('http client', () => {
         jasmine
           .Ajax
           .stubRequest('http://example.com/some/cool/path?a=this&a=that')
-          .andReturn({ status: 200 });
+          .andReturn({status: 200});
 
         client.get('some/cool/path', {
           'a': ['this', 'that']
@@ -522,108 +521,55 @@ describe('http client', () => {
 
   });
 
-
-
   describe('send', () => {
-    //test boilerplate
 
-    //isErrorlike func
-    //Cf  https://github.com/petkaantonov/bluebird/blob/master/src/util.js#L240-L246
-    let isErrorObject = function isError(obj) {
-      return obj instanceof Error ||
-        (obj !== null &&
-          typeof obj === "object" &&
-          typeof obj.message === "string" &&
-          typeof obj.name === "string");
-    }
+    it('should reject on onerror', (done) => {
+      var client = new HttpClient()
+        .configure(x => x.withBaseUrl(baseUrl));
 
-    let itHelper: (testMsg: string, rejectPromiseWithErrorObjectOption?: boolean) => (testMsg: string, done: () => void) => void;
-    //end  
+      jasmine.Ajax
+        .stubRequest('http://example.com/some/cool/path')
+        .andError();
 
-    itHelper = (testMsg: string, rejectPromiseWithErrorObjectOption?: boolean) => {
-      it(testMsg, (done) => {
-        var client = new HttpClient()
-          .configure(x => x.withBaseUrl(baseUrl));
-        if (rejectPromiseWithErrorObjectOption)
-          client.rejectPromiseWithErrorObject = rejectPromiseWithErrorObjectOption;
-
-        jasmine.Ajax
-          .stubRequest('http://example.com/some/cool/path')
-          .andError();
-
-        client.send(new HttpRequestMessage('GET', 'some/cool/path')).catch(response => {
-          expect(response instanceof HttpResponseMessage).toBe(true);
-          expect(response.responseType).toBe('error');
-          if (rejectPromiseWithErrorObjectOption) {
-            expect(response instanceof ErrorHttpResponseMessage).toBe(true);
-            expect(isErrorObject(response)).toBe(true);
-          } else {
-            expect(response instanceof ErrorHttpResponseMessage).toBe(false);
-            expect(isErrorObject(response)).toBe(false);
-          }
-          done();
-        });
+      client.send(new HttpRequestMessage('GET', 'some/cool/path')).catch(response => {
+        expect(response instanceof HttpResponseMessage).toBe(true);
+        expect(response.responseType).toBe('error');
+        done();
       });
-    };
-    itHelper('should reject on onerror');
-    itHelper('should reject on onerror with rejectPromiseWithErrorObject option', true);
 
-    itHelper = (testMsg: string, rejectPromiseWithErrorObjectOption?: boolean) => {
-      it(testMsg, (done) => {
-        jasmine.clock().install();
-        var client = new HttpClient()
-          .configure(x => x.withBaseUrl(baseUrl));
-        if (rejectPromiseWithErrorObjectOption)
-          client.rejectPromiseWithErrorObject = rejectPromiseWithErrorObjectOption;
+    });
 
-        jasmine.Ajax
-          .stubRequest('http://example.com/some/cool/path')
-          .andTimeout();
+    it('should reject on ontimeout', (done) => {
+      jasmine.clock().install();
+      var client = new HttpClient()
+        .configure(x => x.withBaseUrl(baseUrl));
 
-        client.send(new HttpRequestMessage('GET', 'some/cool/path')).catch(response => {
-          expect(response instanceof HttpResponseMessage).toBe(true);
-          if (rejectPromiseWithErrorObjectOption) {
-            expect(response instanceof ErrorHttpResponseMessage).toBe(true);
-            expect(isErrorObject(response)).toBe(true);
-          } else {
-            expect(response instanceof ErrorHttpResponseMessage).toBe(false);
-            expect(isErrorObject(response)).toBe(false);
-          }
-          expect(response.responseType).toBe('timeout');
-          jasmine.clock().uninstall();
-          done();
-        });
+      jasmine.Ajax
+        .stubRequest('http://example.com/some/cool/path')
+        .andTimeout();
+
+      client.send(new HttpRequestMessage('GET', 'some/cool/path')).catch(response => {
+        expect(response instanceof HttpResponseMessage).toBe(true);
+        expect(response.responseType).toBe('timeout');
+        jasmine.clock().uninstall();
+        done();
       });
-    }
-    itHelper('should reject on ontimeout');
-    itHelper('should reject on ontimeout with rejectPromiseWithErrorObject option', true);
 
-    itHelper = (testMsg: string, rejectPromiseWithErrorObjectOption?: boolean) => {
-      it(testMsg, (done) => {
-        var client = new HttpClient()
-          .configure(x => x.withBaseUrl(baseUrl));
-        if (rejectPromiseWithErrorObjectOption)
-          client.rejectPromiseWithErrorObject = rejectPromiseWithErrorObjectOption;
+    });
 
-        var promise = client.send(new HttpRequestMessage('GET', 'some/cool/path'));
-        promise.catch((response) => {
-          expect(response instanceof HttpResponseMessage).toBe(true);
-          if (rejectPromiseWithErrorObjectOption) {
-            expect(response instanceof ErrorHttpResponseMessage).toBe(true);
-            expect(isErrorObject(response)).toBe(true);
-          } else {
-            expect(response instanceof ErrorHttpResponseMessage).toBe(false);
-            expect(isErrorObject(response)).toBe(false);
-          }
-          expect(response.responseType).toBe('abort');
-          done();
-        });
-        promise.abort();
+    it('should reject when aborted', (done) => {
+      var client = new HttpClient()
+        .configure(x => x.withBaseUrl(baseUrl));
 
+      var promise = client.send(new HttpRequestMessage('GET', 'some/cool/path'));
+      promise.catch((response) => {
+        expect(response instanceof HttpResponseMessage).toBe(true);
+        expect(response.responseType).toBe('abort');
+        done();
       });
-    };
-    itHelper('should reject when aborted');
-    itHelper('should reject when aborted with rejectPromiseWithErrorObject option', true);
+      promise.abort();
+
+    });
 
     it('can parse request headers', (done) => {
       var client = new HttpClient()
@@ -633,7 +579,7 @@ describe('http client', () => {
         .stubRequest('http://example.com/some/cool/path')
         .andReturn({
           status: 200,
-          responseHeaders: [{ name: 'Access-Control-Allow-Origin', value: 'http://www.example.com' }]
+          responseHeaders: [{ name: 'Access-Control-Allow-Origin', value: 'http://www.example.com'}]
         });
 
       client.send(new HttpRequestMessage('GET', 'some/cool/path')).then(response => {
@@ -655,8 +601,8 @@ describe('http client', () => {
         .andReturn({
           status: 200,
           responseHeaders: [
-            { name: 'Access-Control-Allow-Origin', value: 'http://www.example.com' },
-            { name: 'Content-Type', value: 'application/json' }
+            { name: 'Access-Control-Allow-Origin', value: 'http://www.example.com'},
+            { name: 'Content-Type', value: 'application/json'}
           ]
         });
 
@@ -676,7 +622,7 @@ describe('http client', () => {
         .stubRequest('http://example.com/some/cool/path')
         .andReturn({
           status: 200,
-          responseHeaders: [{ name: 'Some-Cosy-Header', value: 'foo:bar' }]
+          responseHeaders: [{ name: 'Some-Cosy-Header', value: 'foo:bar'}]
         });
 
       client.send(new HttpRequestMessage('GET', 'some/cool/path')).then(response => {
@@ -689,7 +635,7 @@ describe('http client', () => {
     it('should set callback on upload progress', (done) => {
       var client = new HttpClient()
         .configure(x => x.withBaseUrl(baseUrl));
-      var callback = function () { };
+      var callback = function(){};
 
       client.createRequest('some/cool/path')
         .asGet()

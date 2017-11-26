@@ -1,9 +1,8 @@
 import './setup';
-import { RequestMessageProcessor } from '../src/request-message-processor';
-import { HttpResponseMessage } from '../src/http-response-message';
-import { ErrorHttpResponseMessage } from '../src/error-http-response-message';
-import { RequestMessage } from '../src/request-message';
-import { PLATFORM } from 'aurelia-pal';
+import {RequestMessageProcessor} from '../src/request-message-processor';
+import {HttpResponseMessage} from '../src/http-response-message';
+import {RequestMessage} from '../src/request-message';
+import {PLATFORM} from 'aurelia-pal';
 
 describe("Request message processor", () => {
   it("constructor() correctly setup the xhrType and the xhrTransformers", () => {
@@ -80,7 +79,7 @@ describe("Request message processor", () => {
       reqProcessor.xhrTransformers.push(transformSpy);
       reqProcessor.xhrTransformers.push(transformSpy);
       reqProcessor.process(client, message).then(() => {
-        expect(transformSpy).toHaveBeenCalledWith(client, reqProcessor, message, reqProcessor.xhr);
+        expect(transformSpy).toHaveBeenCalledWith(client, reqProcessor, message,  reqProcessor.xhr);
         expect(transformSpy.calls.count()).toBe(2);
         done();
       });
@@ -108,110 +107,73 @@ describe("Request message processor", () => {
       reqProcessor.xhr.fakeResponse(200, "status test", responseObj)
     });
 
-    //test boilerplate
-    let itHelper: (testMsg: string, rejectPromiseWithErrorObjectOption?: boolean) => (testMsg: string, done: () => void) => void;
-    //end  
+    it("will reject if the onload response has failed", (done) => {
+      let responseObj = {};
 
-    itHelper = (testMsg: string, rejectPromiseWithErrorObjectOption?: boolean) => {
-      it(testMsg, (done) => {
-        let responseObj = {};
-        let clientCpy = Object.assign({}, client, { rejectPromiseWithErrorObject: rejectPromiseWithErrorObjectOption });
-        reqProcessor.process(clientCpy, message)
-          .then((response) => expect(false).toBeTruthy("This should have failed"))
-          .catch((response) => {
-            expect(response).toEqual(jasmine.any(HttpResponseMessage));
-            if (rejectPromiseWithErrorObjectOption) {
-              expect(response).toEqual(jasmine.any(ErrorHttpResponseMessage));
-            }
-            expect(response.requestMessage).toBe(message);
-            expect(response.statusCode).toBe(401);
-            expect(response.response).toBe(responseObj);
-            expect(response.responseType).toBe("test");
-            expect(response.statusText).toBe("status test");
-            expect(response.reviver).toBe(message.reviver);
-          })
-          .then(done);
+      reqProcessor.process(client, message)
+        .then((response) => expect(false).toBeTruthy("This should have failed"))
+        .catch((response) => {
+          expect(response).toEqual(jasmine.any(HttpResponseMessage));
+          expect(response.requestMessage).toBe(message);
+          expect(response.statusCode).toBe(401);
+          expect(response.response).toBe(responseObj);
+          expect(response.responseType).toBe("test");
+          expect(response.statusText).toBe("status test");
+          expect(response.reviver).toBe(message.reviver);
+        })
+        .then(done);
 
-        reqProcessor.xhr.fakeResponse(401, "status test", responseObj);
-      });
-    };
-    itHelper("will reject if the onload response has failed");
-    itHelper("will reject if the onload response has failed with rejectPromiseWithErrorObject option", true);
+      reqProcessor.xhr.fakeResponse(401, "status test", responseObj);
+    });
 
-    itHelper = (testMsg: string, rejectPromiseWithErrorObjectOption?: boolean) => {
-      it(testMsg, (done) => {
+    it("will reject if the ontimeout was called", (done) => {
+      let errorResponse = {};
+      reqProcessor.process(client, message)
+        .then((response) => expect(false).toBeTruthy("This should have failed"))
+        .catch((response) => {
+          expect(response).toEqual(jasmine.any(HttpResponseMessage));
+          expect(response.requestMessage).toBe(message);
+          expect(response.response).toBe(errorResponse);
+          expect(response.responseType).toBe("timeout");
+        })
+        .then(done);
 
-        let errorResponse = {};
-        let clientCpy = Object.assign({}, client, { rejectPromiseWithErrorObject: rejectPromiseWithErrorObjectOption });
-        reqProcessor.process(clientCpy, message)
-          .then((response) => expect(false).toBeTruthy("This should have failed"))
-          .catch((response) => {
-            expect(response).toEqual(jasmine.any(HttpResponseMessage));
-            if (rejectPromiseWithErrorObjectOption) {
-              expect(response).toEqual(jasmine.any(ErrorHttpResponseMessage));
-            }
-            expect(response.requestMessage).toBe(message);
-            expect(response.response).toBe(errorResponse);
-            expect(response.responseType).toBe("timeout");
-          })
-          .then(done);
+      let xhr = reqProcessor.xhr;
+      xhr.ontimeout(errorResponse);
+    });
 
-        let xhr = reqProcessor.xhr;
-        xhr.ontimeout(errorResponse);
-      });
-    };
-    itHelper("will reject if the ontimeout was called");
-    itHelper("will reject if the ontimeout was called with rejectPromiseWithErrorObject option", true);
+    it("will reject if the onerror was called", (done) => {
+      let errorResponse = {};
+      reqProcessor.process(client, message)
+        .then((response) => expect(false).toBeTruthy("This should have failed"))
+        .catch((response) => {
+          expect(response).toEqual(jasmine.any(HttpResponseMessage));
+          expect(response.requestMessage).toBe(message);
+          expect(response.response).toBe(errorResponse);
+          expect(response.responseType).toBe("error");
+        })
+        .then(done);
 
-    itHelper = (testMsg: string, rejectPromiseWithErrorObjectOption?: boolean) => {
-      it(testMsg, (done) => {
+      let xhr = reqProcessor.xhr;
+      xhr.onerror(errorResponse);
+    });
 
-        let errorResponse = {};
-        let clientCpy = Object.assign({}, client, { rejectPromiseWithErrorObject: rejectPromiseWithErrorObjectOption });
-        reqProcessor.process(clientCpy, message)
-          .then((response) => expect(false).toBeTruthy("This should have failed"))
-          .catch((response) => {
-            expect(response).toEqual(jasmine.any(HttpResponseMessage));
-            if (rejectPromiseWithErrorObjectOption) {
-              expect(response).toEqual(jasmine.any(ErrorHttpResponseMessage));
-            }
-            expect(response.requestMessage).toBe(message);
-            expect(response.response).toBe(errorResponse);
-            expect(response.responseType).toBe("error");
-          })
-          .then(done);
+    it("will reject if the onabort was called", (done) => {
+      let errorResponse = {};
+      reqProcessor.process(client, message)
+        .then((response) => expect(false).toBeTruthy("This should have failed"))
+        .catch((response) => {
+          expect(response).toEqual(jasmine.any(HttpResponseMessage));
+          expect(response.requestMessage).toBe(message);
+          expect(response.response).toBe(errorResponse);
+          expect(response.responseType).toBe("abort");
+        })
+        .then(done);
 
-        let xhr = reqProcessor.xhr;
-        xhr.onerror(errorResponse);
-      });
-    };
-    itHelper("will reject if the onerror was called");
-    itHelper("will reject if the onerror was called with rejectPromiseWithErrorObject option", true);
-
-    itHelper = (testMsg: string, rejectPromiseWithErrorObjectOption?: boolean) => {
-      it(testMsg, (done) => {
-        let errorResponse = {};
-        let clientCpy = Object.assign({}, client, { rejectPromiseWithErrorObject: rejectPromiseWithErrorObjectOption });
-        reqProcessor.process(clientCpy, message)
-          .then((response) => expect(false).toBeTruthy("This should have failed"))
-          .catch((response) => {
-            expect(response).toEqual(jasmine.any(HttpResponseMessage));
-            if (rejectPromiseWithErrorObjectOption) {
-              expect(response).toEqual(jasmine.any(ErrorHttpResponseMessage));
-            }
-            expect(response.requestMessage).toBe(message);
-            expect(response.response).toBe(errorResponse);
-            expect(response.responseType).toBe("abort");
-          })
-          .then(done);
-
-        let xhr = reqProcessor.xhr;
-        xhr.status = 200;
-        xhr.onabort(errorResponse);
-      });
-    };
-    itHelper("will reject if the onabort was called");
-    itHelper("will reject if the onabort was called with rejectPromiseWithErrorObject option", true);
+      let xhr = reqProcessor.xhr;
+      xhr.status = 200;
+      xhr.onabort(errorResponse);
+    });
 
     it('applies xhr transformers after calling request interceptors', (done) => {
       class RequestInterceptor {
@@ -229,7 +191,7 @@ describe("Request message processor", () => {
 
       message.interceptors = [interceptor]
       reqProcessor.xhrTransformers.push(mockTransformer);
-      reqProcessor.process(client, message).then((response) => { done() });
+      reqProcessor.process(client, message).then((response) => { done() } );
       reqProcessor.xhr.fakeResponse();
     });
   });
