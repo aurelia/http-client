@@ -1,7 +1,8 @@
 /*eslint no-unused-vars:0*/
-import {PLATFORM} from 'aurelia-pal';
-import {RequestMessage} from './request-message';
-import {HttpResponseMessage} from './http-response-message';
+import { PLATFORM } from 'aurelia-pal';
+import { RequestMessage } from './request-message';
+import { HttpResponseMessage } from './http-response-message';
+import { ErrorHttpResponseMessage } from './error-http-response-message';
 
 function applyXhrTransformers(xhrTransformers, client, processor, message, xhr) {
   let i;
@@ -16,7 +17,7 @@ function applyXhrTransformers(xhrTransformers, client, processor, message, xhr) 
  * Creates an XHR implementation.
  */
 interface XHRConstructor {
-	//new():XHR;
+  //new():XHR;
 }
 
 /**
@@ -66,7 +67,7 @@ interface XHR {
   /**
   * Sends the request.
   */
-  send(content? : any): void;
+  send(content?: any): void;
 }
 
 /**
@@ -112,17 +113,29 @@ export class RequestMessageProcessor {
     let promise = new Promise((resolve, reject) => {
       let xhr = this.xhr = new this.XHRType();
 
+      let rejectResponse: (resp: HttpResponseMessage) => void;
+
+      if (client.rejectPromiseWithErrorObject) {
+        rejectResponse = (resp: HttpResponseMessage) => {
+          const errorResp = new ErrorHttpResponseMessage(resp);
+          reject(errorResp);
+        };
+      } else {
+        rejectResponse = (resp: HttpResponseMessage) => {
+          reject(resp);
+        };
+      }
       xhr.onload = (e) => {
         let response = new HttpResponseMessage(requestMessage, xhr, requestMessage.responseType, requestMessage.reviver);
         if (response.isSuccess) {
           resolve(response);
         } else {
-          reject(response);
+          rejectResponse(response);
         }
       };
 
       xhr.ontimeout = (e) => {
-        reject(new HttpResponseMessage(requestMessage, {
+        rejectResponse(new HttpResponseMessage(requestMessage, {
           response: e,
           status: xhr.status,
           statusText: xhr.statusText
@@ -130,7 +143,7 @@ export class RequestMessageProcessor {
       };
 
       xhr.onerror = (e) => {
-        reject(new HttpResponseMessage(requestMessage, {
+        rejectResponse(new HttpResponseMessage(requestMessage, {
           response: e,
           status: xhr.status,
           statusText: xhr.statusText
@@ -138,7 +151,7 @@ export class RequestMessageProcessor {
       };
 
       xhr.onabort = (e) => {
-        reject(new HttpResponseMessage(requestMessage, {
+        rejectResponse(new HttpResponseMessage(requestMessage, {
           response: e,
           status: xhr.status,
           statusText: xhr.statusText
