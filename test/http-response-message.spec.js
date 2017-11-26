@@ -70,8 +70,8 @@ describe("HttpResponseMessage", () => {
 
     it("will use the mimeType as the responseType if there is no alias for it in the mimeTypes map", () => {
       runContentTypeExpectations([
-        {contentType:"text/foo", mimeType:"text/foo", responseType:"text/foo", type:"foo"},
-        {contentType:"text/foo; charset=utf-8", mimeType:"text/foo", responseType:"text/foo", type:"foo"}
+        {contentType:"text/foo", mimeType:"text/foo", type:"foo"},
+        {contentType:"text/foo; charset=utf-8", mimeType:"text/foo", type:"foo"}
       ]);
     });
 
