@@ -1,11 +1,11 @@
 /*eslint no-unused-vars:0*/
-import {DOM} from 'aurelia-pal';
-import {RequestMessage} from './request-message';
-import {RequestBuilder} from './request-builder';
-import {HttpRequestMessage, createHttpRequestMessageProcessor} from './http-request-message';
-import {HttpResponseMessage} from './http-response-message';
-import {JSONPRequestMessage, createJSONPRequestMessageProcessor} from './jsonp-request-message';
-import {RequestMessageProcessor} from './request-message-processor';
+import { DOM } from 'aurelia-pal';
+import { RequestMessage } from './request-message';
+import { RequestBuilder } from './request-builder';
+import { HttpRequestMessage, createHttpRequestMessageProcessor } from './http-request-message';
+import { HttpResponseMessage } from './http-response-message';
+import { JSONPRequestMessage, createJSONPRequestMessageProcessor } from './jsonp-request-message';
+import { RequestMessageProcessor } from './request-message-processor';
 
 function trackRequestStart(client: HttpClient, processor: RequestMessageProcessor) {
   client.pendingRequests.push(processor);
@@ -28,6 +28,12 @@ function trackRequestEnd(client: HttpClient, processor: RequestMessageProcessor)
 * The main HTTP client object.
 */
 export class HttpClient {
+
+  /**
+  * Return true is promises are rejected with an error like object. Default false
+  */
+  rejectPromiseWithErrorObject: boolean;
+
   /**
   * Indicates whether or not the client is in the process of requesting resources.
   */
@@ -42,6 +48,7 @@ export class HttpClient {
     this.requestProcessorFactories.set(HttpRequestMessage, createHttpRequestMessageProcessor);
     this.requestProcessorFactories.set(JSONPRequestMessage, createJSONPRequestMessageProcessor);
     this.pendingRequests = [];
+    this.rejectPromiseWithErrorObject = false;
   }
 
   /**

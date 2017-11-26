@@ -39,7 +39,8 @@ describe('headers', () => {
 
     jasmine.Ajax.withMock(() => {
       var xhr = new XMLHttpRequest();
-
+      //headers.configureXHR works only if xhr is in Open state
+      xhr.open('test', 'http://dummy.com', true);
       headers.configureXHR(xhr);
 
       expect(xhr.requestHeaders['Authorization']).toBe('123');
