@@ -28,6 +28,12 @@ function trackRequestEnd(client: HttpClient, processor: RequestMessageProcessor)
 * The main HTTP client object.
 */
 export class HttpClient {
+
+  /**
+  * Return true if promises are rejected with an error like object. Default false
+  */
+  rejectPromiseWithErrorObject: boolean;
+
   /**
   * Indicates whether or not the client is in the process of requesting resources.
   */
@@ -37,6 +43,7 @@ export class HttpClient {
   * Creates an instance of HttpClient.
   */
   constructor() {
+    this.rejectPromiseWithErrorObject = false;
     this.requestTransformers = [];
     this.requestProcessorFactories = new Map();
     this.requestProcessorFactories.set(HttpRequestMessage, createHttpRequestMessageProcessor);
