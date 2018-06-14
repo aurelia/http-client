@@ -4,7 +4,7 @@ define(['exports', 'aurelia-path', 'aurelia-pal'], function (exports, _aureliaPa
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
-  exports.HttpClient = exports.RequestBuilder = exports.HttpRequestMessage = exports.JSONPRequestMessage = exports.RequestMessageProcessor = exports.mimeTypes = exports.HttpResponseMessage = exports.RequestMessage = exports.Headers = undefined;
+  exports.HttpClient = exports.RequestBuilder = exports.ErrorHttpResponseMessage = exports.HttpRequestMessage = exports.JSONPRequestMessage = exports.RequestMessageProcessor = exports.mimeTypes = exports.HttpResponseMessage = exports.RequestMessage = exports.Headers = undefined;
   exports.timeoutTransformer = timeoutTransformer;
   exports.callbackParameterNameTransformer = callbackParameterNameTransformer;
   exports.credentialsTransformer = credentialsTransformer;
@@ -161,11 +161,7 @@ define(['exports', 'aurelia-path', 'aurelia-pal'], function (exports, _aureliaPa
       this.mimeType = null;
 
       if (xhr.getAllResponseHeaders) {
-        try {
-          this.headers = Headers.parse(xhr.getAllResponseHeaders());
-        } catch (err) {
-          if (xhr.requestHeaders) this.headers = new Headers(xhr.requestHeaders);
-        }
+        this.headers = Headers.parse(xhr.getAllResponseHeaders());
       } else {
         this.headers = new Headers();
       }
@@ -276,19 +272,30 @@ define(['exports', 'aurelia-path', 'aurelia-pal'], function (exports, _aureliaPa
       var _this = this;
 
       var promise = new Promise(function (resolve, reject) {
-        var xhr = _this.xhr = new _this.XHRType();
+        var rejectResponse = void 0;
+        if (client.rejectPromiseWithErrorObject) {
+          rejectResponse = function rejectResponse(resp) {
+            var errorResp = new ErrorHttpResponseMessage(resp);
+            reject(errorResp);
+          };
+        } else {
+          rejectResponse = function rejectResponse(resp) {
+            reject(resp);
+          };
+        }
 
+        var xhr = _this.xhr = new _this.XHRType();
         xhr.onload = function (e) {
           var response = new HttpResponseMessage(requestMessage, xhr, requestMessage.responseType, requestMessage.reviver);
           if (response.isSuccess) {
             resolve(response);
           } else {
-            reject(response);
+            rejectResponse(response);
           }
         };
 
         xhr.ontimeout = function (e) {
-          reject(new HttpResponseMessage(requestMessage, {
+          rejectResponse(new HttpResponseMessage(requestMessage, {
             response: e,
             status: xhr.status,
             statusText: xhr.statusText
@@ -296,7 +303,7 @@ define(['exports', 'aurelia-path', 'aurelia-pal'], function (exports, _aureliaPa
         };
 
         xhr.onerror = function (e) {
-          reject(new HttpResponseMessage(requestMessage, {
+          rejectResponse(new HttpResponseMessage(requestMessage, {
             response: e,
             status: xhr.status,
             statusText: xhr.statusText
@@ -304,7 +311,7 @@ define(['exports', 'aurelia-path', 'aurelia-pal'], function (exports, _aureliaPa
         };
 
         xhr.onabort = function (e) {
-          reject(new HttpResponseMessage(requestMessage, {
+          rejectResponse(new HttpResponseMessage(requestMessage, {
             response: e,
             status: xhr.status,
             statusText: xhr.statusText
@@ -540,6 +547,26 @@ define(['exports', 'aurelia-path', 'aurelia-pal'], function (exports, _aureliaPa
     return new RequestMessageProcessor(_aureliaPal.PLATFORM.XMLHttpRequest, [timeoutTransformer, credentialsTransformer, progressTransformer, downloadProgressTransformer, responseTypeTransformer, contentTransformer, headerTransformer]);
   }
 
+  var ErrorHttpResponseMessage = exports.ErrorHttpResponseMessage = function (_HttpResponseMessage) {
+    _inherits(ErrorHttpResponseMessage, _HttpResponseMessage);
+
+    function ErrorHttpResponseMessage(responseMessage) {
+      
+
+      var _this5 = _possibleConstructorReturn(this, _HttpResponseMessage.call(this, responseMessage.requestMessage, {
+        response: responseMessage.response,
+        status: responseMessage.statusCode,
+        statusText: responseMessage.statusText
+      }, responseMessage.responseType));
+
+      _this5.name = responseMessage.responseType;
+      _this5.message = 'Error: ' + responseMessage.statusCode + ' Status: ' + responseMessage.statusText;
+      return _this5;
+    }
+
+    return ErrorHttpResponseMessage;
+  }(HttpResponseMessage);
+
   var RequestBuilder = exports.RequestBuilder = function () {
     function RequestBuilder(client) {
       
@@ -740,6 +767,7 @@ define(['exports', 'aurelia-path', 'aurelia-pal'], function (exports, _aureliaPa
 
       this.isRequesting = false;
 
+      this.rejectPromiseWithErrorObject = false;
       this.requestTransformers = [];
       this.requestProcessorFactories = new Map();
       this.requestProcessorFactories.set(HttpRequestMessage, createHttpRequestMessageProcessor);
@@ -765,7 +793,7 @@ define(['exports', 'aurelia-path', 'aurelia-pal'], function (exports, _aureliaPa
     };
 
     HttpClient.prototype.send = function send(requestMessage, transformers) {
-      var _this5 = this;
+      var _this6 = this;
 
       var createProcessor = this.requestProcessorFactories.get(requestMessage.constructor);
       var processor = void 0;
@@ -784,14 +812,14 @@ define(['exports', 'aurelia-path', 'aurelia-pal'], function (exports, _aureliaPa
 
       promise = Promise.resolve(requestMessage).then(function (message) {
         for (i = 0, ii = transformers.length; i < ii; ++i) {
-          transformers[i](_this5, processor, message);
+          transformers[i](_this6, processor, message);
         }
 
-        return processor.process(_this5, message).then(function (response) {
-          trackRequestEnd(_this5, processor);
+        return processor.process(_this6, message).then(function (response) {
+          trackRequestEnd(_this6, processor);
           return response;
         }).catch(function (response) {
-          trackRequestEnd(_this5, processor);
+          trackRequestEnd(_this6, processor);
           throw response;
         });
       });

@@ -227,12 +227,7 @@ export class HttpResponseMessage {
     this.mimeType = null;
 
     if (xhr.getAllResponseHeaders) {
-      try {
-        this.headers = Headers.parse(xhr.getAllResponseHeaders());
-      } catch (err) {
-        //if this fails it means the xhr was a mock object so the `requestHeaders` property should be used
-        if (xhr.requestHeaders) this.headers = new Headers(xhr.requestHeaders);
-      }
+      this.headers = Headers.parse(xhr.getAllResponseHeaders());
     } else {
       this.headers = new Headers();
     }
@@ -425,19 +420,30 @@ export class RequestMessageProcessor {
    */
   process(client: HttpClient, requestMessage: RequestMessage): Promise<HttpResponseMessage> {
     let promise = new Promise((resolve, reject) => {
-      let xhr = this.xhr = new this.XHRType();
+      let rejectResponse: (resp: HttpResponseMessage) => void;
+      if (client.rejectPromiseWithErrorObject) {
+        rejectResponse = (resp: HttpResponseMessage) => {
+          const errorResp = new ErrorHttpResponseMessage(resp);
+          reject(errorResp);
+        };
+      } else {
+        rejectResponse = (resp: HttpResponseMessage) => {
+          reject(resp);
+        };
+      }
 
+      let xhr = this.xhr = new this.XHRType();
       xhr.onload = (e) => {
         let response = new HttpResponseMessage(requestMessage, xhr, requestMessage.responseType, requestMessage.reviver);
         if (response.isSuccess) {
           resolve(response);
         } else {
-          reject(response);
+          rejectResponse(response);
         }
       };
 
       xhr.ontimeout = (e) => {
-        reject(new HttpResponseMessage(requestMessage, {
+        rejectResponse(new HttpResponseMessage(requestMessage, {
           response: e,
           status: xhr.status,
           statusText: xhr.statusText
@@ -445,7 +451,7 @@ export class RequestMessageProcessor {
       };
 
       xhr.onerror = (e) => {
-        reject(new HttpResponseMessage(requestMessage, {
+        rejectResponse(new HttpResponseMessage(requestMessage, {
           response: e,
           status: xhr.status,
           statusText: xhr.statusText
@@ -453,7 +459,7 @@ export class RequestMessageProcessor {
       };
 
       xhr.onabort = (e) => {
-        reject(new HttpResponseMessage(requestMessage, {
+        rejectResponse(new HttpResponseMessage(requestMessage, {
           response: e,
           status: xhr.status,
           statusText: xhr.statusText
@@ -771,6 +777,39 @@ export function createHttpRequestMessageProcessor(): RequestMessageProcessor {
     contentTransformer,
     headerTransformer
   ]);
+}
+
+/**
+* Represents an error like object response message from an HTTP or JSONP request.
+*/
+export class ErrorHttpResponseMessage extends HttpResponseMessage {
+
+  /**
+  * Error like name
+  */
+  name: string;
+
+  /**
+  * Error like message
+  */
+  message: string;
+
+  /**
+   * Instanciate a new error response message
+   * ErrorHttpResponseMessage instanceof Error is false but with two members 'name' and 'message' we have an error like object
+   * @param responseMessage response message
+   */
+  constructor(responseMessage: HttpResponseMessage) {
+    super(responseMessage.requestMessage, {
+      response: responseMessage.response,
+      status: responseMessage.statusCode,
+      statusText: responseMessage.statusText
+    }, responseMessage.responseType);
+    //error like properties : name and message
+    this.name = responseMessage.responseType;
+    this.message = `Error: ${responseMessage.statusCode} Status: ${responseMessage.statusText}`;
+  }
+
 }
 
 /**
@@ -1134,6 +1173,12 @@ function trackRequestEnd(client: HttpClient, processor: RequestMessageProcessor)
 * The main HTTP client object.
 */
 export class HttpClient {
+
+  /**
+  * Return true if promises are rejected with an error like object. Default false
+  */
+  rejectPromiseWithErrorObject: boolean;
+
   /**
   * Indicates whether or not the client is in the process of requesting resources.
   */
@@ -1143,6 +1188,7 @@ export class HttpClient {
   * Creates an instance of HttpClient.
   */
   constructor() {
+    this.rejectPromiseWithErrorObject = false;
     this.requestTransformers = [];
     this.requestProcessorFactories = new Map();
     this.requestProcessorFactories.set(HttpRequestMessage, createHttpRequestMessageProcessor);

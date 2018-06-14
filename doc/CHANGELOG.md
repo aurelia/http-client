@@ -1,3 +1,9 @@
+<a name="1.3.0"></a>
+# [1.3.0](https://github.com/aurelia/http-client/compare/1.2.1...1.3.0) (2018-06-14)
+
+* Fix unit tests.
+* Enable error responses to be shaped like Error objects, addressing some issues with BlueBird.
+
 <a name="1.2.1"></a>
 ## [1.2.1](https://github.com/aurelia/http-client/compare/1.2.0...1.2.1) (2017-10-07)
 

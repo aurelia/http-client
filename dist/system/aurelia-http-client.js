@@ -3,7 +3,7 @@
 System.register(['aurelia-path', 'aurelia-pal'], function (_export, _context) {
   "use strict";
 
-  var join, buildQueryString, PLATFORM, DOM, _createClass, Headers, RequestMessage, HttpResponseMessage, mimeTypes, RequestMessageProcessor, JSONPRequestMessage, JSONPXHR, HttpRequestMessage, RequestBuilder, HttpClient;
+  var join, buildQueryString, PLATFORM, DOM, _createClass, Headers, RequestMessage, HttpResponseMessage, mimeTypes, RequestMessageProcessor, JSONPRequestMessage, JSONPXHR, HttpRequestMessage, ErrorHttpResponseMessage, RequestBuilder, HttpClient;
 
   function _possibleConstructorReturn(self, call) {
     if (!self) {
@@ -299,11 +299,7 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export, _context) {
           this.mimeType = null;
 
           if (xhr.getAllResponseHeaders) {
-            try {
-              this.headers = Headers.parse(xhr.getAllResponseHeaders());
-            } catch (err) {
-              if (xhr.requestHeaders) this.headers = new Headers(xhr.requestHeaders);
-            }
+            this.headers = Headers.parse(xhr.getAllResponseHeaders());
           } else {
             this.headers = new Headers();
           }
@@ -409,19 +405,30 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export, _context) {
           var _this = this;
 
           var promise = new Promise(function (resolve, reject) {
-            var xhr = _this.xhr = new _this.XHRType();
+            var rejectResponse = void 0;
+            if (client.rejectPromiseWithErrorObject) {
+              rejectResponse = function rejectResponse(resp) {
+                var errorResp = new ErrorHttpResponseMessage(resp);
+                reject(errorResp);
+              };
+            } else {
+              rejectResponse = function rejectResponse(resp) {
+                reject(resp);
+              };
+            }
 
+            var xhr = _this.xhr = new _this.XHRType();
             xhr.onload = function (e) {
               var response = new HttpResponseMessage(requestMessage, xhr, requestMessage.responseType, requestMessage.reviver);
               if (response.isSuccess) {
                 resolve(response);
               } else {
-                reject(response);
+                rejectResponse(response);
               }
             };
 
             xhr.ontimeout = function (e) {
-              reject(new HttpResponseMessage(requestMessage, {
+              rejectResponse(new HttpResponseMessage(requestMessage, {
                 response: e,
                 status: xhr.status,
                 statusText: xhr.statusText
@@ -429,7 +436,7 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export, _context) {
             };
 
             xhr.onerror = function (e) {
-              reject(new HttpResponseMessage(requestMessage, {
+              rejectResponse(new HttpResponseMessage(requestMessage, {
                 response: e,
                 status: xhr.status,
                 statusText: xhr.statusText
@@ -437,7 +444,7 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export, _context) {
             };
 
             xhr.onabort = function (e) {
-              reject(new HttpResponseMessage(requestMessage, {
+              rejectResponse(new HttpResponseMessage(requestMessage, {
                 response: e,
                 status: xhr.status,
                 statusText: xhr.statusText
@@ -590,6 +597,28 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export, _context) {
       }(RequestMessage));
 
       _export('HttpRequestMessage', HttpRequestMessage);
+
+      _export('ErrorHttpResponseMessage', ErrorHttpResponseMessage = function (_HttpResponseMessage) {
+        _inherits(ErrorHttpResponseMessage, _HttpResponseMessage);
+
+        function ErrorHttpResponseMessage(responseMessage) {
+          
+
+          var _this5 = _possibleConstructorReturn(this, _HttpResponseMessage.call(this, responseMessage.requestMessage, {
+            response: responseMessage.response,
+            status: responseMessage.statusCode,
+            statusText: responseMessage.statusText
+          }, responseMessage.responseType));
+
+          _this5.name = responseMessage.responseType;
+          _this5.message = 'Error: ' + responseMessage.statusCode + ' Status: ' + responseMessage.statusText;
+          return _this5;
+        }
+
+        return ErrorHttpResponseMessage;
+      }(HttpResponseMessage));
+
+      _export('ErrorHttpResponseMessage', ErrorHttpResponseMessage);
 
       _export('RequestBuilder', RequestBuilder = function () {
         function RequestBuilder(client) {
@@ -774,6 +803,7 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export, _context) {
 
           this.isRequesting = false;
 
+          this.rejectPromiseWithErrorObject = false;
           this.requestTransformers = [];
           this.requestProcessorFactories = new Map();
           this.requestProcessorFactories.set(HttpRequestMessage, createHttpRequestMessageProcessor);
@@ -799,7 +829,7 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export, _context) {
         };
 
         HttpClient.prototype.send = function send(requestMessage, transformers) {
-          var _this5 = this;
+          var _this6 = this;
 
           var createProcessor = this.requestProcessorFactories.get(requestMessage.constructor);
           var processor = void 0;
@@ -818,14 +848,14 @@ System.register(['aurelia-path', 'aurelia-pal'], function (_export, _context) {
 
           promise = Promise.resolve(requestMessage).then(function (message) {
             for (i = 0, ii = transformers.length; i < ii; ++i) {
-              transformers[i](_this5, processor, message);
+              transformers[i](_this6, processor, message);
             }
 
-            return processor.process(_this5, message).then(function (response) {
-              trackRequestEnd(_this5, processor);
+            return processor.process(_this6, message).then(function (response) {
+              trackRequestEnd(_this6, processor);
               return response;
             }).catch(function (response) {
-              trackRequestEnd(_this5, processor);
+              trackRequestEnd(_this6, processor);
               throw response;
             });
           });

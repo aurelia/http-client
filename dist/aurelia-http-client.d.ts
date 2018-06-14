@@ -444,6 +444,29 @@ export declare class HttpRequestMessage extends RequestMessage {
 export declare function createHttpRequestMessageProcessor(): RequestMessageProcessor;
 
 /**
+* Represents an error like object response message from an HTTP or JSONP request.
+*/
+export declare class ErrorHttpResponseMessage extends HttpResponseMessage {
+  
+  /**
+    * Error like name
+    */
+  name: string;
+  
+  /**
+    * Error like message
+    */
+  message: string;
+  
+  /**
+     * Instanciate a new error response message
+     * ErrorHttpResponseMessage instanceof Error is false but with two members 'name' and 'message' we have an error like object
+     * @param responseMessage response message
+     */
+  constructor(responseMessage: HttpResponseMessage);
+}
+
+/**
  * A builder class allowing fluent composition of HTTP requests.
  */
 /**
@@ -642,6 +665,11 @@ export declare class RequestBuilder {
 * The main HTTP client object.
 */
 export declare class HttpClient {
+  
+  /**
+    * Return true if promises are rejected with an error like object. Default false
+    */
+  rejectPromiseWithErrorObject: boolean;
   
   /**
     * Indicates whether or not the client is in the process of requesting resources.

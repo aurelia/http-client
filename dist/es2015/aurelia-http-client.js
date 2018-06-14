@@ -90,11 +90,7 @@ export let HttpResponseMessage = class HttpResponseMessage {
     this.mimeType = null;
 
     if (xhr.getAllResponseHeaders) {
-      try {
-        this.headers = Headers.parse(xhr.getAllResponseHeaders());
-      } catch (err) {
-        if (xhr.requestHeaders) this.headers = new Headers(xhr.requestHeaders);
-      }
+      this.headers = Headers.parse(xhr.getAllResponseHeaders());
     } else {
       this.headers = new Headers();
     }
@@ -196,19 +192,30 @@ export let RequestMessageProcessor = class RequestMessageProcessor {
 
   process(client, requestMessage) {
     let promise = new Promise((resolve, reject) => {
-      let xhr = this.xhr = new this.XHRType();
+      let rejectResponse;
+      if (client.rejectPromiseWithErrorObject) {
+        rejectResponse = resp => {
+          const errorResp = new ErrorHttpResponseMessage(resp);
+          reject(errorResp);
+        };
+      } else {
+        rejectResponse = resp => {
+          reject(resp);
+        };
+      }
 
+      let xhr = this.xhr = new this.XHRType();
       xhr.onload = e => {
         let response = new HttpResponseMessage(requestMessage, xhr, requestMessage.responseType, requestMessage.reviver);
         if (response.isSuccess) {
           resolve(response);
         } else {
-          reject(response);
+          rejectResponse(response);
         }
       };
 
       xhr.ontimeout = e => {
-        reject(new HttpResponseMessage(requestMessage, {
+        rejectResponse(new HttpResponseMessage(requestMessage, {
           response: e,
           status: xhr.status,
           statusText: xhr.statusText
@@ -216,7 +223,7 @@ export let RequestMessageProcessor = class RequestMessageProcessor {
       };
 
       xhr.onerror = e => {
-        reject(new HttpResponseMessage(requestMessage, {
+        rejectResponse(new HttpResponseMessage(requestMessage, {
           response: e,
           status: xhr.status,
           statusText: xhr.statusText
@@ -224,7 +231,7 @@ export let RequestMessageProcessor = class RequestMessageProcessor {
       };
 
       xhr.onabort = e => {
-        reject(new HttpResponseMessage(requestMessage, {
+        rejectResponse(new HttpResponseMessage(requestMessage, {
           response: e,
           status: xhr.status,
           statusText: xhr.statusText
@@ -433,6 +440,20 @@ export function createHttpRequestMessageProcessor() {
   return new RequestMessageProcessor(PLATFORM.XMLHttpRequest, [timeoutTransformer, credentialsTransformer, progressTransformer, downloadProgressTransformer, responseTypeTransformer, contentTransformer, headerTransformer]);
 }
 
+export let ErrorHttpResponseMessage = class ErrorHttpResponseMessage extends HttpResponseMessage {
+  constructor(responseMessage) {
+    super(responseMessage.requestMessage, {
+      response: responseMessage.response,
+      status: responseMessage.statusCode,
+      statusText: responseMessage.statusText
+    }, responseMessage.responseType);
+
+    this.name = responseMessage.responseType;
+    this.message = `Error: ${responseMessage.statusCode} Status: ${responseMessage.statusText}`;
+  }
+
+};
+
 export let RequestBuilder = class RequestBuilder {
   constructor(client) {
     this.client = client;
@@ -625,6 +646,7 @@ export let HttpClient = class HttpClient {
   constructor() {
     this.isRequesting = false;
 
+    this.rejectPromiseWithErrorObject = false;
     this.requestTransformers = [];
     this.requestProcessorFactories = new Map();
     this.requestProcessorFactories.set(HttpRequestMessage, createHttpRequestMessageProcessor);
