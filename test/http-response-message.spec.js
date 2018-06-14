@@ -190,7 +190,23 @@ function runContentTypeExpectations(expectations){
 
     jasmine.Ajax.withMock(() => {
       var xhr = new XMLHttpRequest();
+      //begin config mock
+      //headers.configureXHR works only if xhr is in Open state
+      xhr.open('test', 'http://dummy.com', true);
+      //patch getAllResponseHeaders to return requestHeaders 
+      //monkey patch getAllResponseHeaders function : rebuild responseheaders from request headers
+      xhr.getAllResponseHeaders = function () {
+        if (!this.requestHeaders) { return null; }
+
+        var result = [];
+        for (var key in this.requestHeaders) {
+          result.push(key + ': ' + this.requestHeaders[key]);
+        }
+        return result.join('\r\n') + '\r\n';
+      }
+      //end config mock
       headers.configureXHR(xhr);
+      
       //check if content-type was correctly set in the xhr headers
       expect(xhr.requestHeaders['Content-Type']).toBe(expectation.contentType);
 
