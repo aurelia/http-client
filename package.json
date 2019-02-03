@@ -19,6 +19,14 @@
     "type": "git",
     "url": "http://github.com/aurelia/http-client"
   },
+  "files": [
+    "dist",
+    "doc",
+    "src",
+    "typings.json",
+    "README.md",
+    "LICENSE"
+  ],
   "jspm": {
     "registry": "npm",
     "jspmPackage": true,
