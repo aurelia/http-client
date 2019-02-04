@@ -52,8 +52,7 @@
   },
   "dependencies": {
     "aurelia-pal": "^1.0.0",
-    "aurelia-path": "^1.1.1",
-    "jspm": "^0.16.53"
+    "aurelia-path": "^1.1.1"
   },
   "devDependencies": {
     "aurelia-tools": "^0.2.4",
