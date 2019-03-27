@@ -1,3 +1,8 @@
+<a name="1.3.2"></a>
+## [1.3.2](https://github.com/aurelia/http-client/compare/1.3.0...1.3.2) (2019-03-27)
+
+
+
 <a name="1.3.1"></a>
 ## [1.3.1](https://github.com/aurelia/http-client/compare/1.3.0...1.3.1) (2019-02-04)
 
